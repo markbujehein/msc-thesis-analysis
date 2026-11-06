@@ -14,6 +14,7 @@ rdkit = ">=2026.3.1,<2027"
 openff-toolkit-base = ">=0.19.0,<0.20"
 openmmforcefields = ">=0.16.0,<0.17"
 ambertools = ">=26.0,<27"
+marimo = ">=0.25.1,<0.26"
 
 [pypi-dependencies]
 mdanse = { version = ">=2.0.2, <3", extras = ["all"] }

@@ -112,3 +112,12 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
   - `tempfile.mktemp` appears once, in `thymol_cif/tests/test_make_pdb.py:6`. It gives no runtime warning; the risk (another process creating the file name first) is negligible on a one-user machine.
 - Test run (all, warnings as errors): 9 tests in `thymol_cif/tests` OK (the older `test_make_pdb.py` also prints `ok`), 7 tests in `tests` OK.
 - Source: [ref: salager2010, grazulis2012]
+
+## 2026-11-06 13:26 - marimo added to md/pixi.toml; documentation check (Claude)
+- What: at the user's request ran `pixi add --no-install marimo` in `md/`: `marimo >=0.25.1,<0.26` added to `md/pixi.toml`; the whole stack (with the scipy pin) solved and `md/pixi.lock` was created. **Nothing installed.** `__pycache__/` added to `.gitignore`.
+- Finding (docs read through Context7; it had no entry for AmberTools, only for iPBSA, so AmberTools docs were **not checked**):
+  - OpenMM: `constraints=None` is the default; with no constraints a time step of about 1 fs is typical for AMBER/CHARMM-type force fields, flexible water about 0.5 fs; `HBonds` constraints allow about 2 fs (Verlet) or 4 fs (Langevin). Reporters: PDB, PDBx/mmCIF, DCD, XTC (the docs describe velocities only for custom reporters), reporter interval is in steps. Consequence: for the DOS, positions need saving every 1-2 steps (Nyquist for the O-H stretch, about 460 meV, needs a period under about 4.5 fs).
+  - openmmforcefields: `SystemGenerator(small_molecule_forcefield=..., forcefield_kwargs={...})`; installed GAFF versions listed in the docs: gaff-1.4, 1.8, 1.81, 2.1, 2.11, 2.2.20; small molecules are parameterised on the fly with antechamber; the docs' example uses `constraints: HBonds` and `hydrogenMass: 4 amu`. **Do not use those two settings for the DOS**: they change the H vibrations.
+  - openff-toolkit: `Molecule.from_smiles`, `generate_conformers`; AM1-BCC charges go through AmberTools' antechamber and need exactly one conformer.
+  - packmol: keywords `tolerance`, `filetype`, `output`, `pbc`, `structure ... number ... inside box ... end structure`. Source is a third-party generated page (context7.com/m3g/packmol/llms.txt), not the packmol site. Packmol builds liquids/mixtures; a crystal from a CIF does not need it.
+- No reference: software documentation.
