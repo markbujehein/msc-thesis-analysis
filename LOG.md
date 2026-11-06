@@ -48,3 +48,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Finding: hand tests with a temporary `.pdb`: clean tree passes; data committed with no log entry is blocked; the temporary commit and file were removed.
 - Mistake: my first cleanup used `git reset --hard HEAD~1`, which also threw away the uncommitted new hook. I restored it from the reflog (`66813a2`) and re-ran the tests with `git reset --mixed`.
 - Remaining weakness: an unlogged earlier edit to `LOG.md` that is still uncommitted counts as "logged" for new work. Fix by committing the log entry with the work.
+
+## 2026-11-06 13:00 - Hook allows derived/extracted files (Claude)
+- What: the hook blocked any new `.cif`/`.pdb`/`.pdf` without a `refs.bib` change, which also hit files derived from already-cited CIFs (extracting blocks, editing, generating PDBs). It now also accepts `[ref: key]` in the new `LOG.md` text when `key` exists in `refs.bib`. `No reference:` and a `refs.bib` change still work. Skill `add-reference` updated (steps 5 and 6).
+- Finding: hand tests with a temporary `.pdb`: no tag blocked; unknown key blocked; `[ref: salager2010]` passed; `No reference:` passed. Temporary file removed.
+- Limit: the hook checks that the key exists, not that it is the right source for that file.
+- Source: [ref: salager2010] (the derived-file example).

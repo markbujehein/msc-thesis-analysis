@@ -12,9 +12,14 @@ ch=$( { git diff --name-only "$B" -- . ; git ls-files -o --exclude-standard; } |
 [ -z "$ch" ] && exit 0
 msg=""
 git diff --quiet "$B" -- LOG.md && msg="LOG.md has no new entry for: $(printf '%s ' $ch). Use the log-entry skill. "
-if printf '%s\n' "$ch" | grep -qiE '\.(cif|pdb|pdf)$' && git diff --quiet "$B" -- refs.bib \
-   && ! git diff "$B" -U0 -- LOG.md | grep -qi '^+.*no reference:'; then
-  msg="${msg}New/changed data files but refs.bib is unchanged: use the add-reference skill, or add a line 'No reference: <why no peer-reviewed source applies>' to the new LOG.md entry."
+if printf '%s\n' "$ch" | grep -qiE '\.(cif|pdb|pdf)$' && git diff --quiet "$B" -- refs.bib; then
+  new=$(git diff "$B" -U0 -- LOG.md | grep '^+')
+  ok=0; printf '%s\n' "$new" | grep -qi 'no reference:' && ok=1
+  # derived/extracted files: a "[ref: key]" tag in the new log text naming a key that exists in refs.bib
+  for k in $(printf '%s\n' "$new" | grep -oiE '\[ref: *[^]]+\]' | sed -E 's/^\[ref: *//I;s/\]$//' | tr ',' ' '); do
+    grep -qE "^@[A-Za-z]+\{$k," refs.bib && ok=1
+  done
+  [ $ok = 1 ] || msg="${msg}New/changed data files and no reference: add the source to refs.bib (add-reference skill), or tag the new LOG.md entry with '[ref: key]' for a key already in refs.bib (derived/extracted files), or add 'No reference: <why>'."
 fi
 [ -z "$msg" ] && exit 0
 printf '{"decision":"block","reason":%s}\n' "$(printf '%s' "$msg" | python3 -c 'import json,sys;print(json.dumps(sys.stdin.read()))')"

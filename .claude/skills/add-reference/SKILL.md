@@ -12,4 +12,5 @@ For every kept download or sourced fact from a peer-reviewed publication:
 
 Non-peer-reviewed sources (vendor pages, wikis) are not added to `refs.bib`; mention them in `LOG.md` only.
 
-5. If no peer-reviewed source applies to a kept data file, add the line `No reference: <reason>` to the new `LOG.md` entry. The Stop hook accepts that instead of a `refs.bib` change.
+5. Files you derive from an already-cited source (extracting a block from a CIF, editing a CIF, generating a PDB) need no new entry: tag the new `LOG.md` entry with `[ref: key]` (comma-separated for several), where the key exists in `refs.bib`. The Stop hook checks that the key exists.
+6. If no peer-reviewed source applies, add the line `No reference: <reason>` to the new `LOG.md` entry.
