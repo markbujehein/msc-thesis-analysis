@@ -7,18 +7,29 @@ a, b, c, al, be, ga = (val(k) for k in ['length_a', 'length_b', 'length_c', 'ang
 ca, cb, cg = np.cos(np.radians([al, be, ga])); sg = np.sin(np.radians(ga))
 v = np.sqrt(1 - ca**2 - cb**2 - cg**2 + 2*ca*cb*cg)
 M = np.array([[a, b*cg, c*cb], [0, b*sg, c*(ca - cb*cg)/sg], [0, 0, c*v/sg]])  # frac -> cart
-# symmetry ops (only characters allowed in eval are checked)
+# symmetry ops: either CIF header name; each op is checked before it reaches eval
+hdr = next((h for h in ('_symmetry_equiv_pos_as_xyz', '_space_group_symop_operation_xyz') if h in t), None)
+if hdr is None: sys.exit('no symmetry operations found in CIF')
 ops = []
-for l in t[t.index('_symmetry_equiv_pos_as_xyz') + 1:]:
+for l in t[t.index(hdr) + 1:]:
     if not l.strip() or l.startswith(('loop_', '_')): break
     m = re.match(r"^(?:\d+\s+)?['\"]?([^'\"]+)['\"]?$", l.strip())
     expr = m.group(1).replace(' ', '').lower()
-    assert re.fullmatch(r'[xyz0-9+\-*/.,]+', expr), expr
+    if not re.fullmatch(r'[xyz0-9+\-/.,]+', expr) or expr.count(',') != 2: sys.exit(f'bad symmetry operation: {expr!r}')
     ops.append(compile('(' + expr + ')', '', 'eval'))
-i = t.index('_atom_site_fract_z')
-at = [l.split() for l in t[i+1:] if len(l.split()) == 5 and l.split()[1] in ('C', 'H', 'O')]
+# atom loop: columns are found by header name, "(esd)" is dropped from numbers
+i = t.index('_atom_site_fract_x'); j = i
+while t[j - 1].startswith('_'): j -= 1
+cols = []
+while t[j].startswith('_'): cols.append(t[j]); j += 1
+rows = []
+while j < len(t) and t[j].strip() and not t[j].startswith(('loop_', '_', '#')): rows.append(t[j].split()); j += 1
+at = [r for r in rows if len(r) == len(cols)]
+num = lambda x: float(re.sub(r'\(.*\)', '', x))
+ix = [cols.index('_atom_site_fract_' + k) for k in 'xyz']
+sym = cols.index('_atom_site_type_symbol') if '_atom_site_type_symbol' in cols else None
 n_at = len(at)
-el = [x[1] for x in at]; F = np.array([[float(y) for y in x[2:]] for x in at])
+el = [x[sym] if sym is not None else re.match('[A-Z][a-z]?', x[0]).group(0) for x in at]; F = np.array([[num(x[k]) for k in ix] for x in at])
 # whole molecule in cartesian (BFS with minimum image)
 cart = np.zeros((n_at, 3)); cart[0] = M @ F[0]; seen = {0}; q = [0]
 while q:
