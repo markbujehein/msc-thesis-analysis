@@ -1,0 +1,103 @@
+#------------------------------------------------------------------------------
+#$Date: 2025-08-20 17:12:52 +0300 (Wed, 20 Aug 2025) $
+#$Revision: 301832 $
+#$URL: file:///home/coder/svn-repositories/_RELOADED_COD/cod-reloaded/cif/4/10/19/4101965.cif $
+#------------------------------------------------------------------------------
+#
+# This file is available in the Crystallography Open Database (COD),
+# http://www.crystallography.net/
+#
+# All data on this site have been placed in the public domain by the
+# contributors.
+#
+data_4101965
+loop_
+_publ_author_name
+'Elodie Salager'
+'Graeme M. Day'
+'Robin S. Stein'
+'Chris J. Pickard'
+'B\'en\'edicte Elena'
+'Lyndon Emsley'
+_publ_section_title
+;
+ Powder Crystallography by Combined Crystal Structure Prediction and
+ High-Resolution 1H Solid-State NMR Spectroscopy
+;
+_journal_name_full               'Journal of the American Chemical Society'
+_journal_page_first              2564
+_journal_page_last               2566
+_journal_paper_doi               10.1021/ja909449k
+_journal_volume                  132
+_journal_year                    2010
+_chemical_formula_sum            'C10 H14 O'
+_space_group_IT_number           14
+_symmetry_space_group_name_Hall  '-P 2yab'
+_symmetry_space_group_name_H-M   'P 1 21/a 1'
+_cell_angle_alpha                90.000000
+_cell_angle_beta                 109.939401
+_cell_angle_gamma                90.000000
+_cell_formula_units_Z            4
+_cell_length_a                   17.195700
+_cell_length_b                   4.640300
+_cell_length_c                   12.030000
+_cell_volume                     902.369
+_cod_data_source_file            ja909449k_si_002_15.cif
+_cod_data_source_block           spacegroup_14_frame_7
+_cod_depositor_comments
+;
+ Removing duplicate loop entries from the _atom_type loop.
+
+ Antanas Vaitkus,
+ 2018-07-07
+;
+_cod_database_code               4101965
+loop_
+_symmetry_equiv_pos_site_id
+_symmetry_equiv_pos_as_xyz
+1 x,y,z
+2 1/2-x,1/2+y,-z
+3 -x,-y,-z
+4 1/2+x,1/2-y,z
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+C1 C 0.362576 0.147422 0.731540
+C2 C 0.278704 0.111356 0.663610
+C3 C 0.390746 0.003053 0.839370
+C4 C 0.226665 -0.058947 0.702658
+C5 C 0.339081 -0.168860 0.879002
+C6 C 0.256015 -0.202194 0.811098
+C7 C 0.417714 0.324974 0.684070
+C8 C 0.437662 0.155124 0.588149
+C9 C 0.499695 0.412962 0.779890
+C10 C 0.199473 -0.385154 0.852336
+O1 O 0.241787 0.231158 0.553023
+H1 H 0.266046 0.417406 0.550998
+H2 H 0.454915 0.025298 0.894918
+H3 H 0.162038 -0.080357 0.647524
+H4 H 0.363879 -0.276597 0.963738
+H5 H 0.385048 0.522687 0.645483
+H6 H 0.381914 0.089769 0.516600
+H7 H 0.475026 0.287122 0.550264
+H8 H 0.473051 -0.038694 0.625611
+H9 H 0.490359 0.528290 0.853454
+H10 H 0.535513 0.551792 0.742050
+H11 H 0.537581 0.223058 0.815540
+H12 H 0.232707 -0.552713 0.913746
+H13 H 0.165142 -0.256778 0.896254
+H14 H 0.154013 -0.490985 0.776658
+loop_
+_atom_type_symbol
+_atom_type_radius_bond
+C 0.680000
+O 0.680000
+H 0.230000
+loop_
+_cod_related_entry_id
+_cod_related_entry_database
+_cod_related_entry_code
+1 PubChem 6989
