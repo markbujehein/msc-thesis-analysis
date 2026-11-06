@@ -134,3 +134,10 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
   - Checked in a browser (Chrome via the devtools tool): index and 1 render with the sidebar; fixed three defects found on the way (black filled chart area, negative-going curve, a code line overflowing the column). Pages 2 and 3 were not viewed.
   - Corrected a wrong statement before committing: the production temperature does not "settle at half"; it should hover near the target after equilibration.
 - No reference: software documentation and design notes.
+
+## 2026-11-06 14:04 - Correction: the md environment is installed; manifest changed by the user (Claude)
+- Correction: earlier entries and summaries said the environment was "not installed". I never re-checked. It is installed.
+- Observed (calling `md/.pixi/envs/default/bin/python` directly, no pixi command): Python 3.14.x, openmm 8.6.1, openmmforcefields 0.16.0, openff-toolkit 0.19.0, rdkit 2026.3.1, mdanse 2.0.1, ase 3.29.0, marimo 0.25.2, pytest 9.2.0, numpy 2.5.4, scipy 1.18.1, packmol 21.2.3; `antechamber`, `packmol`, `marimo`, `pytest` are in the environment's `bin`.
+- Observed: `md/pixi.toml` and `md/pixi.lock` carry uncommitted changes that Claude did not make (Python 3.14, scipy pin removed, mdanse allowed from 2.0.1, marimo from PyPI with the `mcp` extra, plus `marimo-lens`, `ruff`, `altair`, unpinned pandas/matplotlib/numpy), and there is a new `md/__marimo__/` folder. Left untouched and uncommitted.
+- Changed: `docs/tutorials/index.html` no longer says nothing is installed, and says the OpenMM tests in pages 1 and 2 have not been run. Not yet done: running anything in the environment; the spec in `docs/superpowers/specs/` still awaits the user's review.
+- No reference: environment state.
