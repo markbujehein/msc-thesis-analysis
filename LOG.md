@@ -37,3 +37,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Unverified: that IPMEPL is thymol (2-isopropyl-5-methylphenol) and not an isomer (no bond/ring-position check run); whether it is the Thozet & Perrin 1980 structure; the temperature of the measurement. The PDB is a single molecule, with no hydrogens checked (25 atoms are listed, element identity not read).
 - Source: probably CSD via ConQuest, user-obtained. Possible primary reference `thozet1980`, not confirmed.
 - Next: get the IPMEPL CIF from the CSD (it has temperature and references), run the ring-position check on it, then compare with Structure 3.
+
+## 2026-11-06 12:40 - Stop hook now matches its message (Claude)
+- What: `.claude/hooks/check_log.sh` accepts a new `LOG.md` line `No reference: <reason>` as an alternative to a `refs.bib` change; the block message names that marker. `add-reference` skill updated (step 5).
+- Finding: tested by hand with a temporary `.pdb`: blocked without the line, passed with it (test file removed, `LOG.md` restored).
+- Unchanged: the hook still checks `git status`, so a commit in the same turn bypasses it (review finding 1, open).

@@ -11,3 +11,5 @@ For every kept download or sourced fact from a peer-reviewed publication:
 4. Add the key to the `Source:` line of the matching `LOG.md` entry.
 
 Non-peer-reviewed sources (vendor pages, wikis) are not added to `refs.bib`; mention them in `LOG.md` only.
+
+5. If no peer-reviewed source applies to a kept data file, add the line `No reference: <reason>` to the new `LOG.md` entry. The Stop hook accepts that instead of a `refs.bib` change.

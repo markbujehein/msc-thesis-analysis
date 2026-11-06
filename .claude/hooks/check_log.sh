@@ -7,8 +7,9 @@ ch=$(git status --porcelain -uall . | grep -vE ' \.claude/|LOG\.md$|refs\.bib$' 
 [ -z "$ch" ] && exit 0
 msg=""
 git status --porcelain . | grep -q 'LOG\.md$' || msg="LOG.md has no new entry for: $(echo $ch | tr '\n' ' '). Use the log-entry skill. "
-if echo "$ch" | grep -qiE '\.(cif|pdb|pdf)$' && ! git status --porcelain . | grep -q 'refs\.bib$'; then
-  msg="${msg}New/changed data files but refs.bib is unchanged: use the add-reference skill (or state in LOG.md why no peer-reviewed source applies)."
+if echo "$ch" | grep -qiE '\.(cif|pdb|pdf)$' && ! git status --porcelain . | grep -q 'refs\.bib$' \
+   && ! git diff HEAD -U0 -- LOG.md | grep -qi '^+.*no reference:'; then
+  msg="${msg}New/changed data files but refs.bib is unchanged: use the add-reference skill, or add a line 'No reference: <why no peer-reviewed source applies>' to the new LOG.md entry."
 fi
 [ -z "$msg" ] && exit 0
 printf '{"decision":"block","reason":%s}\n' "$(printf '%s' "$msg" | python3 -c 'import json,sys;print(json.dumps(sys.stdin.read()))')"
