@@ -81,3 +81,16 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Kept: the findings recorded about it in earlier entries (cell 14.730/14.730/23.115 A, R-3, Z=18; thymol by formula and ring pattern). Those came from reading the file and are not redone here.
 - PDBs now in `pdb/`: only the two generated from `thymol_cif/4101955.cif` (predicted Structure 3, no temperature).
 - No reference: file removal, nothing new sourced.
+
+## 2026-11-06 13:17 - Delete guard and log-hook fixes (Claude)
+- What: new `PreToolUse` hook `.claude/hooks/guard_delete.sh` (registered in `.claude/settings.json`). Destructive commands (`rm`, `rmdir`, `unlink`, `shred`, `truncate`, `find -delete`, `git reset --hard`, `git clean`, `git restore`, `git checkout --`, `git rm`, `git branch -D`, `git stash drop`, forced push, Python `rmtree`/`os.remove`/`unlink`) now ask the user for approval, and the prompt tells Claude to list the target first. `.claude/hooks/check_log.sh`: untracked files only count if they are newer than the last `LOG.md` commit.
+- Why: Claude deleted a directory without listing it first and discarded uncommitted edits with `git reset --hard`; neither was requested.
+- Finding (hand test, 15 sample commands): the 8 destructive ones asked; the 7 harmless ones (`ls`, `git status`, `git log`, `grep rm file`, a version check, a commit message containing "rm", `git reset --soft`) were allowed.
+- Limit: matches command text only. A deletion hidden in a script file, an overwrite with `cp`, `mv`, `sed -i` or `>` is not caught. Hooks may need a new session or `/hooks` reload.
+- Note on times: the times in the entry headers above were typed by hand, not read from the clock. The git commit times are authoritative.
+- No reference: tooling.
+
+## 2026-11-06 13:17 - GAFF2 O-H stretch for thymol (Claude)
+- Finding: GAFF2 (`gaff-2.11`, flexible, no constraints) gives an O-H bond with k = 471537 kJ/mol/nm^2, r0 = 0.0973 nm: a harmonic stretch of **464 meV** (O and H masses only). Near an isolated O-H; no H-bond softening, so it should sit above the crystal value (expected about 400-420 meV, general knowledge, unverified).
+- Not reproducible from the repo: the script and the environment used were not kept. Redo before relying on it.
+- No reference: computed value.

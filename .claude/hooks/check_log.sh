@@ -7,7 +7,8 @@ in=$(cat); echo "$in" | grep -q '"stop_hook_active": *true' && exit 0   # no loo
 git rev-parse --git-dir >/dev/null 2>&1 || exit 0
 B=$(git log -1 --format=%H -- LOG.md 2>/dev/null)
 [ -z "$B" ] && B=$(git hash-object -t tree /dev/null)
-ch=$( { git diff --name-only "$B" -- . ; git ls-files -o --exclude-standard; } | sort -u \
+ts=$(git log -1 --format=%ct "$B" 2>/dev/null || echo 0)   # untracked files only count if newer than the last LOG.md commit
+ch=$( { git diff --name-only "$B" -- . ; git ls-files -o --exclude-standard | while IFS= read -r f; do [ "$(stat -c %Y "$f")" -gt "$ts" ] && echo "$f"; done; } | sort -u \
       | grep -vE '^\.claude/|^LOG\.md$|^refs\.bib$|^\.gitignore$' )
 [ -z "$ch" ] && exit 0
 msg=""
