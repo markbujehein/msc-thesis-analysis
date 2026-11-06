@@ -4,7 +4,7 @@ positions carry OH / isopropyl / methyl, numbered from the OH carbon. Thymol = O
 import sys, re, numpy as np
 
 def read(fn):
-    t = open(fn).read().split('\n')
+    with open(fn) as f: t = f.read().split('\n')
     if fn.endswith('.pdb'):
         at = [l for l in t if l.startswith(('ATOM', 'HETATM'))]
         el = [re.sub(r'[^A-Z]', '', l[12:16].strip()[:1].upper()) for l in at]   # element = first letter of atom name
@@ -45,8 +45,15 @@ THYMOL = [(1, 'OH'), (2, 'iPr'), (5, 'Me')]
 def mirror(pat):  # same ring numbered in the other direction, still starting at the OH carbon
     return sorted(((1 - p) % 6 + 1, name) for p, name in pat)
 
-for fn in sys.argv[1:]:
+def is_thymol_pattern(pat):
+    return pat is not None and (pat == THYMOL or mirror(pat) == THYMOL)
+
+def classify(fn):
     el, xyz = read(fn); pat = pattern(el, xyz)
     formula = sorted(el) == sorted("C" * 10 + "H" * 14 + "O")
-    ok = formula and pat is not None and (pat == THYMOL or mirror(pat) == THYMOL)
-    print(f'{fn}: atoms={len(el)} formula_ok={formula} ring_positions={pat} -> {"THYMOL" if ok else "NOT thymol / unclear"}')
+    return pat, formula and is_thymol_pattern(pat)
+
+if __name__ == '__main__':
+    for fn in sys.argv[1:]:
+        pat, ok = classify(fn)
+        print(f'{fn}: ring_positions={pat} -> {"THYMOL" if ok else "NOT thymol / unclear"}')
