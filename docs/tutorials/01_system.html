@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>1 Build the system</title><link rel="stylesheet" href="tutorial.css"></head>
+<body><div class="shell"><nav class="rail" aria-label="Tutorial pages"><p>Thymol DOS, test first</p><ol>
+<li><a href="index.html">Set up and workflow</a></li>
+<li><a href="01_system.html" aria-current="page">1 Build the system</a></li>
+<li><a href="02_run.html">2 Run the dynamics</a></li>
+<li><a href="03_dos.html">3 Compute the DOS</a></li></ol>
+<p>Rules: energies in meV, a failing test before any code, ask before any pixi change.</p></nav>
+<main><h1>1 Build the system</h1>
+<p class="lead">Goal: <code>md/build.py</code> with three functions, tested, and <code>md/01_system.py</code> showing the checks. Run <code>pixi run pytest</code> from <code>md/</code>, so <code>build</code> is importable. Put the tests in <code>md/tests/test_build.py</code>.</p>
+<p>The cell is the 2×2×1 PDB (1800 atoms, 72 molecules). The unit cell is too narrow for a 1 nm cutoff.</p>
+<h2>Read the structure</h2>
+<section class="step"><input type="checkbox" aria-label="Done: Read the PDB"><div><h3>Read the PDB</h3><span class="tag red">Write this test first. It must fail.</span><pre class="red"><code>from pathlib import Path
+from build import read_pdb
+
+PDB = Path(__file__).parents[2] / &quot;pdb&quot; / &quot;thymol_structure3_R-3_2x2x1.pdb&quot;
+
+def test_the_2x2x1_pdb_has_1800_atoms_in_72_molecules():
+    atoms, box = read_pdb(PDB)
+    assert len(atoms) == 1800
+    assert len({a.residue for a in atoms}) == 72</code></pre><p class="expect">Expect a <code>ModuleNotFoundError</code> for <code>build</code>. That is the right reason to fail.</p><span class="tag green">Then write the least code that passes.</span><p><code>read_pdb(path)</code> returns the atoms (name, element, residue number, position) and the box from the <code>CRYST1</code> line. A PDB uses fixed columns: atom name 13–16, residue number 23–26, x, y, z in 31–38, 39–46, 47–54, element 77–78.</p></div></section>
+<section class="step"><input type="checkbox" aria-label="Done: Find the bonds"><div><h3>Find the bonds</h3><span class="tag red">Write this test first. It must fail.</span><pre class="red"><code>from build import bonds_from_geometry
+
+def test_every_molecule_has_25_bonds():
+    atoms, box = read_pdb(PDB)
+    bonds = bonds_from_geometry(atoms)
+    per_molecule = {}
+    for i, j in bonds:
+        per_molecule[atoms[i].residue] = per_molecule.get(atoms[i].residue, 0) + 1
+    assert set(per_molecule.values()) == {25}</code></pre><span class="tag green">Then write the least code that passes.</span><p>Two atoms are bonded when they are closer than 1.2 Å if one is hydrogen, 1.7 Å otherwise. Molecules in this PDB are whole, so you need no periodic wrapping. The bond count of 25 is 11 heavy-atom bonds plus 14 bonds to hydrogen.</p><details><summary>Why geometry?</summary>The PDB has no bond records, and OpenMM cannot guess bonds for a residue it does not know. Without bonds the parameter generator cannot match the molecule.</details></div></section>
+<h2>Parameterise</h2>
+<section class="step"><input type="checkbox" aria-label="Done: Make the OpenMM system"><div><h3>Make the OpenMM system</h3><span class="tag red">Write this test first. It must fail.</span><pre class="red"><code>from build import make_system
+
+THYMOL = &quot;Cc1ccc(C(C)C)c(O)c1&quot;
+
+def test_the_system_is_flexible_and_complete():
+    system, topology, positions = make_system(PDB, THYMOL, cutoff_nm=1.0)
+    assert system.getNumParticles() == 1800
+    assert system.getNumConstraints() == 0</code></pre><span class="tag green">Then write the least code that passes.</span><p>Use openmmforcefields' <code>SystemGenerator</code> with <code>small_molecule_forcefield="gaff-2.11"</code>, the thymol molecule from <code>Molecule.from_smiles</code>, and <code>forcefield_kwargs={"constraints": None, "rigidWater": False}</code>. Particle mesh Ewald and the cutoff go in through the generator's periodic settings: check its documentation for the exact argument name before you write it.</p>
+<p><strong>Do not copy two lines from the openmmforcefields example:</strong> <code>constraints: HBonds</code> and <code>hydrogenMass: 4 * unit.amu</code>. They make production runs faster and they also change the hydrogen vibrations, which is the spectrum you are after.</p>
+<p>Set the box vectors from <code>read_pdb</code>: the hexagonal cell is triclinic.</p></div></section>
+<section class="step"><input type="checkbox" aria-label="Done: Minimise and check the energy"><div><h3>Minimise and check the energy</h3><span class="tag red">Write this test first. It must fail.</span><pre class="red"><code>import math
+import openmm as mm
+import openmm.unit as u
+import openmm.app as app
+
+def test_energy_is_finite_after_minimisation():
+    system, topology, positions = make_system(PDB, THYMOL, cutoff_nm=1.0)
+    sim = app.Simulation(topology, system, mm.VerletIntegrator(0.0005))
+    sim.context.setPositions(positions)
+    sim.minimizeEnergy()
+    energy = sim.context.getState(getEnergy=True).getPotentialEnergy()
+    assert math.isfinite(energy.value_in_unit(u.kilojoule_per_mole))</code></pre><span class="tag green">Then write the least code that passes.</span><p class="note">A failure here is informative: an energy of <code>nan</code> usually means overlapping atoms or a wrong box. Check the box before the force field.</p></div></section>
+<h2>Show it in the notebook</h2>
+<section class="step"><input type="checkbox" aria-label="Done: Fill 01_system.py"><div><h3>Fill 01_system.py</h3><p>Cells for <code>md/01_system.py</code>, each calling the module and showing the result:</p>
+<ul><li>atom, molecule and bond counts, and the box lengths in Å;</li><li>the number of constraints (it must be 0);</li><li>the energy after minimisation, in kJ/mol;</li><li>the O–H bond of the GAFF2 system: its force constant <em>k</em> and the harmonic energy ħ√(<em>k</em>/μ), with μ = m<sub>O</sub>m<sub>H</sub>/(m<sub>O</sub>+m<sub>H</sub>), in meV.</li></ul>
+<p class="expect">Earlier, with <code>gaff-2.11</code> and a single molecule, I got <em>k</em> = 471537 kJ/mol/nm² and about 464 meV. That is a guide, not a requirement: it came from an environment that was later removed.</p></div></section></main></div><script src="progress.js"></script></body></html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3 Compute the DOS</title><link rel="stylesheet" href="tutorial.css"></head>
+<body><div class="shell"><nav class="rail" aria-label="Tutorial pages"><p>Thymol DOS, test first</p><ol>
+<li><a href="index.html">Set up and workflow</a></li>
+<li><a href="01_system.html">1 Build the system</a></li>
+<li><a href="02_run.html">2 Run the dynamics</a></li>
+<li><a href="03_dos.html" aria-current="page">3 Compute the DOS</a></li></ol>
+<p>Rules: energies in meV, a failing test before any code, ask before any pixi change.</p></nav>
+<main><h1>3 Compute the DOS</h1>
+<p class="lead">Goal: <code>md/dos.py</code> turning velocities into g(E) with energy in meV, and <code>md/03_dos.py</code> showing it. This step needs only numpy, so it works before the full environment is installed. Tests go in <code>md/tests/test_dos.py</code>.</p>
+<h2>The idea</h2>
+<p>The power spectrum of the velocities is the Fourier transform of their autocorrelation function. Its peaks sit at the vibrational energies. Energy follows from frequency as E = h·f, with h = 4135.667696 meV·fs. The resolution of a run of N frames spaced dt apart is h/(N·dt).</p>
+<h2>Write the tests</h2>
+<section class="step"><input type="checkbox" aria-label="Done: One oscillator, one peak"><div><h3>One oscillator, one peak</h3><span class="tag red">Write this test first. It must fail.</span><pre class="red"><code>import numpy as np
+from dos import dos, resolution_mev
+
+H_MEV_FS = 4135.667696          # Planck constant in meV*fs
+
+def oscillator(energy_mev, n=20000, dt_fs=2.0, atoms=3):
+    t = np.arange(n) * dt_fs
+    f = energy_mev / H_MEV_FS   # 1/fs
+    phase = np.random.default_rng(0).uniform(0, 2 * np.pi, (1, atoms, 3))
+    return np.cos(2 * np.pi * f * t[:, None, None] + phase)
+
+def test_peak_is_at_the_oscillator_energy():
+    e, g = dos(oscillator(41.0), dt_fs=2.0)
+    assert abs(e[np.argmax(g)] - 41.0) &lt; 2 * resolution_mev(20000, 2.0)
+
+def test_resolution_is_h_over_total_time():
+    assert abs(resolution_mev(20000, 2.0) - H_MEV_FS / (20000 * 2.0)) &lt; 1e-9
+
+def test_two_oscillators_give_two_peaks():
+    v = oscillator(41.0)[:, :2] + 0 ; w = oscillator(120.0)[:, :2]
+    e, g = dos(np.concatenate([v, w], axis=1), dt_fs=2.0)
+    top = e[np.argsort(g)[-40:]]
+    assert (abs(top - 41.0) &lt; 1).any() and (abs(top - 120.0) &lt; 1).any()</code></pre><p class="expect">With a stub that raises <code>NotImplementedError</code>, all three tests fail with that error. That is the right reason.</p><span class="tag green">Then write the least code that passes.</span><details><summary>Stuck? One version that passes</summary><pre class="green"><code>import numpy as np
+
+H_MEV_FS = 4135.667696          # Planck constant in meV*fs
+
+def resolution_mev(n_frames, dt_fs):
+    return H_MEV_FS / (n_frames * dt_fs)
+
+def dos(velocities, dt_fs):
+    &quot;&quot;&quot;velocities: (n_frames, n_atoms, 3). Returns energy in meV and g(E) normalised to area 1.&quot;&quot;&quot;
+    n = len(velocities)
+    x = velocities.reshape(n, -1)
+    x = (x - x.mean(0)) * np.hanning(n)[:, None]        # remove drift, taper the ends
+    g = (np.abs(np.fft.rfft(x, axis=0)) ** 2).sum(1)     # power spectrum = Fourier transform of the VACF
+    e = np.fft.rfftfreq(n, d=dt_fs) * H_MEV_FS
+    return e, g / np.trapezoid(g, e)</code></pre><p class="note">With the reference version, all three tests passed in a numpy-only run. Try writing yours first.</p></details></div></section>
+<section class="step"><input type="checkbox" aria-label="Done: Hydrogen only"><div><h3>Hydrogen only</h3><span class="tag red">Write this test first. It must fail.</span><pre class="red"><code>from dos import h_projected_dos
+
+def test_hydrogen_dos_ignores_the_other_atoms():
+    v = oscillator(41.0, atoms=2); w = oscillator(120.0, atoms=2)    # atoms 0-1 are H, atoms 2-3 are C
+    velocities = np.concatenate([v, w], axis=1)
+    is_h = np.array([True, True, False, False])
+    e, g = h_projected_dos(velocities, dt_fs=2.0, is_hydrogen=is_h)
+    assert abs(e[np.argmax(g)] - 41.0) &lt; 1</code></pre><span class="tag green">Then write the least code that passes.</span><p><code>h_projected_dos(velocities, dt_fs, is_hydrogen)</code> selects the hydrogen atoms and calls the same function. In the incoherent approximation the neutron signal is dominated by hydrogen, so this is the curve to compare with TOSCA.</p></div></section>
+<h2>Show it in the notebook</h2>
+<section class="step"><input type="checkbox" aria-label="Done: Fill 03_dos.py"><div><h3>Fill 03_dos.py</h3><ul><li>load the velocity file written by <code>02_run.py</code>;</li>
+<li>plot the total and the hydrogen DOS against energy in meV, and print the resolution;</li>
+<li>run a convergence check: compute the hydrogen DOS for the 1×1×1 and the 2×2×1 cell with the <em>same</em> 0.6 nm cutoff and compare them below about 30 meV, where the lattice modes depend on how many wavevectors the cell holds;</li>
+<li>leave one cell empty for the measured spectrum, to overlay later.</li></ul>
+<p class="note">Do not compare absolute heights with the measured spectrum yet. The neutron weighting, the Debye–Waller factor and the multiphonon terms are not part of this first version.</p></div></section></main></div><script src="progress.js"></script></body></html>

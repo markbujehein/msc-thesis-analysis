@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2 Run the dynamics</title><link rel="stylesheet" href="tutorial.css"></head>
+<body><div class="shell"><nav class="rail" aria-label="Tutorial pages"><p>Thymol DOS, test first</p><ol>
+<li><a href="index.html">Set up and workflow</a></li>
+<li><a href="01_system.html">1 Build the system</a></li>
+<li><a href="02_run.html" aria-current="page">2 Run the dynamics</a></li>
+<li><a href="03_dos.html">3 Compute the DOS</a></li></ol>
+<p>Rules: energies in meV, a failing test before any code, ask before any pixi change.</p></nav>
+<main><h1>2 Run the dynamics</h1>
+<p class="lead">Goal: <code>md/run.py</code> with a velocity reporter and a function that runs minimise, equilibrate and produce, and <code>md/02_run.py</code> showing the run. Tests go in <code>md/tests/test_run.py</code>.</p>
+<h2>Why velocities, why every 4 steps</h2>
+<table><tr><th>Setting</th><th>Value</th><th>Reason</th></tr>
+<tr><td>Time step</td><td>0.5 fs, no constraints</td><td>OpenMM's docs: about 1 fs is typical without constraints; constraints would remove the O–H and C–H stretches.</td></tr>
+<tr><td>Write interval</td><td>4 steps = 2 fs</td><td>The highest energy you can see is h/(2 × 2 fs) = about 1030 meV, above the O–H stretch (about 460 meV in GAFF2).</td></tr>
+<tr><td>File size</td><td>about 1.1 GB per 100 ps</td><td>1800 atoms × 3 × 4 bytes per frame, 50 000 frames. Start with 2 ps (about 22 MB).</td></tr></table>
+<h2>Write the reporter</h2>
+<section class="step"><input type="checkbox" aria-label="Done: Save velocities at a fixed interval"><div><h3>Save velocities at a fixed interval</h3><span class="tag red">Write this test first. It must fail.</span><pre class="red"><code>import numpy as np
+import openmm as mm
+import openmm.app as app
+from run import VelocityReporter
+
+def tiny_simulation():
+    system = mm.System()
+    for _ in range(2): system.addParticle(12.0)
+    bond = mm.HarmonicBondForce(); bond.addBond(0, 1, 0.15, 1e5); system.addForce(bond)
+    top = app.Topology(); res = top.addResidue(&quot;X&quot;, top.addChain())
+    for name in (&quot;C1&quot;, &quot;C2&quot;): top.addAtom(name, app.Element.getBySymbol(&quot;C&quot;), res)
+    sim = app.Simulation(top, system, mm.VerletIntegrator(0.0005))   # 0.5 fs, in ps
+    sim.context.setPositions([[0, 0, 0], [0.16, 0, 0]])
+    sim.context.setVelocitiesToTemperature(10)
+    return sim
+
+def test_the_reporter_writes_every_4th_step(tmp_path):
+    sim = tiny_simulation(); out = tmp_path / &quot;v.npy&quot;
+    reporter = VelocityReporter(out, every=4)
+    sim.reporters.append(reporter); sim.step(40); reporter.close()
+    assert np.load(out).shape == (10, 2, 3)</code></pre><p class="expect">Expect a <code>ModuleNotFoundError</code> for <code>run</code>.</p><span class="tag green">Then write the least code that passes.</span><p>OpenMM's built-in <code>DCDReporter</code> saves positions only. Write a small reporter class with <code>describeNextReport</code> and <code>report</code>, following the pattern in the OpenMM documentation ("Extracting and Reporting Forces"). Ask for <code>'velocities'</code>, collect <code>state.getVelocities(asNumpy=True)</code> as float32, and write the array in <code>close()</code>.</p>
+<p class="note">The documentation shows <code>describeNextReport</code> returning a dictionary with <code>steps</code> and <code>include</code> keys. Older OpenMM versions used a tuple. This test will tell you which your version accepts.</p></div></section>
+<h2>Run the stages</h2>
+<section class="step"><input type="checkbox" aria-label="Done: Minimise, equilibrate, produce"><div><h3>Minimise, equilibrate, produce</h3><span class="tag red">Write this test first. It must fail.</span><pre class="red"><code>from run import run
+
+def test_a_short_run_gives_finite_energies_and_the_right_number_of_frames(tmp_path):
+    sim = tiny_simulation()
+    result = run(sim, equilibration_steps=200, production_steps=400, every=4, velocity_file=tmp_path / &quot;v.npy&quot;)
+    assert np.isfinite(result[&quot;final_potential_kj_mol&quot;])
+    assert np.load(tmp_path / &quot;v.npy&quot;).shape == (100, 2, 3)</code></pre><span class="tag green">Then write the least code that passes.</span><p>Equilibrate with a thermostat at the target temperature (10 K). Then produce without one, so the dynamics are not disturbed, and attach the reporter only for production. <code>run</code> returns a small dictionary of results, including the final potential energy in kJ/mol.</p>
+<details><summary>How do I change the integrator?</summary>Build a new <code>Simulation</code> for production from the same system, topology and the equilibrated positions and velocities. Do not copy the state through text files.</details></div></section>
+<h2>Show it in the notebook</h2>
+<section class="step"><input type="checkbox" aria-label="Done: Fill 02_run.py"><div><h3>Fill 02_run.py</h3><ul><li>parameters at the top: temperature 10 K, time step 0.5 fs, write interval 4 steps, equilibration and production lengths;</li>
+<li>start with 2 ps of production (4000 steps), then raise it;</li>
+<li>plots of temperature and total energy against time. Check that the total energy is flat in production: a drift means the time step is too large or the setup is wrong;</li>
+<li>the path and size of the velocity file.</li></ul>
+<p class="note">Without a thermostat the temperature is not held: after equilibration it should hover near 10 K and fluctuate. Judge the run by energy conservation, not by the temperature curve.</p></div></section></main></div><script src="progress.js"></script></body></html>

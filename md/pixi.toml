@@ -15,6 +15,9 @@ openff-toolkit-base = ">=0.19.0,<0.20"
 openmmforcefields = ">=0.16.0,<0.17"
 ambertools = ">=26.0,<27"
 marimo = ">=0.25.1,<0.26"
+pytest = ">=9.2.0,<10"
+ruff = ">=0.17.4,<0.18"
+altair = ">=6.3.0,<7"
 
 [pypi-dependencies]
 mdanse = { version = ">=2.0.2, <3", extras = ["all"] }

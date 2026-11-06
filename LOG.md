@@ -121,3 +121,16 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
   - openff-toolkit: `Molecule.from_smiles`, `generate_conformers`; AM1-BCC charges go through AmberTools' antechamber and need exactly one conformer.
   - packmol: keywords `tolerance`, `filetype`, `output`, `pbc`, `structure ... number ... inside box ... end structure`. Source is a third-party generated page (context7.com/m3g/packmol/llms.txt), not the packmol site. Packmol builds liquids/mixtures; a crystal from a CIF does not need it.
 - No reference: software documentation.
+
+## 2026-11-06 13:54 - pytest added; MD design spec, empty marimo notebooks, tutorials (Claude)
+- What:
+  - `pixi add --no-install pytest` in `md/` at the user's request: `pytest >=9.2.0,<10` in `md/pixi.toml`, `md/pixi.lock` updated. Solved only; **nothing installed**.
+  - Design spec for review: `docs/superpowers/specs/2026-11-06-md-dos-design.md` (modules `md/dos.py`, `md/build.py`, `md/run.py` with their first tests; what each notebook does; settings and limits; three open questions). **No module code written**: the brainstorming gate needs the user's review of the spec first.
+  - Three empty marimo notebooks (valid skeleton only, not run): `md/01_system.py`, `md/02_run.py`, `md/03_dos.py`.
+  - Four tutorial pages for the user to follow, test first: `docs/tutorials/index.html`, `01_system.html`, `02_run.html`, `03_dos.html` (+ `tutorial.css`, `progress.js`). Open them in a browser.
+- Finding:
+  - The DOS tests shown in tutorial 3 were run in a scratch folder against a stub (3 failed, `NotImplementedError`) and against a reference implementation (3 passed, numpy only). That reference is shown in the tutorial; it is not in the repo.
+  - Tutorials 1 and 2 contain tests and API hints for OpenMM, openmmforcefields and a custom reporter that were **not run** (environment not installed). The reporter API (dictionary versus tuple from `describeNextReport`) and the openmmforcefields periodic settings are flagged in the text as things to check.
+  - Checked in a browser (Chrome via the devtools tool): index and 1 render with the sidebar; fixed three defects found on the way (black filled chart area, negative-going curve, a code line overflowing the column). Pages 2 and 3 were not viewed.
+  - Corrected a wrong statement before committing: the production temperature does not "settle at half"; it should hover near the target after equilibration.
+- No reference: software documentation and design notes.

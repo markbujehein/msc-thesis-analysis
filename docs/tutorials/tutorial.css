@@ -1,0 +1,43 @@
+:root{--paper:#F2F5F4;--ink:#15272C;--rule:#C5D3D0;--code:#E2EBE8;--signal:#4338CA;--red:#B3261E;--green:#17794A;--muted:#4C6168}
+@media (prefers-color-scheme:dark){:root{--paper:#101C20;--ink:#E3ECEA;--rule:#2F4349;--code:#18292E;--signal:#9A93FF;--red:#FF8A80;--green:#6FD3A0;--muted:#9DB3B8}}
+*{box-sizing:border-box}
+html{font-size:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:1.0625rem/1.65 Charter,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
+a{color:var(--signal)}
+a:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
+.shell{display:grid;grid-template-columns:15rem minmax(0,1fr);max-width:76rem;margin:0 auto;gap:0 3rem;padding:0 1.25rem}
+nav.rail{position:sticky;top:0;align-self:start;padding:2.5rem 0;font-size:.95rem}
+nav.rail p{margin:0 0 .75rem;color:var(--muted)}
+nav.rail ol{list-style:none;margin:0 0 1.5rem;padding:0;border-left:2px solid var(--rule)}
+nav.rail li a{display:block;padding:.35rem 0 .35rem 1rem;margin-left:-2px;border-left:2px solid transparent;text-decoration:none;color:var(--ink)}
+nav.rail li a[aria-current=page]{border-left-color:var(--signal);font-weight:700}
+nav.rail li a:hover{border-left-color:var(--rule)}
+main{min-width:0;max-width:43rem;padding:2.5rem 0 5rem}
+h1{font-size:2.4rem;line-height:1.1;letter-spacing:-.02em;margin:0 0 1rem}
+h2{font-size:1.45rem;line-height:1.25;letter-spacing:-.01em;margin:3rem 0 .75rem;padding-top:1.25rem;border-top:1px solid var(--rule)}
+h3{font-size:1.1rem;margin:1.75rem 0 .4rem}
+p,ul,ol{margin:0 0 1rem}
+.lead{font-size:1.2rem;color:var(--muted)}
+code,pre{font-family:"JetBrains Mono","Cascadia Code",ui-monospace,Menlo,Consolas,monospace;font-size:.88rem}
+code{background:var(--code);padding:.08em .35em;border-radius:3px}
+pre{background:var(--code);padding:1rem 1.1rem;overflow-x:auto;border-left:4px solid var(--rule);margin:0 0 1rem;line-height:1.5}
+pre code{background:none;padding:0}
+pre.red{border-left-color:var(--red)}pre.green{border-left-color:var(--green)}
+.tag{display:inline-block;font-weight:700;margin:.25rem 0 .35rem}
+.tag.red{color:var(--red)}.tag.green{color:var(--green)}
+.step{display:grid;grid-template-columns:1.6rem 1fr;gap:0 .6rem;align-items:start}
+.step>input{margin-top:.55rem;width:1.1rem;height:1.1rem;accent-color:var(--signal)}
+.step>div{min-width:0}
+.step h3{margin:.2rem 0 .4rem}
+.step:has(input:checked) h3{text-decoration:line-through;text-decoration-color:var(--rule);color:var(--muted)}
+.expect{border-left:4px solid var(--signal);padding:.1rem 0 .1rem 1rem;margin:0 0 1rem;color:var(--ink)}
+.note{color:var(--muted);font-size:.95rem}
+details{margin:0 0 1rem;border:1px solid var(--rule);padding:.5rem 1rem}
+summary{cursor:pointer;font-weight:700}
+details[open] summary{margin-bottom:.6rem}
+figure{margin:1.5rem 0 2rem}
+figure svg{width:100%;height:auto;display:block}
+figcaption{color:var(--muted);font-size:.9rem;margin-top:.4rem}
+table{border-collapse:collapse;margin:0 0 1rem;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:.45rem .6rem;border-bottom:1px solid var(--rule);vertical-align:top}
+@media (max-width:52rem){.shell{grid-template-columns:1fr}nav.rail{position:static;padding:1.25rem 0 0}nav.rail ol{border-left:0;display:flex;flex-wrap:wrap;gap:.25rem 1rem}nav.rail li a{padding:.2rem 0;border-left:0}h1{font-size:1.9rem}}
