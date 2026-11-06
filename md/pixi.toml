@@ -1,0 +1,28 @@
+[workspace]
+name = "md"
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[dependencies]
+python = "3.13.*"
+libgfortran5 = "*"
+# MDANSE (PyPI) needs scipy <= 1.17.1; the conda packages below otherwise pull 1.18.1
+scipy = "<=1.17.1"
+ase = ">=3.29.0,<4"
+rdkit = ">=2026.3.1,<2027"
+openff-toolkit-base = ">=0.19.0,<0.20"
+openmmforcefields = ">=0.16.0,<0.17"
+ambertools = ">=26.0,<27"
+
+[pypi-dependencies]
+mdanse = { version = ">=2.0.2, <3", extras = ["all"] }
+mdanse-gui = { version = ">=2.0.2, <3", extras = ["all"] }
+openmm = "*"
+packmol = ">=21.2.3, <22"
+pandas = ">=3.1.0, <4"
+matplotlib = ">=3.11.2, <4"
+numpy = ">=2.5.4, <3"
+
+[activation.env]
+QT_QPA_PLATFORM = "xcb"

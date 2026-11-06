@@ -94,3 +94,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Finding: GAFF2 (`gaff-2.11`, flexible, no constraints) gives an O-H bond with k = 471537 kJ/mol/nm^2, r0 = 0.0973 nm: a harmonic stretch of **464 meV** (O and H masses only). Near an isolated O-H; no H-bond softening, so it should sit above the crystal value (expected about 400-420 meV, general knowledge, unverified).
 - Not reproducible from the repo: the script and the environment used were not kept. Redo before relying on it.
 - No reference: computed value.
+
+## 2026-11-06 13:20 - md/pixi.toml written (Claude)
+- What: `md/pixi.toml`, workspace name `md`. Based on the user's workshop manifest (`simulation.pixi.toml`, untouched, still untracked in the repo root). Added: `scipy<=1.17.1` (MDANSE needs it), `ase`, `rdkit`, `openff-toolkit-base`, `openmmforcefields`, `ambertools` (thymol parameters via GAFF2; the flexible O-H bond is needed for the DOS).
+- Not run: no pixi or conda command, nothing solved or installed; no lock file. The versions in the file come from an earlier test solve that succeeded in a scratch copy (this exact set apart from `ase`, which was added right after and installed fine).
+- Next: the user decides when to run `pixi install` in `md/`.
+- No reference: environment definition.
