@@ -61,6 +61,6 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
   - New `thymol_cif/tests/test_make_pdb.py` (run `uv run --with numpy python thymol_cif/tests/test_make_pdb.py`): builds 4101955 (R-3, 18 molecules, 450 atoms), its 2x2x1 supercell (72 molecules) and 4101957 (P2_1/c, 4 molecules); checks 25 bonds per molecule, no overlaps incl. periodic images (heavy atoms > 2.4 A), density 0.9-1.2 g/cm3.
   - Deleted `thymol_BEST_MATCH_structure3_R-3.cif` (byte copy of `4101955.cif`). **Best-match Structure 3 = `thymol_cif/4101955.cif`.**
   - ready-gate: `READY_GATE=off` in `.claude/settings.json`; globally the SessionStart hook `ready_gate_registry.py` was removed from `~/.claude/settings.json` and the rule in `~/.claude/CLAUDE.md` rewritten (backups `*.bak-readygate`).
-- Finding: test prints `ok`. Regenerating both PDBs from `4101955.cif` is byte-identical to the committed ones (`cmp`). A CIF with Z changed to 17 makes the script fail on its Z assertion (output above this session, last line quoted: see tool result).
+- Finding: test prints `ok`. Regenerating both PDBs from `4101955.cif` is byte-identical to the committed ones (`cmp`). A CIF with Z changed to 17 makes the script fail on its Z assertion (`AssertionError: 18 unique molecules found, CIF says Z=17`).
 - Unchecked: other space groups beyond P2_1/c; CIFs whose symmetry loop has a different layout than COD's; the test does not check that atom positions are right, only geometry and counts.
 - Source: [ref: salager2010]
