@@ -24,3 +24,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
   - Look for any low-temperature thymol redetermination.
   - Choose the supercell size for the MD cutoff (perpendicular widths of the 2x2x1 box: 25.4 A and 22.7 A).
   - Protonation/force field and hydrogen positions have not been examined.
+
+## 2026-11-06 12:30 - Repo moved to project root (Claude)
+- What: the git repo, `.claude/` (skills, Stop hook), `LOG.md` and `refs.bib` were first created inside `thymol_cif/` by mistake. The project root is `/home/mark/Work/msc-thesis/`. They now live there; data, scripts and PDBs stay in `thymol_cif/`.
+- Note: file and script names in the entries above are relative to `thymol_cif/` (e.g. `scripts/make_pdb.py` = `thymol_cif/scripts/make_pdb.py`).
+- `.remember/` (plugin state) is git-ignored. `52035.pdb` in the root was already there (not made by Claude); not committed, origin unknown.
