@@ -75,3 +75,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Mistake: the first version of the checker only accepted one numbering direction and printed `NOT thymol` for `52035.pdb`. Fixed (the mirror case). The negative control (carvacrol pattern rejected) was run on the pattern logic only, not on a real carvacrol structure.
 - IPMEPL is therefore thymol by formula (C10H14O) and ring pattern. Still unverified: temperature, and whether it is the Thozet & Perrin 1980 entry.
 - Source: [ref: salager2010, grazulis2012, grazulis2009]
+
+## 2026-11-06 13:45 - Removed pdb/52035.pdb (Claude)
+- What: deleted `pdb/52035.pdb` on the user's request. It was user-supplied (CSD export IPMEPL), not a finding of this work. The file stays in git history (commit `0e7353a`, later moved to `pdb/`), so it can be restored.
+- Kept: the findings recorded about it in earlier entries (cell 14.730/14.730/23.115 A, R-3, Z=18; thymol by formula and ring pattern). Those came from reading the file and are not redone here.
+- PDBs now in `pdb/`: only the two generated from `thymol_cif/4101955.cif` (predicted Structure 3, no temperature).
+- No reference: file removal, nothing new sourced.
