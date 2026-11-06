@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard_delete.sh"
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard_delete.py"
           }
         ]
       }
