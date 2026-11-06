@@ -64,3 +64,14 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Finding: test prints `ok`. Regenerating both PDBs from `4101955.cif` is byte-identical to the committed ones (`cmp`). A CIF with Z changed to 17 makes the script fail on its Z assertion (`AssertionError: 18 unique molecules found, CIF says Z=17`).
 - Unchecked: other space groups beyond P2_1/c; CIFs whose symmetry loop has a different layout than COD's; the test does not check that atom positions are right, only geometry and counts.
 - Source: [ref: salager2010]
+
+## 2026-11-06 13:30 - Remaining review fixes; PDB files moved to pdb/ (Claude)
+- What:
+  - **PDB files now live in `pdb/`** (project root), not in `thymol_cif/` and not in the root: `pdb/52035.pdb`, `pdb/thymol_structure3_R-3_unitcell.pdb`, `pdb/thymol_structure3_R-3_2x2x1.pdb`. Older entries name them without the folder. New generated PDBs go to `pdb/` too (`scripts/make_pdb.py` takes the output path as an argument).
+  - Added `thymol_cif/scripts/check_thymol.py` (CIF or PDB): finds OH, isopropyl and methyl positions on the ring, numbered from the OH carbon, in either direction.
+  - `refs.bib`: added the COD papers `grazulis2012` (Nucleic Acids Res. 40, D420-D427; metadata checked against Crossref) and `grazulis2009` (J. Appl. Cryst. 42, 726-729).
+  - Hook (`.claude/hooks/check_log.sh`): file list in the block message is no longer split by the shell (review finding 6).
+- Finding (`check_thymol.py` output, run on 19 COD CIFs + 4 `SI_*` CIFs + `52035.pdb`): all 24 print `THYMOL` (OH at 1, isopropyl at 2, methyl at 5, or the same ring read in the other direction). That includes the 4 `SI_*` files that were unchecked before, and `52035.pdb` (CSD IPMEPL): ring positions as read `[(1,OH),(3,Me),(6,iPr)]` = the same pattern numbered the other way.
+- Mistake: the first version of the checker only accepted one numbering direction and printed `NOT thymol` for `52035.pdb`. Fixed (the mirror case). The negative control (carvacrol pattern rejected) was run on the pattern logic only, not on a real carvacrol structure.
+- IPMEPL is therefore thymol by formula (C10H14O) and ring pattern. Still unverified: temperature, and whether it is the Thozet & Perrin 1980 entry.
+- Source: [ref: salager2010, grazulis2012, grazulis2009]

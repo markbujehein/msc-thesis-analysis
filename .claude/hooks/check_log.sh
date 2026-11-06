@@ -11,7 +11,7 @@ ch=$( { git diff --name-only "$B" -- . ; git ls-files -o --exclude-standard; } |
       | grep -vE '^\.claude/|^LOG\.md$|^refs\.bib$|^\.gitignore$' )
 [ -z "$ch" ] && exit 0
 msg=""
-git diff --quiet "$B" -- LOG.md && msg="LOG.md has no new entry for: $(printf '%s ' $ch). Use the log-entry skill. "
+git diff --quiet "$B" -- LOG.md && msg="LOG.md has no new entry for: $(printf '%s' "$ch" | tr '\n' ' '). Use the log-entry skill. "
 if printf '%s\n' "$ch" | grep -qiE '\.(cif|pdb|pdf)$' && git diff --quiet "$B" -- refs.bib; then
   new=$(git diff "$B" -U0 -- LOG.md | grep '^+')
   ok=0; printf '%s\n' "$new" | grep -qi 'no reference:' && ok=1
