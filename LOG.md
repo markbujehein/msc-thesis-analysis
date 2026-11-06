@@ -42,3 +42,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - What: `.claude/hooks/check_log.sh` accepts a new `LOG.md` line `No reference: <reason>` as an alternative to a `refs.bib` change; the block message names that marker. `add-reference` skill updated (step 5).
 - Finding: tested by hand with a temporary `.pdb`: blocked without the line, passed with it (test file removed, `LOG.md` restored).
 - Unchanged: the hook still checks `git status`, so a commit in the same turn bypasses it (review finding 1, open).
+
+## 2026-11-06 12:50 - Hook no longer bypassed by same-turn commits (Claude)
+- What: `.claude/hooks/check_log.sh` now compares the working tree with the last commit that touched `LOG.md` (plus untracked files), instead of using `git status`. Data committed without a log entry is still blocked; a `LOG.md` change or a `refs.bib` change / `No reference:` line is judged against that same baseline.
+- Finding: hand tests with a temporary `.pdb`: clean tree passes; data committed with no log entry is blocked; the temporary commit and file were removed.
+- Mistake: my first cleanup used `git reset --hard HEAD~1`, which also threw away the uncommitted new hook. I restored it from the reflog (`66813a2`) and re-ran the tests with `git reset --mixed`.
+- Remaining weakness: an unlogged earlier edit to `LOG.md` that is still uncommitted counts as "logged" for new work. Fix by committing the log entry with the work.
