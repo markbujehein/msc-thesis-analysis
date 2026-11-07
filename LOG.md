@@ -344,3 +344,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Hooks: `check_log.sh`, `check_tasks.sh`, `check_deps.py` now locate the repo from their own real path instead of `$CLAUDE_PROJECT_DIR`. This session still carries the old project path, so I added a symlink `/home/mark/Work/msc-thesis/.claude` -> `../msc-thesis-analysis/.claude` (stopgap, remove after restarting Claude in the new directory). Ran all three through the old path: exit 0.
 - Old banner now in `.local/old-banner/` (git-ignored) instead of /tmp.
 - No reference: planning and housekeeping.
+
+## 2026-11-07 16:50 - Corrections after review: VESUVIO low energy, QENS, banner text (Claude)
+- What: the previous entry called the sub-25 meV VESUVIO claim "probably wrong". That was my inference, not a finding: the sources I read do not cover that region, and the user states it matters. Spec and README now say "not confirmed by the sources read" and keep cross-section and composition as the user stated. QENS is described as an exploratory check that may find nothing (no known QENS data); the earlier wording about temperature comparison and reorientation was speculation and is removed. Banner title and subtitle rewritten in plain words.
+- No reference: planning and wording.

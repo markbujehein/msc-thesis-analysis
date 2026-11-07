@@ -12,7 +12,7 @@ N = {  # key: (x, row, status, title, detail)
  "S": (260, 2, "done", "Reduction", "Mantid"),
  "T": (460, 2, "done", "Reduced spectra", "git-ignored"),
  "SYN": (60, 3, "planned", "Synthetic data", "stand-in runs"),
- "Q": (460, 3, "planned", "Quasi-elastic fit", "line broadening"),
+ "Q": (460, 3, "planned", "QENS check", "exploratory"),
  "IR": (460, 4, "planned", "FTIR and Raman", "band positions in meV"),
  "VR": (60, 5, "planned", "VESUVIO runs", "foil in / foil out"),
  "VM": (260, 5, "planned", "Foil difference", "Mantid LoadVesuvio"),

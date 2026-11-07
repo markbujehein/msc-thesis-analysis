@@ -1,4 +1,4 @@
-![Neutron spectra from molecular dynamics](docs/figures/banner.svg)
+![Molecular dynamics and neutron spectra](docs/figures/banner.svg)
 
 # Thymol: from a crystal structure to a simulated neutron spectrum
 
@@ -30,8 +30,9 @@ Solid green is DONE, dashed amber is WIP, dotted grey is PLANNED. Dotted arrows 
 | MACE machine-learned force field | **PLANNED** | second potential next to GAFF2 for MD and Hessian, to test how much the result depends on the force field |
 | FTIR and Raman cross-checks | **PLANNED** | band positions in meV against TOSCA and the simulation; low priority |
 | VESUVIO: neutron Compton scattering | **PLANNED** | foil-cycling reduction, fit per atomic mass, hydrogen momentum width and kinetic energy, compared with the simulated hydrogen dynamics |
+| VESUVIO: cross-section and low energy | **PLANNED** | transmission and cross-section of the sample; the region below 25 meV as a complement to TOSCA |
 | VESUVIO: diffraction | **PLANNED** | check of the crystal structure against the predicted one |
-| Quasi-elastic analysis of the TOSCA data | **PLANNED** | broadening of the elastic line between the two temperatures, compared with the simulation; method follows the supervisor's earlier work |
+| QENS check on the TOSCA data | **PLANNED** | exploratory: first find out whether the data show any quasi-elastic signal; it may find nothing. The supervisor has used the method before |
 | Measured crystal structure (CSD THYMOL) | **PLANNED** | download needs a CCDC login; until then the structure is a prediction |
 
 Model: GAFF2 with AM1-BCC charges, not fitted. Open work is tracked in [`docs/TASKS.md`](docs/TASKS.md).

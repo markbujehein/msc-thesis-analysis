@@ -46,6 +46,8 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [ ] QENS: look at the reduced TOSCA spectra for any quasi-elastic signal before planning anything; ask the supervisor for their earlier analyses.
+
 - [ ] Remove the symlink `/home/mark/Work/msc-thesis/.claude` after restarting Claude in `msc-thesis-analysis` (user).
 - [ ] Check the VESUVIO hydrogen kinetic-energy link and the MACE model choice against the literature before writing plans.
 
