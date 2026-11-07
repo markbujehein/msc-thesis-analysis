@@ -117,7 +117,7 @@ Inputs and conditions the spec implies but the main tests would not catch, most 
 **Files:**
 - Create: `analysis/tosca_detectors.py`
 - Test: `analysis/tests/test_tosca_detectors.py`
-- Output (new): `data/tosca_detectors.csv`
+- Output (new): `data/tosca_detectors_idf2016.csv`
 
 **Interfaces:**
 - Produces: `read_detectors(idf_path) -> list[dict]` each `{"bank": "back"|"front", "two_theta_deg": float, "efixed_mev": float}`, in file order; raises `ValueError` unless exactly 70 back and 70 front are found. `write_csv(detectors, path)` with columns `bank,two_theta_deg,efixed_mev`. Uses only the standard library.
@@ -125,7 +125,7 @@ Inputs and conditions the spec implies but the main tests would not catch, most 
 - [ ] **Step 1: Write the failing tests**: `test_counts_and_ranges` on `.pixi/envs/mantid/instrument/TOSCA_Definition_2016.xml` asserts 70 back with efixed min 2.690 and max 4.297 (tolerance 1e-3), 2 theta 127.0 to 140.8 deg; 70 front with efixed 2.688 to 4.294 and 2 theta 38.9 to 53.1 deg. `test_incomplete_table_raises`: an XML string with only 69 back detectors raises `ValueError`.
 - [ ] **Step 2: Run them.** Expected: FAIL (`ModuleNotFoundError`).
 - [ ] **Step 3: Implement** with `re` over the `<type name="back">` and `<type name="front">` blocks (the `location ... t="..."` attribute is the angle, `Efixed` the parameter).
-- [ ] **Step 4: Run the tests; then write** `data/tosca_detectors.csv` once (new file).
+- [ ] **Step 4: Run the tests; then write** `data/tosca_detectors_idf2016.csv` once (new file).
 - [ ] **Step 5: Log.**
 
 ### Task 6: INS simulation `analysis/ins.py`
@@ -135,7 +135,7 @@ Inputs and conditions the spec implies but the main tests would not catch, most 
 - Test: `analysis/tests/test_ins.py`
 
 **Interfaces:**
-- Consumes: `md/output/fc_2x2x1.npz` (Task 3 format), `data/tosca_detectors.csv` (Task 5).
+- Consumes: `md/output/fc_2x2x1.npz` (Task 3 format), `data/tosca_detectors_idf2016.csv` (Task 5).
 - Produces: `simulate_tosca(fc_path, detectors_csv, bank="back", temperature_K=10.0, q_mesh=(2, 2, 2), energy_edges_mev) -> tuple[np.ndarray, np.ndarray]`: energy bin centres (meV) and intensity with the TOSCA resolution applied. Steps (the abinslib/euphonic 2 API was only inspected by signature, not run: read the installed code first): build `euphonic.ForceConstants` from the file (kJ/mol/nm^2 times 0.10364 = meV/A^2), `calculate_qpoint_phonon_modes` on `mp_grid(q_mesh)`, `Displacements.from_modes(modes, temperature=...)`, per detector `calculate_indirect_q2(bins, angle, final_energy)` with that detector's values, `calculate_almost_isotropic_incoherent_spectra` and `mantid_like_combination_spectra`, `apply_weights(..., key='scattering_cross_section')`, average over the bank's detectors, then `resins` `AbINS_v1` broadening. Raises `ValueError` if the table does not have 70 detectors in the chosen bank.
 
 - [ ] **Step 1: Write the failing tests** in `analysis/tests/test_ins.py` (build a 2-atom fixture `.npz` by hand with a known bond force constant, no md env needed):

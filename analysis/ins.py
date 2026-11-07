@@ -1,7 +1,7 @@
 """Simulated TOSCA spectrum from GAFF2 force constants (run with the `ins` environment).
 
 Force constants come from md/supercell.py (kJ/mol/nm^2); detector angle and final energy per detector
-from data/tosca_detectors.csv, so nothing about the geometry is hardcoded.
+from data/tosca_detectors_idf2016.csv, so nothing about the geometry is hardcoded.
 """
 import csv
 from pathlib import Path

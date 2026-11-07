@@ -14,7 +14,7 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 - [ ] 2 `md/hessian.py`: ledger line and `LOG.md` entry.
 - [x] 3 `md/supercell.py`
 - [x] 4 `md/04_hessian.py` -> `md/output/fc_2x2x1.npz` (0 imaginary modes, 936 C-H and 72 O-H modes as expected)
-- [x] 5 `analysis/tosca_detectors.py` -> `data/tosca_detectors.csv`
+- [x] 5 `analysis/tosca_detectors.py` -> `data/tosca_detectors_idf2016.csv`
 - [ ] 6 `analysis/ins.py`: run on `fc_2x2x1.npz`. One detector first (time and memory were not recorded; the second-order spectra may be too heavy for 5400 modes), then the bank. Ask before grouping detectors.
 - [ ] 7 `analysis/compare.py`: check which reduced-CSV bank is the IDF "back" bank, then write `data/simulated/ins_back_2x2x1.csv` and log the fitted scale and peak positions.
 - [ ] 8 `md/thermo.py`: `LOG.md` entry with U, S, F, Cv at 10, 50, 100, 300 K (computed, not yet logged). Check the ASE overflow warnings at low T.
@@ -46,7 +46,7 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
-- [ ] Replace `data/tosca_detectors.csv` (temporary, from the 2016 Mantid definition) when an updated TOSCA definition is available; then rerun the INS comparison.
+- [ ] Replace `data/tosca_detectors_idf2016.csv` (temporary, from the 2016 Mantid definition) when an updated TOSCA definition is available; then rerun the INS comparison.
 
 - [ ] README figures: pipeline.svg is hand-placed; update `docs/figures/make_pipeline.py` whenever a step changes status.
 
