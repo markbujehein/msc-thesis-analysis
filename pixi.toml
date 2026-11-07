@@ -4,7 +4,7 @@
 # Why three science environments: Mantid 7 pins Python 3.13 and euphonic <2, abinslib needs euphonic >=2.
 
 [workspace]
-name = "msc-thesis"
+name = "msc-thesis-analysis"
 authors = ["Mark Sørensen <191927387+markbujehein@users.noreply.github.com>"]
 channels = ["conda-forge"]
 platforms = ["linux-64"]

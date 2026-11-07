@@ -1,4 +1,4 @@
-# msc-thesis
+# msc-thesis-analysis
 
 - **TDD is mandatory here.** Write the test first and run it to see it fail (red) for the right reason, then write the minimal code (green), then refactor. Applies to scripts, hooks and fixes. Docs and data files are exempt. Report the red and green runs.
 - Run all tests: `uv run --with numpy python -m unittest discover -s tests/unit/thymol_cif && uv run python -m unittest discover -s tests/unit/hooks`

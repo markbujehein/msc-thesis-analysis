@@ -298,3 +298,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Finding: guard hook after the edit and baseline change: none missing. `pixi.toml` parses.
 - Unverified: `pixi.lock` is stale until the user re-locks; without a python pin the md solve may choose a newer Python than the 3.14 the notebooks were run on (Mantid still pins 3.13 in its own environment).
 - No reference: tooling only.
+
+## 2026-11-07 15:39 - Rename: msc-thesis to msc-thesis-analysis (Claude)
+- What: on the user's instruction, because `msc-thesis` already exists on their account with the thesis document. Workspace name in `pixi.toml`, the heading in `CLAUDE.md`, and the absolute file links in `docs/TASKS.md` and the INS plan now use `msc-thesis-analysis`; the old tracker items about running the test suites were removed at the user's request. No git remote is configured, so nothing was renamed remotely. Older entries in this log keep the old path as history.
+- Unverified: the directory move itself and what it does to the installed pixi environments (conda prefixes are normally not relocatable; expect a reinstall).
+- No reference: housekeeping.

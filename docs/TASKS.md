@@ -2,8 +2,8 @@
 
 Open work only (list it with `grep -n '^- \[ \]' docs/TASKS.md`; the Stop hook `check_tasks.sh` blocks when a file is newer than this one); tick a box when it is done and say how it was checked. Last updated 2026-11-07.
 
-- Spec: file:///home/mark/Work/msc-thesis/docs/superpowers/specs/2026-11-06-md-dos-design.md
-- Plan: file:///home/mark/Work/msc-thesis/docs/superpowers/plans/2026-11-06-ins-from-gaff2.md
+- Spec: file:///home/mark/Work/msc-thesis-analysis/docs/superpowers/specs/2026-11-06-md-dos-design.md
+- Plan: file:///home/mark/Work/msc-thesis-analysis/docs/superpowers/plans/2026-11-06-ins-from-gaff2.md
 - History and results: `LOG.md`
 
 ## Plan tasks (INS from the GAFF2 Hessian)
@@ -21,7 +21,6 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Wrap-up
 
-- [ ] Rerun the full `md` and `analysis` test suites; report any failure by name.
 - [ ] Whole-branch review (self-review: no subagent for it in the plan run).
 - [x] Systematic commits (2026-11-07): 10 commits `956b5a6`..`494fb16` on master, explicit paths only. Left uncommitted on purpose: `data/zeppelin-experimental-data/` (30 MB raw TOSCA files; user decides), `analysis/.gitignore` and `analysis/.gitattributes` (leftovers of the removed analysis project; the lock-file attribute is not set for the root `pixi.lock`). `md/output/` and `md/__marimo__/session/` are now git-ignored.
 
@@ -52,7 +51,6 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 - [ ] Doctests are configured (`pytest.ini`) but no docstring has an example yet.
 
 - [x] Package-loss guard `check_deps.py` + `.claude/deps.baseline` (8 tests; it caught my own corruption of `pixi.toml` on 2026-11-07).
-- [ ] Test commands exist but untested: `test-unit-*`, `test-integration-*`, `*-all` and the `test-*` environments need a lock/solve (user go-ahead); no new tests written yet. The lock exists now, but `test-*` tasks have still not been run.
 
 - [x] Global `tests/unit/` and `tests/integration/` (user request, 2026-11-07; no new tests for now). Done 2026-11-07: tests moved, pixi tasks `test-unit`/`test-integration`; checked by test counts before/after (see `LOG.md`). Integration tests not executed.
 

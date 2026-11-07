@@ -8,7 +8,7 @@
 
 **Tech Stack:** OpenMM 8 and numpy in `md/`; euphonic 2.1.1, abinslib 0.3.0, resins 0.1.0 in `analysis/` env `ins`; Mantid 7.0.0 in `analysis/` env `default`; ASE `CrystalThermo` in `md/`.
 
-**Spec:** `file:///home/mark/Work/msc-thesis/docs/superpowers/specs/2026-11-06-md-dos-design.md` (approved by the user 2026-11-06). Not in this plan: the Bayesian band model (own plan, after the overlay of Task 7 exists), force-field scale-factor inference, p-cymene, NPT.
+**Spec:** `file:///home/mark/Work/msc-thesis-analysis/docs/superpowers/specs/2026-11-06-md-dos-design.md` (approved by the user 2026-11-06). Not in this plan: the Bayesian band model (own plan, after the overlay of Task 7 exists), force-field scale-factor inference, p-cymene, NPT.
 
 ## Global Constraints
 
