@@ -425,3 +425,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - What: README image links now carry the short git blob hash of the figure as a query string (`?v=c081004` for pipeline, `?v=bc01f05` for banner), so GitHub's image cache fetches the new file when a figure changes. Remote blobs were already identical to local (API blob sha c081004 for pipeline.svg).
 - Finding: cause of the stale image on the GitHub page is unverified (cache assumed).
 - Next: after a figure changes, update the `?v=` value with `git hash-object <file> | cut -c1-7`.
+
+## 2026-11-07 17:21 - Mantid VESUVIO algorithms surveyed; old-style versus modern workflow (Claude)
+- What: spec section 2 of `docs/superpowers/specs/2026-11-07-extended-data-design.md` extended with a table of the 14 VESUVIO algorithms, how Mantid fits and quotes uncertainties, and a reasoned plan for testing whether our Bayesian fit can replace the fit stage.
+- Source: Mantid 7.0.0 source in the rattler cache (`plugins/python/algorithms/Vesuvio*.py`, `scripts/Inelastic/vesuvio/analysisHelpers.py`); Mantid docs for the algorithm index, VesuvioCalculateMS, VesuvioCalculateGammaBackground, VesuvioL1ThetaResolution; web search (Romanelli et al., J. Phys.: Conf. Ser. 1055, 012016, abstract only). Not added to `refs.bib` (not read in full).
+- Finding: `VesuvioAnalysis` fits each detector by SLSQP least squares, averages widths with a 1-sigma cut, fits hydrogen in y-space with Simplex; no bootstrap, jackknife or MCMC in Mantid VESUVIO code (grep found none). Mantid Monte Carlo = multiple-scattering correction (seeded), L1/theta resolution; gamma background from a simulation. Unverified: the instrument scientists' bootstrap/jackknife/MCMC validation (no source found).
+- Next: ask for the reference or scripts; test plan in the spec (reference run, joint Bayesian fit, jackknife over detectors).

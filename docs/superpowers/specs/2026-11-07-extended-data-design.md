@@ -56,6 +56,30 @@ The main line stays: simulated TOSCA INS spectrum of thymol versus the measured 
 3. Fit the neutron Compton profile of each atomic mass in the sample (H, C, O): `VesuvioPreFit`, `VesuvioTOFFit`, with `VesuvioCorrections` for gamma background and multiple scattering. Result: the momentum distribution n(p) of each nucleus.
 4. For hydrogen, the width and the mean kinetic energy of n(p) follow. These are quantum quantities.
 
+**Mantid VESUVIO algorithms (7.0.0; 14 with "Vesuvio" in the name; read from the package source and the Mantid documentation):**
+
+| Step | Algorithm | What it does |
+|---|---|---|
+| Load | `LoadVesuvio`, `LoadEmptyVesuvio` | raw runs with foil-difference modes; empty instrument geometry |
+| Sample | `VesuvioTransmission`, `VesuvioThickness` | transmission spectrum; sample density from transmission |
+| Resolution | `VesuvioResolution`, `VesuvioL1ThetaResolution` | resolution function; Monte Carlo of final flight path and angle spread per detector (1 000 000 events by default) |
+| Prior estimate | `VesuvioPeakPrediction` | peak widths from a Debye or Einstein model |
+| Fit | `VesuvioPreFit`, `VesuvioTOFFit` | smoothing and masking; Compton profile fit per bank or per detector (Levenberg-Marquardt by default) |
+| Corrections | `VesuvioCorrections`, `VesuvioCalculateGammaBackground`, `VesuvioCalculateMS` | gamma background (forward banks only, from a simulation over the foils); multiple scattering by a seeded Monte Carlo after Mayers et al. (10 runs of 50 000 events by default) |
+| Whole workflow | `VesuvioAnalysis` | iterates fit and corrections in time of flight, then fits hydrogen in y-space; forward scattering only |
+| Deprecated | `VesuvioDiffractionReduction` | since April 2017 |
+
+**How the fitting is done in Mantid** (source read): in `VesuvioAnalysis` each detector spectrum is fitted separately by least squares (SLSQP, chi-squared of the Compton profile model); widths and intensities are then averaged over detectors after discarding values more than one standard deviation from the mean; hydrogen is finally fitted in y-space with a simplex minimizer. The quoted uncertainty is the scatter over detectors. A search of the Mantid VESUVIO sources found no bootstrap, jackknife or MCMC code. The Monte Carlo in Mantid is forward simulation of corrections and resolution, not statistical inference.
+
+**Unverified:** that instrument scientists validate fits by bootstrap or jackknife resampling with Monte Carlo inference. Neither the Mantid sources nor the literature search supports or contradicts it. A reference or the scientists' scripts are needed.
+
+**Is the old-style workflow required?** My reasoning, to be tested:
+
+- The forward-model pieces cannot be skipped or cheaply re-implemented: foil differencing, instrument parameters and resolution, transmission, and the gamma and multiple-scattering corrections. Use the Mantid implementations.
+- The fitting stage is a different matter. Mantid uses plain least squares and detector scatter, so a Bayesian fit (dynesty, already a dependency) can replace it: one joint fit over all detectors with a width and an intensity per mass shared across detectors, using the model function in `Inelastic.vesuvio.analysisHelpers` (`calculate_ncp`, plain numpy) on Mantid-corrected data.
+- Catch: the corrections depend on the fitted parameters, which is why Mantid iterates. A Bayesian fit on corrected data is conditional on the converged corrections and ignores their uncertainty unless the loop is repeated.
+- Test of validity: run `VesuvioAnalysis` as the reference on one run, fit the same corrected spectra with the Bayesian model, and compare widths and intensities per mass against the detector scatter. Add a leave-one-detector-out (jackknife) and a bootstrap over detectors on top of our fit, which is cheap because the fits are already per detector. Agreement validates the fit stage; the correction stage stays Mantid's.
+
 **Relevance to this project** (my reasoning, not a source claim): thymol is hydrogen-rich, with an O-H group in a hydrogen bond and methyl and isopropyl C-H groups. A classical MD run cannot give the hydrogen kinetic energy, because the classical value is (3/2)kT regardless of the potential. A harmonic model can: with the hydrogen-projected vibrational density of states, the mean kinetic energy is a thermal sum over the modes. That gives a number from the simulation to compare with the fitted hydrogen width, and a way to test GAFF2 against MACE. This needs checking against the literature before any plan.
 
 **Diffraction** on the same instrument can confirm that the sample has the predicted crystal structure.
