@@ -394,3 +394,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - What: the force-field box read "MACE and others for higher accuracy", which was the user's own phrase pasted in. Replaced after a literature search: box "Force fields to try: MACE-OFF23, ANI-2x, AIMNet2"; README row and spec section 3 rewritten with sources (arXiv 2312.15211, arXiv 2505.06462). Found: MACE-OFF23 tested on 23 molecular crystals (sublimation enthalpies) and compared with ANI-2x; the 2025 preprint compares ANI-2x, MACE-OFF23, AIMNet2 on organic crystals. Not found: any vibrational or phonon benchmark for these; listed as unverified.
 - Process: same failure as the first VESUVIO text and the "last step" QENS label. New rule in `CLAUDE.md` (self-check: no four-word run from the user message unchanged) and a feedback memory. No hook: a mechanical check would flag legitimate quotes.
 - No reference added to `refs.bib` (planning text, papers not read in full).
+
+## 2026-11-07 17:08 - Force-field box simplified: MACE and a classical force field (Claude)
+- What: box now lists "MACE (machine-learned)" and "AMOEBA (classical)"; README row and spec section 3 shortened to match. Dropped ANI-2x and AIMNet2 (user wanted MACE plus one classical force field).
+- Unverified: AMOEBA is my proposal for the classical force field; accuracy versus GAFF2 for this crystal not checked.
+- No reference: planning.

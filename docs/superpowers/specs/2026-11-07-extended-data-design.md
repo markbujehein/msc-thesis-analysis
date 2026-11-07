@@ -64,12 +64,11 @@ The main line stays: simulated TOSCA INS spectrum of thymol versus the measured 
 **Open:** where the VESUVIO runs are, which sample and temperatures, whether empty-can and calibration runs exist, which Mantid VESUVIO fitting workflow the facility recommends (the `scripts/Inelastic/vesuvio` package or the algorithms above).
 **Sources:** ISIS VESUVIO page (https://www.isis.stfc.ac.uk/Pages/vesuvio.aspx); Mantid LoadVesuvio documentation (https://docs.mantidproject.org/nightly/algorithms/LoadVesuvio-v1.html); Mantid 7.0.0 source, `plugins/python/algorithms/Vesuvio*.py`.
 
-### 3. Machine-learned force fields (after the GAFF2 comparison)
+### 3. Better force fields (after the GAFF2 comparison)
 
-- **Goal:** replace GAFF2 in the MD and Hessian steps with potentials trained on quantum-chemistry data, and measure how much the spectrum changes. GAFF2 has a fixed functional form and charges that were not fitted to this crystal.
-- **Candidates:** MACE-OFF23 (a MACE model for organic molecules), ANI-2x and AIMNet2. Literature found: MACE-OFF23 was tested on 23 molecular crystals (sublimation enthalpies) and compared with ANI-2x in its paper ([arXiv 2312.15211](https://arxiv.org/html/2312.15211v2)); a 2025 preprint benchmarks ANI-2x, MACE-OFF23 and AIMNet2 on organic crystals ([arXiv 2505.06462](https://arxiv.org/pdf/2505.06462)).
-- **Unverified:** accuracy of any of them for crystal vibrational frequencies (the search found no such benchmark); element coverage of each model for this molecule (C, H, O); whether they run through ASE in this repo's environments; the cost of an 1800-atom Hessian.
-- **Open:** which candidates the user wants tried, and whether a DFT reference (the `dft/` folder) is part of this step.
+- **Goal:** replace GAFF2 in the MD and Hessian steps and measure how much the spectrum changes.
+- **Candidates:** MACE (machine-learned) and one classical force field more accurate than GAFF2. AMOEBA (polarizable, available in OpenMM) is my proposal for the classical one; the user has not confirmed it.
+- **Unverified:** that AMOEBA is more accurate than GAFF2 for this crystal; whether thymol can be parametrized for it; which MACE model fits an organic molecular crystal (MACE-OFF23 was tested on molecular crystals, [arXiv 2312.15211](https://arxiv.org/html/2312.15211v2)); the cost of an 1800-atom Hessian.
 
 ### 4. QENS check on the TOSCA data (exploratory, may lead nowhere)
 
