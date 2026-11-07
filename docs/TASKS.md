@@ -51,8 +51,8 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 - [ ] AFGA (papers read, refs.bib done 2026-11-07): check NCrystal in the environments; run `hfg2ncmat` for thymol (spec `3xCHaro+1xCHali+3xCH3+1xOH`, density from the crystal structure) and compare with the simulated hydrogen DOS.
 - [ ] Krzystyniak 2023 read (2026-11-07). Open: verify the recomputed E_kin and omega ratio against the journal page; read arXiv 2506.01860 and 2603.05442 in full; GAFF2 vs MACE Hessian comparison.
-- [ ] ML-method survey recorded (2026-11-07). Open: read OMC25 and UMA in full (levels of theory, elements, licence); read arXiv 2506.01860 and the Armstrong paper; decide whether to add the remaining unlisted references (Petrov 2026, DM21).
-- [ ] Investigate UMA (README force-field row, diagram, spec section 3): confirm C, H, O coverage, dispersion treatment and licence; then compare Hessians and spectrum with GAFF2.
+- [ ] ML-method survey recorded (2026-11-07). OMC25, OMol25, UMA read (see log). Open: read arXiv 2506.01860, the Armstrong paper and the npj Comput. Mater. phonon paper; decide whether to add Petrov 2026 and DM21.
+- [ ] Investigate UMA (papers read 2026-11-07): read the weights licence on Hugging Face; check fairchem install in its own environment (UMA needs it, not tested); compare GAFF2 and UMA Hessians on the same cell (imaginary modes first), then the spectrum. Settled from the papers: C, H, O covered, crystal task is PBE-D3, OMol task is wB97M-V (VV10).
 - [x] Diagram: UMA added and box renamed "Potentials to try" (2026-11-07). Checked: regenerated `docs/figures/pipeline.svg`, grep finds the title and UMA in the SVG, README `?v=` hash updated, first render (three-line box) viewed; the renamed-title render is saved but not viewed.
 - [x] Names aligned: README row and spec section 3 heading now "Potentials to try" (checked by grep, 2026-11-07).
 - [ ] Confirm the eSEN baseline names and licence (fallback to UMA); not yet in the README or diagram.

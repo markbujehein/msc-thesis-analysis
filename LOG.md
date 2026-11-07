@@ -485,3 +485,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 18:07 - README row and spec heading renamed to "Potentials to try" (Claude)
 - What: `README.md` status row and section 3 heading of the spec; tracker item ticked.
 - No reference: wording change.
+
+## 2026-11-07 18:14 - OMol25, OMC25 and UMA papers read (Claude)
+- What: PDFs from Omabib extracted to the git-ignored `.local/`; read OMC25 in full, OMol25 and UMA by section (abstract, datasets, evaluation, limitations, outlook, model table, dataset appendix) with targeted greps; new block "Findings from the three Meta papers" in section 3 of the spec; `refs.bib` entry for OMC25 changed from preprint to the Scientific Data article (key kept), notes of the other two updated.
+- Source: [ref: levine2025, gharakhanyan2025, wood2025]
+- Finding: OMol25 labels are wB97M-V with VV10 (stated in the OMC25 paper); D3 is in the OMC25 and ODAC25 labels (PBE-D3, VASP). Correction to my earlier survey: OMC25 is published (Scientific Data 13, 354, 2026) and its level of theory is now confirmed from the paper, not a search summary. C, H, O covered in OMC25. No paper compares a molecular-crystal phonon or INS spectrum with experiment; OMol25 states Hessian tests are absent. Weights licence text not read. Not read: appendices of OMol25 and UMA other than those named; the npj Comput. Mater. phonon paper.
+- Next: read the weights licence; install check of fairchem in a separate environment; GAFF2 vs UMA Hessian comparison.
