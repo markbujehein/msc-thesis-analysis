@@ -303,3 +303,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - What: on the user's instruction, because `msc-thesis` already exists on their account with the thesis document. Workspace name in `pixi.toml`, the heading in `CLAUDE.md`, and the absolute file links in `docs/TASKS.md` and the INS plan now use `msc-thesis-analysis`; the old tracker items about running the test suites were removed at the user's request. No git remote is configured, so nothing was renamed remotely. Older entries in this log keep the old path as history.
 - Unverified: the directory move itself and what it does to the installed pixi environments (conda prefixes are normally not relocatable; expect a reinstall).
 - No reference: housekeeping.
+
+## 2026-11-07 15:44 - README: status labels instead of prose caveats (Claude)
+- What: `README.md` now marks every step in the diagram and in a Status table with DONE, WIP, PLANNED or BLOCKED (legend at the top); removed the sentences that hedged in prose (test tasks, fixture-only INS code, unobtained structure). `pixi.lock` committed as written by the user's latest pixi run (38 insertions, 33 deletions; contents not re-checked).
+- Finding: statuses taken from `docs/TASKS.md` and `LOG.md`; the unobtained CSD structure is BLOCKED (needs a CCDC login).
+- No reference: documentation.

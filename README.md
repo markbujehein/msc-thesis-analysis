@@ -2,40 +2,47 @@
 
 MSc thesis workspace. The aim is to predict the **inelastic neutron scattering (INS) spectrum of crystalline thymol** (C10H14O) from a classical force field, and to compare it with a measured spectrum from the TOSCA spectrometer (ISIS). Everything is reproducible from one `pixi.toml`; every scientific step is written down in [`LOG.md`](LOG.md).
 
-All energies are in **meV**.
+All energies are in **meV**. Status labels used below: **DONE** (works and is tested), **WIP** (in progress), **PLANNED** (not started), **BLOCKED** (waiting on something outside the repo).
 
 ## How the pieces fit
 
 ```mermaid
 flowchart LR
-    A["Predicted crystal structures<br/>Salager 2010, COD 4101953-71"] --> B["PDB supercells<br/>thymol_cif/ and pdb/"]
-    B --> C["Flexible GAFF2 MD, 10 K<br/>OpenMM, md/"]
-    C --> D["Vibrational DOS<br/>from velocities"]
-    C --> E["Relaxed cell, Hessian,<br/>supercell unfolding"]
-    E --> F["INS per TOSCA detector<br/>abinslib, analysis/"]
-    R["Raw TOSCA runs<br/>TSC25989, TSC25990"] --> S["Reduction with Mantid"]
-    S --> T["Reduced spectra<br/>data/reduced/"]
-    F --> U["Overlay and scale fit"]
+    A["Predicted crystal structures<br/>Salager 2010, COD 4101953-71<br/><b>DONE</b>"] --> B["PDB supercells<br/>thymol_cif/ and pdb/<br/><b>DONE</b>"]
+    B --> C["Flexible GAFF2 MD, 10 K<br/>OpenMM, md/<br/><b>DONE</b>"]
+    C --> D["Vibrational DOS<br/>from velocities<br/><b>DONE</b>"]
+    C --> E["Relaxed cell, Hessian,<br/>supercell unfolding<br/><b>DONE</b>"]
+    E --> F["INS per TOSCA detector<br/>abinslib, analysis/<br/><b>WIP</b>"]
+    R["Raw TOSCA runs<br/>TSC25989, TSC25990"] --> S["Reduction with Mantid<br/><b>DONE</b>"]
+    S --> T["Reduced spectra<br/>data/reduced/<br/><b>DONE</b>"]
+    F --> U["Overlay and scale fit<br/><b>WIP</b>"]
     T --> U
-    classDef open stroke-dasharray: 5 4
-    class U open
+    U --> V["Bayesian band model<br/>dynesty<br/><b>PLANNED</b>"]
+    classDef done fill:#e3f1e8,stroke:#2f6b4f,color:#14281e
+    classDef wip fill:#fff1c9,stroke:#a06b00,color:#2b1d00,stroke-dasharray:5 4
+    classDef planned fill:#ececec,stroke:#777,color:#222,stroke-dasharray:2 4
+    class A,B,C,D,E,R,S,T done
+    class F,U wip
+    class V planned
 ```
 
-Dashed = not run yet. The INS code is written and tested on a small fixture, but has not yet been run on the real force constants.
+**WIP detail:** the INS code is written and tested on a small fixture. Its run on the real force constants and the overlay with TSC25990 come next.
 
-## Where things stand
+## Status
 
-| Step | State |
-|---|---|
-| Structure choice: Structure 3 of Salager et al. (R-3, best NMR match), PDB unit cell and 2x2x1 supercell | done |
-| Classical MD of the unit cell and the 2x2x1 supercell, velocity DOS in meV | done (resolved C-H stretch bands at about 376-396 meV, O-H at about 462-467 meV in the 1x1x1 DOS) |
-| Hessian of the 2x2x1 supercell at a true minimum, unfolded to force constants | done (no imaginary modes; 936 C-H and 72 O-H stretch modes) |
-| Harmonic thermodynamics from the DOS (U, S, F, Cv) | code and tests; numbers not yet logged |
-| TOSCA reduction of the two thymol runs, method in [`data/REDUCTION.md`](data/REDUCTION.md) | done |
-| INS spectrum on the real force constants, overlay with TSC25990 | **next** |
-| Bayesian band model (dynesty) | planned, separate plan |
+| Step | Status | Notes |
+|---|---|---|
+| Structure choice and PDB cells | **DONE** | Structure 3 of Salager et al. (R-3, best NMR match); unit cell and 2x2x1 supercell |
+| Classical MD and velocity DOS | **DONE** | 1x1x1 DOS: C-H stretch bands at about 376-396 meV, O-H at about 462-467 meV |
+| Hessian of the 2x2x1 supercell, unfolded to force constants | **DONE** | no imaginary modes; 936 C-H and 72 O-H stretch modes |
+| TOSCA reduction of the two thymol runs | **DONE** | method in [`data/REDUCTION.md`](data/REDUCTION.md) |
+| Harmonic thermodynamics from the DOS (U, S, F, Cv) | **WIP** | code and tests done; values not yet logged |
+| INS spectrum on the real force constants, overlay with TSC25990 | **WIP** | |
+| Pixi test, fix and lint tasks | **WIP** | defined in `pixi.toml` |
+| Bayesian band model | **PLANNED** | own plan, after the overlay |
+| Measured crystal structure (CSD THYMOL) | **BLOCKED** | download needs a CCDC login; until then the structure is a prediction |
 
-Open work is tracked in [`docs/TASKS.md`](docs/TASKS.md). Known limits: the force field is GAFF2 with AM1-BCC charges and nothing was fitted; the measured crystal structure (CSD THYMOL) has not been obtained, so the model structure is a prediction.
+Model: GAFF2 with AM1-BCC charges, not fitted. Open work is tracked in [`docs/TASKS.md`](docs/TASKS.md).
 
 ## Environments
 
@@ -62,8 +69,6 @@ cd md
 pixi run -e md marimo edit 03_dos.py              # notebooks: 01_system, 02_run, 03_dos, 04_hessian
 pixi run -e md python 02_run.py -- --cell 1x1x1   # or run one as a script
 ```
-
-The test and fix tasks are defined but have not been run through pixi yet; the unit tests were run directly in the earlier per-folder environments.
 
 ## Repository map
 

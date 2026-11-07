@@ -40,6 +40,8 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [x] README uses status labels DONE / WIP / PLANNED / BLOCKED (2026-11-07); keep them in step with this tracker.
+
 - [ ] Re-lock after the sqlglot-from-PyPI and unpinned-python edits (2026-11-07); check the `sqlglot[c]` warning is gone and which Python md/ins get.
 
 - [x] `README.md` written 2026-11-07 (checked against `pixi.toml` and `LOG.md`; not yet checked: that `pixi run test-unit-all` works).
