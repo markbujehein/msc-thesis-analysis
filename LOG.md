@@ -374,3 +374,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 17:00 - Pipeline diagram change undone (Claude)
 - What: `pipeline.svg`, `make_pipeline.py` and the README MACE row restored to the version of commit f30adc1 (PLANNED box "Other force fields, MACE" above GAFF2 MD with one arrow into it). The "Improved potentials" box between MD and Hessian is removed, on the user's instruction. The lattice-dynamics finding in the previous entry still stands.
 - No reference: figure.
+
+## 2026-11-07 17:03 - Relative links in replies: hook registered and widened (Claude)
+- What: I broke the standing rule (absolute file:// links, no relative paths) by naming figures with relative paths. Cause: `.claude/hooks/check_md_links.py` existed but was not registered in `settings.json` and covered only spec/plan files. Now registered as a Stop hook and widened to any md, svg, png, html or pdf path with a directory part; web URLs and bare file names are ignored; it trusts its own repo root as well as the session root. 5 new tests written first (2 failed), then 17 pass; all hook tests run.
+- Also: `CLAUDE.md` rule extended; the existing memory `feedback_spec_links` updated (no new memory).
+- Not checked: that the Stop hook fires in this stale session; it should, through the old-path symlink.
+- No reference: process.

@@ -9,4 +9,4 @@
 - Real data (`data/zeppelin-experimental-data/`, `data/reduced/`, `dft/zeppelin-dft-input/`) is unpublished: git-ignored, never committed. `data/` itself is tracked and holds synthetic stand-in data.
 - Energies in meV (eV when large), never wavenumbers.
 
-- Files the user must see go inside the repo (git-ignored `.local/`) and are named as absolute `file:///home/mark/Work/msc-thesis-analysis/...` links. Never `/tmp`: the user cannot open it from the terminal.
+- Files the user must see go inside the repo (git-ignored `.local/`) and are named as absolute `file:///home/mark/Work/msc-thesis-analysis/...` links. Never `/tmp`: the user cannot open it from the terminal. Every reply that names a repo file the user could open (md, svg, png, html, pdf) uses the absolute `file://` URL, never a relative path; the Stop hook `.claude/hooks/check_md_links.py` blocks the reply otherwise.

@@ -2,6 +2,8 @@ import json, os, subprocess, tempfile, unittest
 HOOK = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')), '.claude/hooks/check_md_links.py')
 ROOT = tempfile.mkdtemp()                                   # stands in for the repo root
 os.makedirs(os.path.join(ROOT, 'docs/specs'))
+os.makedirs(os.path.join(ROOT, 'docs/figures'))
+open(os.path.join(ROOT, 'docs/figures/p.svg'), 'w').close()
 open(os.path.join(ROOT, 'docs/specs/a.md'), 'w').close()
 SPEC_URL = 'file://' + ROOT + '/docs/specs/a.md'
 
@@ -46,5 +48,19 @@ class MdLinkTests(unittest.TestCase):
     def test_missing_transcript_is_allowed(self):
         p = subprocess.run(['python3', HOOK], input='{}', capture_output=True, text=True)
         self.assertNotIn('block', p.stdout)
+
+class FigureLinkTests(unittest.TestCase):
+    FIG_URL = 'file://' + ROOT + '/docs/figures/p.svg'
+    def test_relative_figure_paths_block(self):
+        for t in ('`docs/figures/pipeline.svg`', 'see .local/pipe.png', '[d](docs/figures/p.svg)', 'docs/index.html', 'docs/x.pdf'):
+            self.assertEqual(run([t]), 'block', t)
+    def test_absolute_file_url_to_an_existing_figure_is_allowed(self):
+        self.assertEqual(run([self.FIG_URL]), 'allow')
+    def test_figure_in_a_temp_dir_blocks(self):
+        self.assertEqual(run(['file:///tmp/claude-1000/x/banner.png']), 'block')
+    def test_web_urls_are_ignored(self):
+        self.assertEqual(run(['https://docs.mantidproject.org/nightly/algorithms/LoadVesuvio-v1.html']), 'allow')
+    def test_bare_file_names_are_allowed(self):
+        self.assertEqual(run(['banner.svg and pipeline.png']), 'allow')
 
 if __name__ == '__main__': unittest.main()

@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [x] Link hook registered and widened to figures (checked: 17 tests in test_check_md_links pass, 2026-11-07).
+
+
 - [x] Pipeline restored to the f30adc1 version (checked: git diff against f30adc1 is empty for pipeline.svg and make_pipeline.py; README differs only in the banner alt text, 2026-11-07).
 
 
