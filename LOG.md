@@ -451,3 +451,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 17:38 - Correction: AFGA validation wording (Claude)
 - What: the previous entry's spec text said "fitted on 7 amino acids"; the paper only says 13 are held out. Wording fixed in the spec.
 - No reference: wording.
+
+## 2026-11-07 17:47 - Krzystyniak 2023 read; circularity decision for AFGA recorded (Claude)
+- What: read the full paper (PDF from Omabib, text extracted to the git-ignored `.local/`); added a VESUVIO analysis and validation paragraph and a harmonic-lattice-dynamics versus machine-learned-potential paragraph to section 2 of `docs/superpowers/specs/2026-11-07-extended-data-design.md`; replaced the open decision on AFGA by a decision: AFGA is not a prior in fits used to judge AFGA; `krzystyniak2023` added to `refs.bib`. Two web searches (snippets only) for machine-learned potentials and INS or path-integral work.
+- Source: [ref: krzystyniak2023]
+- Finding: paper shows harmonic DFT lattice dynamics reproduces TOSCA (RMSD about 2 cm-1), cross sections above 50 K, C and N widths, but H widths are below the harmonic prediction at all temperatures (4.93 inverse angstrom, 146.7 meV reported). No bootstrap, jackknife or MCMC in the paper. My recomputation from the reported widths gives 150.0 and 96.5 meV (reported 146.7 and 94.4) and omega_H/omega_D about 1.56 against the reported 1.28: unverified, equations came from garbled text extraction and were not checked against the journal page. Search found no NCS comparison with machine-learned-potential path-integral dynamics.
+- Next: check the two recomputed numbers against the journal PDF page; read the two arXiv papers in full before relying on them; test GAFF2 against MACE Hessians.
