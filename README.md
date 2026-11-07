@@ -1,3 +1,5 @@
+![Neutron spectra from molecular dynamics](docs/figures/banner.svg)
+
 # Thymol: from a crystal structure to a simulated neutron spectrum
 
 MSc thesis workspace. The aim is to predict the **inelastic neutron scattering (INS) spectrum of crystalline thymol** (C10H14O) from a classical force field, and to compare it with a measured spectrum from the TOSCA spectrometer (ISIS). Everything is reproducible from one `pixi.toml`; every scientific step is written down in [`LOG.md`](LOG.md).
@@ -6,33 +8,11 @@ All energies are in **meV**. Status labels used below: **DONE** (works and is te
 
 ## How the pieces fit
 
-```mermaid
-flowchart LR
-    A["Predicted crystal structures<br/>Salager 2010, COD 4101953-71<br/><b>DONE</b>"] --> B["PDB supercells<br/>thymol_cif/ and pdb/<br/><b>DONE</b>"]
-    B --> C["Flexible GAFF2 MD, 10 K<br/>OpenMM, md/<br/><b>DONE</b>"]
-    C --> D["Vibrational DOS<br/>from velocities<br/><b>DONE</b>"]
-    C --> E["Relaxed cell, Hessian,<br/>supercell unfolding<br/><b>DONE</b>"]
-    E --> F["INS per TOSCA detector<br/>abinslib, analysis/<br/><b>WIP</b>"]
-    R["Raw TOSCA runs<br/>TSC25989, TSC25990"] --> S["Reduction with Mantid<br/><b>DONE</b>"]
-    S --> T["Reduced spectra<br/>data/reduced/<br/><b>DONE</b>"]
-    F --> U["Overlay and scale fit<br/><b>WIP</b>"]
-    T --> U
-    U --> W["Bayesian band model<br/>dynesty<br/><b>PLANNED</b>"]
-    IR["FTIR and Raman<br/>band positions in meV<br/><b>PLANNED</b>"] --> U
-    VR["VESUVIO runs"] --> VM["Mantid reduction: transmission,<br/>forward, back, virtual diffraction, gamma<br/><b>PLANNED</b>"]
-    VM --> VF["Neutron Compton scattering fit<br/>composition, cross-section, below 25 meV<br/><b>PLANNED</b>"]
-    VF --> U
-    R --> Q["QENS on TOSCA data<br/>last step<br/><b>PLANNED</b>"]
-    SYN["Synthetic stand-in data<br/>data/<br/><b>PLANNED</b>"] -.-> T
-    classDef done fill:#e3f1e8,stroke:#2f6b4f,color:#14281e
-    classDef wip fill:#fff1c9,stroke:#a06b00,color:#2b1d00,stroke-dasharray:5 4
-    classDef planned fill:#ececec,stroke:#777,color:#222,stroke-dasharray:2 4
-    class A,B,C,D,E,R,S,T done
-    class F,U wip
-    class W,IR,VM,VF,Q,SYN planned
-```
+![Pipeline: simulation path, TOSCA measurement path and planned branches, each box labelled DONE, WIP or PLANNED](docs/figures/pipeline.svg)
 
-**WIP detail:** the INS code is written and tested on a small fixture. Its run on the real force constants and the overlay with TSC25990 come next. The planned branches are specified in [`docs/superpowers/specs/2026-11-07-extended-data-design.md`](docs/superpowers/specs/2026-11-07-extended-data-design.md).
+Solid green is DONE, dashed amber is WIP, dotted grey is PLANNED. Dotted arrows are planned links.
+
+**WIP detail:** the INS code is written and tested on a small fixture. Its run on the real force constants and the overlay come next. The planned branches are specified in [`docs/superpowers/specs/2026-11-07-extended-data-design.md`](docs/superpowers/specs/2026-11-07-extended-data-design.md).
 
 ## Status
 
@@ -43,7 +23,7 @@ flowchart LR
 | Hessian of the 2x2x1 supercell, unfolded to force constants | **DONE** | no imaginary modes; 936 C-H and 72 O-H stretch modes |
 | TOSCA reduction of the two thymol runs | **DONE** | method in `data/REDUCTION.md` (git-ignored, see Data) |
 | Harmonic thermodynamics from the DOS (U, S, F, Cv) | **WIP** | code and tests done; values not yet logged |
-| INS spectrum on the real force constants, overlay with TSC25990 | **WIP** | |
+| INS spectrum on the real force constants, overlay | **WIP** | |
 | Pixi test, fix and lint tasks | **WIP** | defined in `pixi.toml` |
 | Synthetic stand-in data in `data/` | **PLANNED** | lets a fresh clone run without the unpublished measurements |
 | Bayesian band model | **PLANNED** | own plan, after the overlay |
@@ -95,7 +75,7 @@ pixi run -e md python 02_run.py -- --cell 1x1x1   # or run one as a script
 | `data/` | detector table; synthetic stand-in data (planned); real data is git-ignored |
 | `dft/` | future DFT vibrational calculations (real inputs are git-ignored) |
 | `tests/` | `unit/` (no simulation) and `integration/` (runs the engines), one folder per area |
-| `docs/` | design specs, implementation plan, tutorials, task tracker |
+| `docs/` | design specs, implementation plan, tutorials, task tracker; `figures/` holds the README banner and pipeline (SVG) and the scripts that draw them |
 | `LOG.md`, `refs.bib` | dated research log; bibliography |
 
 ## Working rules

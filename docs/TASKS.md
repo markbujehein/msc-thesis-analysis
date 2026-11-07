@@ -46,6 +46,10 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [ ] Replace `data/tosca_detectors.csv` (temporary, from the 2016 Mantid definition) when an updated TOSCA definition is available; then rerun the INS comparison.
+
+- [ ] README figures: pipeline.svg is hand-placed; update `docs/figures/make_pipeline.py` whenever a step changes status.
+
 - [ ] Refine the rough spec `docs/superpowers/specs/2026-11-07-extended-data-design.md` (open questions at its end: VESUVIO data location and format, synthetic-data realism, IR/Raman calibration, earlier QENS analyses), then write plans per work stream.
 - [ ] Synthetic stand-in data in `data/` (generator script + test), so a fresh clone runs without the unpublished data.
 
