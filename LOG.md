@@ -491,3 +491,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Source: [ref: levine2025, gharakhanyan2025, wood2025]
 - Finding: OMol25 labels are wB97M-V with VV10 (stated in the OMC25 paper); D3 is in the OMC25 and ODAC25 labels (PBE-D3, VASP). Correction to my earlier survey: OMC25 is published (Scientific Data 13, 354, 2026) and its level of theory is now confirmed from the paper, not a search summary. C, H, O covered in OMC25. No paper compares a molecular-crystal phonon or INS spectrum with experiment; OMol25 states Hessian tests are absent. Weights licence text not read. Not read: appendices of OMol25 and UMA other than those named; the npj Comput. Mater. phonon paper.
 - Next: read the weights licence; install check of fairchem in a separate environment; GAFF2 vs UMA Hessian comparison.
+
+## 2026-11-07 18:15 - Correction: Z-prime statement for thymol removed (Claude)
+- What: the previous entry's spec block claimed one molecule per asymmetric unit for the thymol structure; not checked, so replaced by an explicit "not checked". Task: check Z-prime of Structure 3 (R-3) from the CIF.
+- No reference: wording correction.

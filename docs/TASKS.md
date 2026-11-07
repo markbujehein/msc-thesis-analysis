@@ -53,6 +53,7 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 - [ ] Krzystyniak 2023 read (2026-11-07). Open: verify the recomputed E_kin and omega ratio against the journal page; read arXiv 2506.01860 and 2603.05442 in full; GAFF2 vs MACE Hessian comparison.
 - [ ] ML-method survey recorded (2026-11-07). OMC25, OMol25, UMA read (see log). Open: read arXiv 2506.01860, the Armstrong paper and the npj Comput. Mater. phonon paper; decide whether to add Petrov 2026 and DM21.
 - [ ] Investigate UMA (papers read 2026-11-07): read the weights licence on Hugging Face; check fairchem install in its own environment (UMA needs it, not tested); compare GAFF2 and UMA Hessians on the same cell (imaginary modes first), then the spectrum. Settled from the papers: C, H, O covered, crystal task is PBE-D3, OMol task is wB97M-V (VV10).
+- [ ] Check the number of molecules in the asymmetric unit (Z-prime) of the thymol structure from the CIF; OMC25 covers Z-prime of at most 1.
 - [x] Diagram: UMA added and box renamed "Potentials to try" (2026-11-07). Checked: regenerated `docs/figures/pipeline.svg`, grep finds the title and UMA in the SVG, README `?v=` hash updated, first render (three-line box) viewed; the renamed-title render is saved but not viewed.
 - [x] Names aligned: README row and spec section 3 heading now "Potentials to try" (checked by grep, 2026-11-07).
 - [ ] Confirm the eSEN baseline names and licence (fallback to UMA); not yet in the README or diagram.
