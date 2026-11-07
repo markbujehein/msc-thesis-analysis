@@ -3,3 +3,4 @@ __pycache__/
 md/output/
 md/__marimo__/session/
 data/zeppelin-experimental-data/
+data/
