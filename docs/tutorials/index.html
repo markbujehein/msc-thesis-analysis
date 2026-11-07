@@ -20,17 +20,17 @@
 <p>The environment in <code>md/</code> is installed. When I checked: Python 3.14, OpenMM 8.6.1, openmmforcefields 0.16.0, openff-toolkit 0.19.0, RDKit 2026.3.1, MDANSE 2.0.1, marimo 0.25.2, pytest 9.2.0. If <code>md/.pixi</code> is missing on your machine, run the install below.</p>
 <section class="step"><input type="checkbox" aria-label="Done: Install the environment, if it is missing"><div><h3>Install the environment, if it is missing</h3><pre class=""><code>cd md
 pixi install</code></pre><p class="expect">It ends with a line saying the environment was installed. Do not use <code>pixi add</code> or <code>pixi update</code> without deciding it first: they re-solve the whole stack.</p></div></section>
-<section class="step"><input type="checkbox" aria-label="Done: Check the tools import"><div><h3>Check the tools import</h3><pre class=""><code>pixi run python -c &quot;import openmm, openmmforcefields, rdkit, marimo; print(openmm.__version__)&quot;</code></pre><p class="expect">It prints a version number and no traceback.</p></div></section>
-<section class="step"><input type="checkbox" aria-label="Done: Run the test runner once"><div><h3>Run the test runner once</h3><pre class=""><code>pixi run pytest</code></pre><p class="expect">Right now it reports that no tests ran. That is the correct starting point.</p></div></section>
+<section class="step"><input type="checkbox" aria-label="Done: Check the tools import"><div><h3>Check the tools import</h3><pre class=""><code>pixi run -e md python -c &quot;import openmm, openmmforcefields, rdkit, marimo; print(openmm.__version__)&quot;</code></pre><p class="expect">It prints a version number and no traceback.</p></div></section>
+<section class="step"><input type="checkbox" aria-label="Done: Run the test runner once"><div><h3>Run the test runner once</h3><pre class=""><code>pixi run -e md pytest</code></pre><p class="expect">Right now it reports that no tests ran. That is the correct starting point.</p></div></section>
 <h2>How a marimo file works</h2>
 <p>A marimo notebook is an ordinary Python file. Open one for editing, run it headless, or test it:</p>
-<pre class=""><code>pixi run marimo edit 01_system.py   # interactive editor in the browser
-pixi run python 01_system.py         # runs the notebook as a script
-pixi run pytest 01_system.py         # runs cells named test_...</code></pre>
+<pre class=""><code>pixi run -e md marimo edit 01_system.py   # interactive editor in the browser
+pixi run -e md python 01_system.py         # runs the notebook as a script
+pixi run -e md pytest 01_system.py         # runs cells named test_...</code></pre>
 <p>Functions marked <code>@app.function</code> can be imported by other files, if they are pure: they may use only other pure functions and the imports and constants in an <code>app.setup</code> block. That is why the logic lives in modules next to the notebooks, in files like <code>md/dos.py</code>, and the notebooks only call them and show results.</p>
 <h2>The loop for every function</h2>
 <ol>
-<li>Write one small test for one behaviour. Run <code>pixi run pytest</code>.</li>
+<li>Write one small test for one behaviour. Run <code>pixi run -e md pytest</code>.</li>
 <li>Read the failure. It must fail because the feature is missing, not because of a typo.</li>
 <li>Write the least code that makes it pass. Run the tests again.</li>
 <li>Tidy up with the tests green.</li>

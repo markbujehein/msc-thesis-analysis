@@ -8,7 +8,7 @@
 <li><a href="03_dos.html">3 Compute the DOS</a></li></ol>
 <p>Rules: energies in meV, a failing test before any code, ask before any pixi change.</p></nav>
 <main><h1>1 Build the system</h1>
-<p class="lead">Goal: <code>md/build.py</code> with three functions, tested, and <code>md/01_system.py</code> showing the checks. Run <code>pixi run pytest</code> from <code>md/</code>, so <code>build</code> is importable. Put the tests in <code>md/tests/test_build.py</code>.</p>
+<p class="lead">Goal: <code>md/build.py</code> with three functions, tested, and <code>md/01_system.py</code> showing the checks. Run <code>pixi run -e md pytest</code> from <code>md/</code>, so <code>build</code> is importable. Put the tests in <code>md/tests/test_build.py</code>.</p>
 <p>The cell is the 2×2×1 PDB (1800 atoms, 72 molecules). The unit cell is too narrow for a 1 nm cutoff.</p>
 <h2>Read the structure</h2>
 <section class="step"><input type="checkbox" aria-label="Done: Read the PDB"><div><h3>Read the PDB</h3><span class="tag red">Write this test first. It must fail.</span><pre class="red"><code>from pathlib import Path
