@@ -399,3 +399,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - What: box now lists "MACE (machine-learned)" and "AMOEBA (classical)"; README row and spec section 3 shortened to match. Dropped ANI-2x and AIMNet2 (user wanted MACE plus one classical force field).
 - Unverified: AMOEBA is my proposal for the classical force field; accuracy versus GAFF2 for this crystal not checked.
 - No reference: planning.
+
+## 2026-11-07 17:08 - Pipeline: force-field box line shortened (Claude)
+- What: `docs/figures/make_pipeline.py` and `docs/figures/pipeline.svg` regenerated (`uv run python docs/figures/make_pipeline.py`); first detail line of the force-field box shortened to "MACE (ML)" because the longer wording touched the box edge in the Chromium render. Commit 5c9d402.
+- Source: none.
+- Finding: shortened version rendered to `.local/pipeline_current.png`; not yet viewed (unverified that it fits).
+- Next: view the render; confirm AMOEBA with the user.

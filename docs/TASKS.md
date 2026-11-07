@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [ ] View the shortened force-field box render (`.local/pipeline_current.png`) to confirm the text fits.
+
+
 - [x] Force-field box lists researched candidates (checked: web search, Chromium render, 2026-11-07).
 - [ ] Confirm AMOEBA as the classical force field (user), check it beats GAFF2 for this crystal and that thymol can be parametrized; pick the MACE model; add the papers to `refs.bib` when read.
 - [x] Pipeline: force-field box text and FTIR box position (checked: Chromium render, 2026-11-07).
