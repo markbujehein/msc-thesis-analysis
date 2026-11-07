@@ -23,7 +23,7 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 - [ ] GitHub still serves the old commit and the reduced CSV by commit id (HTTP 200 at 16:0x) although `origin/main` is rewritten: make the repository private, or delete and recreate it, or ask GitHub support to purge cached objects. Needs the user (my attempt was denied).
 - [ ] Decide whether values derived from the unpublished data (sample mass, temperatures, scale factors, bin widths in `LOG.md` and the spec) must also leave the history.
-- [ ] Regenerate `data/reduced/*.csv` and `data/tosca_detectors.csv` (deleted locally by the history rewrite; both ignored by git).
+- [x] `data/reduced/*.csv`, `data/REDUCTION.md`, `data/tosca_detectors.csv` restored byte-exact (2026-11-07, from the old GitHub commits) after my history rewrite deleted them; checked by line counts and `cmp`.
 
 ## Wrap-up
 

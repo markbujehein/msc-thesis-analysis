@@ -316,3 +316,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Finding (text): tracked text still contains values derived from the measurements (e.g. sample mass and temperatures in `LOG.md` line 183 and the spec, bank scale factors, bin widths); not raw data, not removed.
 - Next: user decides how to remove the cached objects (make private, delete and recreate the repository, or GitHub support); decide whether the derived values in LOG.md and the spec must go too.
 - No reference: housekeeping.
+
+## 2026-11-07 16:12 - Correction: files deleted by my history rewrite restored; ignore rules narrowed (Claude)
+- What: `git filter-branch` also removed `data/reduced/*.csv`, `data/REDUCTION.md` and `data/tosca_detectors.csv` from the working tree, which was never the instruction. All four restored byte-exact from the old commits that GitHub still served (`298377e`, `98dae8d`): reduced CSVs 1533 lines each, detector table 141 lines, `REDUCTION.md` identical to the copy recovered earlier from the session transcript. `.gitignore` now ignores only `data/zeppelin-experimental-data/`, `data/reduced/`, `data/REDUCTION.md` and `dft/zeppelin-dft-input/`; `data/` and `dft/` stay tracked (synthetic stand-in data will live in `data/`). `CLAUDE.md` got a rule: back up outside the repo and compare before any history rewrite or work-tree reset.
+- Unverified: the restored CSVs were not re-derived from the raw runs; they are the committed bytes. `data/tosca_detectors.csv` is untracked and not ignored (instrument geometry from the Mantid IDF); the user decides whether to commit it.
+- No reference: housekeeping.
