@@ -23,7 +23,7 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 - [ ] Rerun the full `md` and `analysis` test suites; report any failure by name.
 - [ ] Whole-branch review (self-review: no subagent for it in the plan run).
-- [ ] Systematic commits (user request, 2026-11-06). Keep out of git: `md/output/` (about 1.6 GB), `.pixi`, `__pycache__`, `.superpowers`.
+- [x] Systematic commits (2026-11-07): 10 commits `956b5a6`..`494fb16` on master, explicit paths only. Left uncommitted on purpose: `data/zeppelin-experimental-data/` (30 MB raw TOSCA files; user decides), `analysis/.gitignore` and `analysis/.gitattributes` (leftovers of the removed analysis project; the lock-file attribute is not set for the root `pixi.lock`). `md/output/` and `md/__marimo__/session/` are now git-ignored.
 
 ## Open decisions (user)
 

@@ -280,3 +280,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Finding: the user ran `pixi install`, `update`, `upgrade` (lock written 15:06); `upgrade` rewrote the `*` pins to lower bounds (numpy >=2.1.3, scipy >=1.16.3, pandas >=3.1.1, matplotlib >=3.10.9, dynesty >=3.1.0, mdanalysis >=2.11.0, rdkit >=2026.9.2, abinslib >=0.3.0,<0.4, resins >=0.1.0,<0.2) and set the `ins` python to `>=3.14.10,<3.15`. Guard hook after my edits: none missing. `tqdm`, `ase`, `mdanalysis` are imported by no project code except `ase` in `md/thermo.py`.
 - Unverified: pixi was not run after my edits (the lock is older than them; a re-lock is needed); that sqlglotc silences nothing in the warning (expected to stay); tqdm in the Mantid environment.
 - No reference: tooling only.
+
+## 2026-11-07 15:18 - Git commits of all work so far (Claude)
+- What: 10 commits on master (`git log --oneline -10`, `956b5a6` to `494fb16`), grouped by topic; `.gitignore` now ignores `md/output/` (about 1.6 GB) and `md/__marimo__/session/`. Not committed: `data/zeppelin-experimental-data/` (30 MB raw files), `analysis/.gitignore`, `analysis/.gitattributes`.
+- Finding: `git status` after the commits shows only those three untracked paths. Commit contents were not re-tested after the last pixi edits (the unit tests ran before them).
+- Next: decide on the raw data and the leftover analysis files; re-lock.
+- No reference: git housekeeping.
