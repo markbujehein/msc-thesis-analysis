@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [x] Hook tests green again after the root fallback fix (checked: 38 tests OK, 2026-11-07).
+
+
 - [x] Link hook registered and widened to figures (checked: 17 tests in test_check_md_links pass, 2026-11-07).
 
 

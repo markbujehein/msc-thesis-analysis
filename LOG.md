@@ -380,3 +380,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Also: `CLAUDE.md` rule extended; the existing memory `feedback_spec_links` updated (no new memory).
 - Not checked: that the Stop hook fires in this stale session; it should, through the old-path symlink.
 - No reference: process.
+
+## 2026-11-07 17:04 - Correction: hook root fallback broke hook tests (Claude)
+- What: my earlier change made `check_tasks.sh` and `check_deps.py` ignore `$CLAUDE_PROJECT_DIR`, which failed 4 of their tests; I committed db185eb without reading the failing test run (the command chain ran on). Now the hooks use `$CLAUDE_PROJECT_DIR` when it holds a repo (.git or pixi.toml) and fall back to their own path only when it is stale. Result: all 38 hook tests pass; old-path runs exit 0.
+- No reference: process.
