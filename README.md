@@ -1,4 +1,4 @@
-![Molecular dynamics and neutron spectra](docs/figures/banner.svg)
+![Vibrational spectra of molecular crystals](docs/figures/banner.svg)
 
 # Thymol: from a crystal structure to a simulated neutron spectrum
 

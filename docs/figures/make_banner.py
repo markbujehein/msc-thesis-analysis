@@ -42,7 +42,7 @@ def banner_svg():
     line = "M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in pts)
     area = f"{line} L{X1},{BASE} L{X0},{BASE} Z"
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" role="img" aria-labelledby="t">
-<title id="t">Molecular dynamics and neutron spectra</title>
+<title id="t">Vibrational spectra of molecular crystals</title>
 <style>
 :root{{--ink:#1C2A39;--muted:#5C6B7C;--line:#2F4FD8}}
 @media (prefers-color-scheme: dark){{:root{{--ink:#E6EDF3;--muted:#9AA7B5;--line:#8BA2FF}}}}
@@ -53,8 +53,8 @@ text{{font-family:Georgia,"Times New Roman",serif;fill:var(--ink)}}
 .curve{{fill:none;stroke:var(--line);stroke-width:2;stroke-linejoin:round}}
 .base{{stroke:var(--muted);stroke-width:1.5}}
 </style>
-<text class="title" x="{X0}" y="62">Molecular dynamics and neutron spectra</text>
-<text class="sub" x="{X0}" y="90">Simulation and analysis code</text>
+<text class="title" x="{X0}" y="62">Vibrational spectra of molecular crystals</text>
+<text class="sub" x="{X0}" y="90">Molecular dynamics, harmonic lattice dynamics and inelastic neutron scattering</text>
 <path class="fill" d="{area}"/>
 <path class="curve" d="{line}"/>
 <line class="base" x1="{X0}" x2="{X1}" y1="{BASE}" y2="{BASE}"/>

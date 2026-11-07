@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [x] Banner title and subtitle in plain academic terms (checked: Chromium render, 4 banner tests, 2026-11-07).
+
+
 - [x] Pipeline: planned force-field box above GAFF2 MD (checked: Chromium render, 2026-11-07).
 
 

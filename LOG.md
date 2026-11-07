@@ -360,3 +360,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 16:55 - Pipeline figure: planned force-field box above GAFF2 MD (Claude)
 - What: `pipeline.svg` has a PLANNED box "Other force fields (MACE)" above GAFF2 MD with a dotted arrow into it; the earlier MACE box beside the Hessian is removed. Rendered in Chromium and read.
 - No reference: figure.
+
+## 2026-11-07 16:57 - Banner title and subtitle rewritten (Claude)
+- What: title "Vibrational spectra of molecular crystals", subtitle "Molecular dynamics, harmonic lattice dynamics and inelastic neutron scattering". Both describe methods the repo uses (MD, Hessian-based harmonic model, INS comparison) and claim no thesis or project context. Previous wording ("Molecular dynamics and neutron spectra") was vague, per user.
+- No reference: wording.
