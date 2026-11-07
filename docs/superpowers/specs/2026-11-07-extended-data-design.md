@@ -22,7 +22,7 @@ The main line stays: simulated TOSCA INS spectrum of thymol versus the measured 
 | TOSCA INS | `tosca/TSC25987` to `TSC25996.nxs` | thymol is TSC25989 and TSC25990; reduced already |
 | FTIR (ATR) | `IR/thymol_4cm-1_128scans_ATR.dat`, `IR/pcymene_64scans_FTIR_2.dat` | thymol and p-cymene |
 | Raman | `Raman/thymol_532nm_LR.dat`, `Raman/Thymol_785nm_..._290K.txt`, `..._6K.txt`, `Raman/p-cymene_test_532nm.dat` | thymol at 290 K and 6 K, 0 to 4000 cm^-1 |
-| VESUVIO | not in the repo yet | location and format to be given by the user |
+| VESUVIO | not in the repo yet | location and format not yet known |
 | DFT inputs | `dft/zeppelin-dft-input/Thymol_vib.com`, `p_cymene.com` | Gaussian inputs for vibrational calculations; `dft/` is for future work |
 
 ## Work streams, in priority order
@@ -43,11 +43,11 @@ The main line stays: simulated TOSCA INS spectrum of thymol versus the measured 
 
 ### 2. VESUVIO (after TOSCA works)
 
-**Correction.** The first version of this section repeated a verbal description without checking it. Checked against the ISIS instrument page and the Mantid 7.0.0 source, three points change:
+**Instrument.** VESUVIO is an inverse-geometry time-of-flight spectrometer at ISIS. Its main technique is neutron Compton scattering (NCS, also called deep inelastic neutron scattering). The ISIS instrument page gives a dynamic range of 1 to 100 eV, an analysing energy of 4906 meV (gold) and a Q range of 30 to 200 per angstrom. It also lists diffraction (130 to 166 degrees, d-spacing 0.5 to 8 angstrom), transmission, resonant capture and prompt gamma analysis.
 
-- VESUVIO is an inverse-geometry time-of-flight instrument. Its main technique is neutron Compton scattering (NCS, also called deep inelastic neutron scattering). The ISIS page gives a dynamic range of 1 to 100 eV, an analysing energy of 4906 meV (gold) and a Q range of 30 to 200 per angstrom. The user states that VESUVIO also gives information below 25 meV, less precise than TOSCA, and that this region matters. The ISIS page lists the NCS range as 1 to 100 eV and says nothing about the region below 25 meV, so the low-energy claim is **not confirmed by the sources read** and needs a dedicated check (which detectors, which analysis). TOSCA remains the main instrument for the vibrational spectrum.
-- "Gamma scattering" and "virtual diffraction" are not extra measurement types in Mantid's loader. In `VesuvioCorrections` the gamma background and multiple scattering are corrections applied to the fit. Diffraction is a separate capability of the instrument (ISIS page: 130 to 166 degrees, d-spacing 0.5 to 8 angstrom); Mantid's `VesuvioDiffractionReduction` is deprecated (April 2017).
-- Composition and cross-section: the user states that VESUVIO gives the exact atomic composition and a precise cross-section; that is accepted as correct. The ISIS page lists transmission, resonant capture and prompt gamma analysis on the instrument as the techniques that provide such information. Which Mantid steps deliver it is open (`VesuvioTransmission` and `VesuvioThickness` are candidates).
+- **Below 25 meV:** this region is expected to complement TOSCA at lower precision. The sources read do not cover it; to be checked.
+- **Gamma background and multiple scattering** are corrections applied during the fit (`VesuvioCorrections`), not separate measurement types. Mantid's `VesuvioDiffractionReduction` is deprecated (April 2017).
+- **Composition and cross-section** follow from the transmission and capture techniques. Which Mantid steps deliver them is open (`VesuvioTransmission` and `VesuvioThickness` are candidates).
 
 **Real pipeline (verified against the Mantid source unless marked):**
 

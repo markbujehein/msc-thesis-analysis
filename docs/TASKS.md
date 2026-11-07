@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [ ] Public repo: remove mentions of the user and revision narrative from older documents (TASKS, plan, older spec, LOG); decide how to treat LOG.md history.
+
+
 - [ ] VESUVIO: get the reference or scripts for the instrument scientists' validation (bootstrap, jackknife, Monte Carlo); decide whether the Bayesian fit stage can replace Mantid's, using the test plan in the spec.
 
 

@@ -431,3 +431,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Source: Mantid 7.0.0 source in the rattler cache (`plugins/python/algorithms/Vesuvio*.py`, `scripts/Inelastic/vesuvio/analysisHelpers.py`); Mantid docs for the algorithm index, VesuvioCalculateMS, VesuvioCalculateGammaBackground, VesuvioL1ThetaResolution; web search (Romanelli et al., J. Phys.: Conf. Ser. 1055, 012016, abstract only). Not added to `refs.bib` (not read in full).
 - Finding: `VesuvioAnalysis` fits each detector by SLSQP least squares, averages widths with a 1-sigma cut, fits hydrogen in y-space with Simplex; no bootstrap, jackknife or MCMC in Mantid VESUVIO code (grep found none). Mantid Monte Carlo = multiple-scattering correction (seeded), L1/theta resolution; gamma background from a simulation. Unverified: the instrument scientists' bootstrap/jackknife/MCMC validation (no source found).
 - Next: ask for the reference or scripts; test plan in the spec (reference run, joint Bayesian fit, jackknife over detectors).
+
+## 2026-11-07 17:24 - Spec prose made neutral (Claude)
+- What: removed the revision narrative and mentions of what was stated from section 2 of `docs/superpowers/specs/2026-11-07-extended-data-design.md`; rule added to `CLAUDE.md` (public repo: no meta-commentary, no "the user ..."). Other documents still contain such mentions (counts: `LOG.md` 63, `docs/TASKS.md` 13, plan 7, older spec 9); not changed.
+- No reference: wording.
