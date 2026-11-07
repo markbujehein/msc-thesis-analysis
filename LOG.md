@@ -435,3 +435,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 17:24 - Spec prose made neutral (Claude)
 - What: removed the revision narrative and mentions of what was stated from section 2 of `docs/superpowers/specs/2026-11-07-extended-data-design.md`; rule added to `CLAUDE.md` (public repo: no meta-commentary, no "the user ..."). Other documents still contain such mentions (counts: `LOG.md` 63, `docs/TASKS.md` 13, plan 7, older spec 9); not changed.
 - No reference: wording.
+
+## 2026-11-07 17:30 - AFGA (hfg2ncmat) noted as VESUVIO prior or cross-check (Claude)
+- What: new paragraph in section 2 of `docs/superpowers/specs/2026-11-07-extended-data-design.md`; read `hfg2ncmat.py` from the NCrystal repository.
+- Source: https://github.com/mctools/ncrystal/blob/main/ncrystal_python/src/NCrystal/hfg2ncmat.py ; Romanelli et al., J. Phys.: Condens. Matter 2021, doi 10.1088/1361-648X/abfc13 (cited in the script; paper not read; not in `refs.bib`).
+- Finding: hydrogen VDOS = group-weighted sum of per-group curves, other atoms Debye 400 K, NCMAT output; groups CHali, CHaro, CH2, CH3, NH, NH2, NH3, OH, SH. Thymol spec `3xCHaro+1xCHali+3xCH3+1xOH` sums to 14 H = formula C10H14O (my derivation from the structure, unverified against the script run). Script not run.
+- Next: decide prior versus cross-check; check NCrystal in the environments.

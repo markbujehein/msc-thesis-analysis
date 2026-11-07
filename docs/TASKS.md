@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [ ] AFGA: add the Romanelli 2021 paper to `refs.bib` after reading it; check NCrystal in the environments; run `hfg2ncmat` for thymol (spec `3xCHaro+1xCHali+3xCH3+1xOH`, density from the crystal structure) and compare with the simulated hydrogen DOS.
+
+
 - [ ] Public repo: remove mentions of the user and revision narrative from older documents (TASKS, plan, older spec, LOG); decide how to treat LOG.md history.
 
 
