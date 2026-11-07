@@ -420,3 +420,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 17:11 - README: Working rules section removed (Claude)
 - What: removed the "Working rules" section from `README.md` on the user's instruction. The rules remain in `CLAUDE.md`.
 - No reference: wording.
+
+## 2026-11-07 17:15 - README image cache busting (Claude)
+- What: README image links now carry the short git blob hash of the figure as a query string (`?v=c081004` for pipeline, `?v=bc01f05` for banner), so GitHub's image cache fetches the new file when a figure changes. Remote blobs were already identical to local (API blob sha c081004 for pipeline.svg).
+- Finding: cause of the stale image on the GitHub page is unverified (cache assumed).
+- Next: after a figure changes, update the `?v=` value with `git hash-object <file> | cut -c1-7`.

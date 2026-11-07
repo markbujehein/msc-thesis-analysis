@@ -1,4 +1,4 @@
-![Vibrational spectra of molecular crystals](docs/figures/banner.svg)
+![Vibrational spectra of molecular crystals](docs/figures/banner.svg?v=bc01f05)
 
 # Thymol: from a crystal structure to a simulated neutron spectrum
 
@@ -8,7 +8,7 @@ All energies are in **meV**. Status labels used below: **DONE** (works and is te
 
 ## How the pieces fit
 
-![Pipeline: simulation path, TOSCA measurement path and planned branches, each box labelled DONE, WIP or PLANNED](docs/figures/pipeline.svg)
+![Pipeline: simulation path, TOSCA measurement path and planned branches, each box labelled DONE, WIP or PLANNED](docs/figures/pipeline.svg?v=c081004)
 
 Solid green is DONE, dashed amber is WIP, dotted grey is PLANNED. Dotted arrows are planned links.
 

@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [ ] After any change to a README figure, update its `?v=` value (`git hash-object <file> | cut -c1-7`).
+
+
 - [x] README has no Working rules section (checked: grep count 0, 2026-11-07).
 
 
