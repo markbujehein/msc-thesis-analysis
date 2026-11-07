@@ -41,6 +41,8 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [x] `README.md` written 2026-11-07 (checked against `pixi.toml` and `LOG.md`; not yet checked: that `pixi run test-unit-all` works).
+
 - [x] `sqlglot[c]` warning: conda `sqlglotc` added to `notebook` (2026-11-07). The warning itself will probably stay; needs a re-lock to see. Checked: manifest parses, guard finds nothing missing.
 - [ ] Compare the new lock with the old locks (`pixi upgrade` pins are logged in `LOG.md`, 2026-11-07); the lock is older than the later manifest edits: re-lock needs the user's go-ahead.
 

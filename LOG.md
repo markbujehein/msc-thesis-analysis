@@ -286,3 +286,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Finding: `git status` after the commits shows only those three untracked paths. Commit contents were not re-tested after the last pixi edits (the unit tests ran before them).
 - Next: decide on the raw data and the leftover analysis files; re-lock.
 - No reference: git housekeeping.
+
+## 2026-11-07 15:29 - README, gitignore of raw data, sqlglotc lock (Claude)
+- What: new `README.md` (aim, pipeline diagram, status, environments, run commands, repo map, rules); `.gitignore` now lists `data/zeppelin-experimental-data/`; removed `analysis/.gitignore` and `analysis/.gitattributes` on the user's instruction (leftovers of the old analysis project).
+- Finding: the user re-locked after my manifest edits: `pixi.lock` now contains `sqlglotc-30.29.0-py314hc824af9_0` (conda-forge) and `tqdm-4.70.1`, so the added packages solve. README facts were taken from `LOG.md` and `pixi.toml`; the README says the test and fix tasks were not yet run through pixi.
+- Next: run `pixi run test-unit-all` once and correct the README if it differs.
+- No reference: documentation.
