@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [x] Pipeline restored to the f30adc1 version (checked: git diff against f30adc1 is empty for pipeline.svg and make_pipeline.py; README differs only in the banner alt text, 2026-11-07).
+
+
 - [x] Pipeline: Improved potentials box feeds MD and Hessian (checked: Chromium render, 2026-11-07; label overflow found and shortened).
 
 

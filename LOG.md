@@ -370,3 +370,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Finding: yes, the repo has harmonic lattice dynamics: `analysis/ins.py` builds Euphonic `ForceConstants`, computes phonon modes on a Monkhorst-Pack q mesh, and feeds abinslib. It is WIP: tested on a fixture, not yet run on the real force constants.
 - Unverified: that DFT belongs under "potentials": it comes from the existing `dft/` folder, which the user calls future work.
 - No reference: figure.
+
+## 2026-11-07 17:00 - Pipeline diagram change undone (Claude)
+- What: `pipeline.svg`, `make_pipeline.py` and the README MACE row restored to the version of commit f30adc1 (PLANNED box "Other force fields, MACE" above GAFF2 MD with one arrow into it). The "Improved potentials" box between MD and Hessian is removed, on the user's instruction. The lattice-dynamics finding in the previous entry still stands.
+- No reference: figure.
