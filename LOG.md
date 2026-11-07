@@ -352,3 +352,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 16:53 - Banner subtitle made general; old banner deleted (Claude)
 - What: subtitle is now "Simulation and analysis code"; no claim about thesis context (the work continues after the MSc). README first line likewise. Old banner files (.local/old-banner and the /tmp copy) deleted on request.
 - No reference: wording.
+
+## 2026-11-07 16:54 - Banner curve made spectrum-like (Claude)
+- What: `docs/figures/make_banner.py` now draws seeded random Gaussian lines arranged like a molecular-crystal spectrum (dense low-energy region, many lines whose width grows with energy, a gap, a few high-energy lines). Still generic: no simulated or measured values. 4 tests pass; render checked in Chromium.
+- No reference: figure.

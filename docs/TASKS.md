@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [x] Banner curve spectrum-like and seeded (checked: unit tests and Chromium render, 2026-11-07).
+
+
 - [x] Banner and README intro carry no unverified thesis context (checked: grep for MSc in banner.svg, README intro).
 
 
