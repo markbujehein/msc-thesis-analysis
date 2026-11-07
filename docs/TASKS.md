@@ -42,18 +42,22 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 - [x] Root `pixi.lock` solved by the user on 2026-11-07 (`pixi install`/`update`/`upgrade`, 15:06); my parse of it: sqlglot conda 30.29.0 in two environments, no `sqlglotc`. Package guard `check_deps.py` finds nothing missing.
 - [x] Marimo extras `mcp` and `recommended` added (no `lsp`: `ty` is global); explicit optional packages kept. Root `pixi.lock` is older than this change: re-lock needs the user's go-ahead.
 - [ ] Narrow `check_tasks.sh`: it also fires on `md/__marimo__/` and `pixi.lock`; proposed to count only `md/ analysis/ thymol_cif/ pdb/ data/ pixi.toml`; awaiting the user's answer.
-- [ ] One root `pixi.toml` with features and environments (md, ins, mantid) is written but not solved or installed (unverified: it may not solve, Mantid 7 pins in the shared default feature are the risk). Needs the user's go-ahead to run pixi, and to remove `md/pixi.toml`, `analysis/pixi.toml`, their locks and the two old `.pixi` folders (5.2 GB and 3.9 GB). Until then `pixi` in `md/` or `analysis/` still uses the old manifests. Still naming the old per-folder environments: the plan (`docs/superpowers/plans/2026-11-06-ins-from-gaff2.md`), the spec section on the analysis environment, `docs/tutorials/*.html`, and the CLAUDE.md test command.
+- [x] One root `pixi.toml` with features and environments (md, ins, mantid) is written but not solved or installed (unverified: it may not solve, Mantid 7 pins in the shared default feature are the risk). Needs the user's go-ahead to run pixi, and to remove `md/pixi.toml`, `analysis/pixi.toml`, their locks and the two old `.pixi` folders (5.2 GB and 3.9 GB). Until then `pixi` in `md/` or `analysis/` still uses the old manifests. Still naming the old per-folder environments: the plan (`docs/superpowers/plans/2026-11-06-ins-from-gaff2.md`), the spec section on the analysis environment, `docs/tutorials/*.html`, and the CLAUDE.md test command. Checked 2026-11-07: user ran pixi install, update, upgrade; `pixi.lock` is committed.
 
 ## Later
+
+- [x] Banner and README intro carry no unverified thesis context (checked: grep for MSc in banner.svg, README intro).
+
 
 - [ ] QENS: look at the reduced TOSCA spectra for any quasi-elastic signal before planning anything; ask the supervisor for their earlier analyses.
 
 - [ ] Remove the symlink `/home/mark/Work/msc-thesis/.claude` after restarting Claude in `msc-thesis-analysis` (user).
 - [ ] Check the VESUVIO hydrogen kinetic-energy link and the MACE model choice against the literature before writing plans.
+- [ ] VESUVIO: check the sub-25 meV region against sources (which detectors and analysis give it, how precise); the ISIS page read so far covers only 1 to 100 eV for NCS.
 
 - [ ] Replace `data/tosca_detectors_idf2016.csv` (temporary, from the 2016 Mantid definition) when an updated TOSCA definition is available; then rerun the INS comparison.
 
-- [ ] README figures: pipeline.svg is hand-placed; update `docs/figures/make_pipeline.py` whenever a step changes status.
+- [ ] README figures: pipeline.svg is hand-placed; update `docs/figures/make_pipeline.py` whenever a step changes status. Figures regenerated 2026-11-07 (banner generic, pipeline with MACE, VESUVIO chain, QENS check): rendered in Chromium and read.
 
 - [ ] Refine the rough spec `docs/superpowers/specs/2026-11-07-extended-data-design.md` (open questions at its end: VESUVIO data location and format, synthetic-data realism, IR/Raman calibration, earlier QENS analyses), then write plans per work stream.
 - [ ] Synthetic stand-in data in `data/` (generator script + test), so a fresh clone runs without the unpublished data.

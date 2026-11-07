@@ -348,3 +348,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 16:50 - Corrections after review: VESUVIO low energy, QENS, banner text (Claude)
 - What: the previous entry called the sub-25 meV VESUVIO claim "probably wrong". That was my inference, not a finding: the sources I read do not cover that region, and the user states it matters. Spec and README now say "not confirmed by the sources read" and keep cross-section and composition as the user stated. QENS is described as an exploratory check that may find nothing (no known QENS data); the earlier wording about temperature comparison and reorientation was speculation and is removed. Banner title and subtitle rewritten in plain words.
 - No reference: planning and wording.
+
+## 2026-11-07 16:53 - Banner subtitle made general; old banner deleted (Claude)
+- What: subtitle is now "Simulation and analysis code"; no claim about thesis context (the work continues after the MSc). README first line likewise. Old banner files (.local/old-banner and the /tmp copy) deleted on request.
+- No reference: wording.

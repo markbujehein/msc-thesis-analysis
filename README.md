@@ -2,7 +2,7 @@
 
 # Thymol: from a crystal structure to a simulated neutron spectrum
 
-MSc thesis workspace. The aim is to predict the **inelastic neutron scattering (INS) spectrum of crystalline thymol** (C10H14O) from a classical force field, and to compare it with a measured spectrum from the TOSCA spectrometer (ISIS). Everything is reproducible from one `pixi.toml`; every scientific step is written down in [`LOG.md`](LOG.md).
+Workspace for simulation and analysis. The aim is to predict the **inelastic neutron scattering (INS) spectrum of crystalline thymol** (C10H14O) from a classical force field, and to compare it with a measured spectrum from the TOSCA spectrometer (ISIS). Everything is reproducible from one `pixi.toml`; every scientific step is written down in [`LOG.md`](LOG.md).
 
 All energies are in **meV**. Status labels used below: **DONE** (works and is tested), **WIP** (in progress), **PLANNED** (not started).
 

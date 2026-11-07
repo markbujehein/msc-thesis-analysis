@@ -39,7 +39,7 @@ text{{font-family:Georgia,"Times New Roman",serif;fill:var(--ink)}}
 .base{{stroke:var(--muted);stroke-width:1.5}}
 </style>
 <text class="title" x="{X0}" y="62">Molecular dynamics and neutron spectra</text>
-<text class="sub" x="{X0}" y="90">Code and notes for my MSc thesis</text>
+<text class="sub" x="{X0}" y="90">Simulation and analysis code</text>
 <path class="fill" d="{area}"/>
 <path class="curve" d="{line}"/>
 <line class="base" x1="{X0}" x2="{X1}" y1="{BASE}" y2="{BASE}"/>
