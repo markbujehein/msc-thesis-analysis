@@ -8,7 +8,7 @@ All energies are in **meV**. Status labels used below: **DONE** (works and is te
 
 ## How the pieces fit
 
-![Pipeline: simulation path, TOSCA measurement path and planned branches, each box labelled DONE, WIP or PLANNED](docs/figures/pipeline.svg?v=99c5d07)
+![Pipeline: simulation path, TOSCA measurement path and planned branches, each box labelled DONE, WIP or PLANNED](docs/figures/pipeline.svg?v=75c9a7d)
 
 Solid green is DONE, dashed amber is WIP, dotted grey is PLANNED. Dotted arrows are planned links.
 

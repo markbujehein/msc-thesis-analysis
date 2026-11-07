@@ -477,3 +477,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - What: `docs/figures/make_pipeline.py` force-field box now has three lines (MACE, ANI-2x / AIMNet2, UMA / AMOEBA); regenerated `docs/figures/pipeline.svg`, rendered with Chromium and looked at the image (box fits, arrow into GAFF2 MD visible); README force-field row lists UMA, standalone "OMol25" row removed, image hash updated to 99c5d07; spec section 3 and tracker item renamed to UMA.
 - Finding: UMA chosen over the dataset name because it is the model; eSEN baselines names unconfirmed.
 - No reference: planning entry, see wood2025 and levine2025 in the survey entry.
+
+## 2026-11-07 18:05 - Diagram box renamed to "Potentials to try" (Claude)
+- What: title in `docs/figures/make_pipeline.py`, regenerated `docs/figures/pipeline.svg`, README image hash 75c9a7d; rendered to `.local/pipeline_potentials.png`. README force-field row and spec section 3 titles unchanged.
+- No reference: wording change.
