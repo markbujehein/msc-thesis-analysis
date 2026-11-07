@@ -7,7 +7,7 @@ N = {  # key: (x, row, status, title, detail)
  "E": (660, 0, "done", "Hessian", "cell, supercell"),
  "F": (860, 0, "wip", "INS per detector", "abinslib"),
  "D": (460, 1, "done", "Vibrational DOS", "from velocities"),
- "FF": (460, -1, "planned", "Force fields to try", ("MACE, ANI-2x", "AIMNet2, AMOEBA")),
+ "FF": (460, -1, "planned", "Force fields to try", ("MACE, ANI-2x", "AIMNet2, UMA", "AMOEBA")),
  "R": (60, 2, "done", "TOSCA runs", "two thymol runs"),
  "S": (260, 2, "done", "Reduction", "Mantid"),
  "T": (460, 2, "done", "Reduced spectra", "git-ignored"),

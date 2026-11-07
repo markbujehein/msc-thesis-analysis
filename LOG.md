@@ -472,3 +472,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 18:01 - Correction: "OMol25 plus D3" renamed to "OMol25" (Claude)
 - What: the previous entry named the item "OMol25 plus D3", which implied D3 is added on top. Per the project owner D3 is already part of the training; README row, spec bullet and tracker item now say "OMol25" only. I have no source yet for the dispersion treatment of the OMol25 labels (the papers read give wB97M-V for OMol25 and, via a search summary, PBE-D3 for OMC25); to be confirmed from the papers.
 - No reference: wording correction.
+
+## 2026-11-07 18:04 - UMA added to diagram and README (Claude)
+- What: `docs/figures/make_pipeline.py` force-field box now has three lines (MACE, ANI-2x / AIMNet2, UMA / AMOEBA); regenerated `docs/figures/pipeline.svg`, rendered with Chromium and looked at the image (box fits, arrow into GAFF2 MD visible); README force-field row lists UMA, standalone "OMol25" row removed, image hash updated to 99c5d07; spec section 3 and tracker item renamed to UMA.
+- Finding: UMA chosen over the dataset name because it is the model; eSEN baselines names unconfirmed.
+- No reference: planning entry, see wood2025 and levine2025 in the survey entry.
