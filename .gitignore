@@ -1,2 +1,4 @@
 .remember/
 __pycache__/
+md/output/
+md/__marimo__/session/
