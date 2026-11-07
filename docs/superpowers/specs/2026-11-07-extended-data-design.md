@@ -89,7 +89,7 @@ The main line stays: simulated TOSCA INS spectrum of thymol versus the measured 
 - **Limits of the cross section:** low temperature and meV energies give the sum of bound cross sections; above a few eV the free cross section, about a quarter of the bound value for hydrogen; between them the cross section depends on the density of states and the temperature.
 
 *Validation reported.*
-- Fitted on 7 amino acids; the remaining 13 are predicted well. Differences appear below a few meV, up to about 5 percent at 1 meV (lysine).
+- The functions are defined from the amino acids; 13 of them are then predicted from the group functions and agree well with the data (the paper does not say which 7 define the functions; six appear in its first comparison figure). Differences appear below a few meV, up to about 5 percent at 1 meV (lysine).
 - Triphenylmethane (aromatic CH only, measured on VESUVIO) agrees very well. PMMA agrees well and better than direct DFT below about 100 meV, attributed to its disorder.
 - The 2023 paper treats polymers and mixtures as linear combinations and appeals to a central-limit argument for hydrogen dynamics in large molecules.
 - The authors state that high accuracy is not expected for small crystalline systems. Crystal-specific features such as Bragg edges are not part of the model. Validation targets total cross sections; no kinetic energies or Compton profile widths are compared.

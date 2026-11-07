@@ -447,3 +447,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Source: [ref: romanelli2021, romanelli2023]
 - Finding: AFGA = group-averaged hydrogen DOS (9 groups) from DFPT of 20 amino acids; validation by total cross sections only (13 held-out amino acids, up to about 5 percent at 1 meV for lysine; triphenylmethane and PMMA good); authors state high accuracy is not expected for small crystalline systems; no kinetic-energy or Compton-width comparison. Correction to my earlier reasoning: I treated AFGA as a good prior for the hydrogen width; its validation covers the low-energy shape that sets cross sections, not the stretching-mode weight that sets the kinetic energy, so it is a stronger cross-section prior than width prior. Unverified: `refs.bib` pagination of romanelli2021 (article number taken from the citation in romanelli2023); script not run.
 - Next: run `hfg2ncmat` for thymol; compare with simulated hydrogen DOS and sample transmission.
+
+## 2026-11-07 17:38 - Correction: AFGA validation wording (Claude)
+- What: the previous entry's spec text said "fitted on 7 amino acids"; the paper only says 13 are held out. Wording fixed in the spec.
+- No reference: wording.

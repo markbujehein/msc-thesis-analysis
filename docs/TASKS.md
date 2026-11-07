@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [x] AFGA validation wording matches the paper (checked: re-read the 2021 text, 2026-11-07).
+
+
 - [ ] AFGA (papers read, refs.bib done 2026-11-07): check NCrystal in the environments; run `hfg2ncmat` for thymol (spec `3xCHaro+1xCHali+3xCH3+1xOH`, density from the crystal structure) and compare with the simulated hydrogen DOS.
 
 
