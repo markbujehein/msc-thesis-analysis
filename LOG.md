@@ -405,3 +405,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Source: none.
 - Finding: shortened version rendered to `.local/pipeline_current.png`; not yet viewed (unverified that it fits).
 - Next: view the render; confirm AMOEBA with the user.
+
+## 2026-11-07 17:08 - Correction: shortened force-field box checked (Claude)
+- What: viewed the render of `docs/figures/pipeline.svg` after the previous entry; both box lines fit inside the box.
+- Finding: previous entry said "not yet viewed"; now viewed, fits.
+- Next: confirm AMOEBA with the user.

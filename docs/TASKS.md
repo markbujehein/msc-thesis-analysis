@@ -46,7 +46,7 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
-- [ ] View the shortened force-field box render (`.local/pipeline_current.png`) to confirm the text fits.
+- [x] Shortened force-field box fits (checked: Chromium render viewed, 2026-11-07).
 
 
 - [x] Force-field box lists researched candidates (checked: web search, Chromium render, 2026-11-07).
