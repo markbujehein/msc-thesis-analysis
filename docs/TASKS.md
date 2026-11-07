@@ -52,7 +52,7 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 - [ ] AFGA (papers read, refs.bib done 2026-11-07): check NCrystal in the environments; run `hfg2ncmat` for thymol (spec `3xCHaro+1xCHali+3xCH3+1xOH`, density from the crystal structure) and compare with the simulated hydrogen DOS.
 - [ ] Krzystyniak 2023 read (2026-11-07). Open: verify the recomputed E_kin and omega ratio against the journal page; read arXiv 2506.01860 and 2603.05442 in full; GAFF2 vs MACE Hessian comparison.
 - [ ] ML-method survey recorded (2026-11-07). Open: read OMC25 and UMA in full (levels of theory, elements, licence); read arXiv 2506.01860 and the Armstrong paper; decide whether to add the remaining unlisted references (Petrov 2026, DM21).
-- [ ] Investigate OMol25-trained model with added D3 (README row, spec section 3): look up the functional's dispersion treatment and the D3 tooling, then compare Hessians and spectrum.
+- [ ] Investigate OMol25 (README row, spec section 3): confirm how dispersion enters the OMol25 labels and models, then compare Hessians and spectrum.
 
 
 - [ ] Public repo: remove mentions of the user and revision narrative from older documents (TASKS, plan, older spec, LOG); decide how to treat LOG.md history.

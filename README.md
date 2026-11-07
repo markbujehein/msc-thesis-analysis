@@ -28,7 +28,7 @@ Solid green is DONE, dashed amber is WIP, dotted grey is PLANNED. Dotted arrows 
 | Synthetic stand-in data in `data/` | **PLANNED** | lets a fresh clone run without the unpublished measurements |
 | Bayesian band model | **PLANNED** | own plan, after the comparison |
 | Better force fields: MACE, ANI-2x, AIMNet2, AMOEBA | **PLANNED** | candidates for higher accuracy than GAFF2, replacing it in the MD and Hessian steps; the first three are machine-learned, AMOEBA is a classical polarizable field |
-| OMol25-trained model with D3 dispersion | **PLANNED** | investigate a model trained on the OMol25 molecular data with an added D3 dispersion term, against the same model without it and against the molecular-crystal task, on the Hessian and the spectrum; untested |
+| OMol25 | **PLANNED** | investigate models trained on the OMol25 molecular data, on the Hessian and the spectrum, against GAFF2 and the molecular-crystal task of the same model family; untested |
 | FTIR and Raman cross-checks | **PLANNED** | band positions in meV against TOSCA and the simulation; low priority |
 | VESUVIO: neutron Compton scattering | **PLANNED** | foil-cycling reduction, fit per atomic mass, hydrogen momentum width and kinetic energy, compared with the simulated hydrogen dynamics |
 | VESUVIO: cross-section and low energy | **PLANNED** | transmission and cross-section of the sample; the region below 25 meV as a complement to TOSCA |

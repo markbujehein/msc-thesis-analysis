@@ -468,3 +468,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - What: new PLANNED row in `README.md` status table; new bullet in section 3 of the spec with open points. Nothing run.
 - Finding: unverified whether wB97M-V already includes non-local dispersion (so D3 would double count) and which tool adds D3 to the model.
 - No reference: planning entry, no source used.
+
+## 2026-11-07 18:01 - Correction: "OMol25 plus D3" renamed to "OMol25" (Claude)
+- What: the previous entry named the item "OMol25 plus D3", which implied D3 is added on top. Per the project owner D3 is already part of the training; README row, spec bullet and tracker item now say "OMol25" only. I have no source yet for the dispersion treatment of the OMol25 labels (the papers read give wB97M-V for OMol25 and, via a search summary, PBE-D3 for OMC25); to be confirmed from the papers.
+- No reference: wording correction.
