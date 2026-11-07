@@ -1,5 +1,5 @@
 W_, H_ = 172, 66
-rows = [64, 160, 256, 352, 448, 544, 640]
+rows = {-1: 64, 0: 160, 1: 256, 2: 352, 3: 448, 4: 544, 5: 640, 6: 736}
 N = {  # key: (x, row, status, title, detail)
  "A": (60, 0, "done", "Predicted structures", "Salager 2010, COD"),
  "B": (260, 0, "done", "PDB supercells", "thymol_cif/, pdb/"),
@@ -7,7 +7,7 @@ N = {  # key: (x, row, status, title, detail)
  "E": (660, 0, "done", "Hessian", "cell, supercell"),
  "F": (860, 0, "wip", "INS per detector", "abinslib"),
  "D": (460, 1, "done", "Vibrational DOS", "from velocities"),
- "M": (660, 1, "planned", "MACE potential", "ML force field"),
+ "FF": (460, -1, "planned", "Other force fields", "MACE (ML potential)"),
  "R": (60, 2, "done", "TOSCA runs", "two thymol runs"),
  "S": (260, 2, "done", "Reduction", "Mantid"),
  "T": (460, 2, "done", "Reduced spectra", "git-ignored"),
@@ -37,16 +37,16 @@ def edge(p, q, via="", cls=""):
 def join(k):  # dotted line from box k to the comparison column, ending on the comparison box
     return f'<path class="e dot" d="M{right(k)[0]},{right(k)[1]} L970,{right(k)[1]} L970,{right("T")[1]}"/>'
 E = [edge(right("A"), left("B")), edge(right("B"), left("C")), edge(right("C"), left("E")), edge(right("E"), left("F")),
-     edge(bottom("C"), top("D")), edge(top("M"), bottom("E"), cls="dot"), edge(right("R"), left("S")), edge(right("S"), left("T")),
+     edge(bottom("C"), top("D")), edge(bottom("FF"), top("C"), cls="dot"), edge(right("R"), left("S")), edge(right("S"), left("T")),
      edge(top("SYN"), bottom("R"), cls="dot"), edge(bottom("T"), top("Q"), cls="dot"),
      edge(right("VR"), left("VM"), cls="dot"), edge(right("VM"), left("VF"), cls="dot"), edge(right("VF"), left("VH"), cls="dot"),
      edge(bottom("VR"), left("VD"), via=f"L{bottom('VR')[0]},{left('VD')[1]}", cls="dot"),
      edge(right("F"), top("U"), via=f"L{top('U')[0]},{right('F')[1]}"),
      edge(right("T"), left("U")), join("IR"), join("VH"),
      edge(bottom("U"), top("W"), cls="dot")]
-labels = [(0, "Simulation"), (2, "Measurement: TOSCA"), (4, "Measurement: FTIR and Raman"), (5, "Measurement: VESUVIO")]
+labels = [(-1, "Simulation"), (2, "Measurement: TOSCA"), (4, "Measurement: FTIR and Raman"), (5, "Measurement: VESUVIO")]
 lab = "".join(f'<text class="lane" x="60" y="{rows[r]-10}">{t}</text>' for r, t in labels)
-svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 730" role="img" aria-labelledby="t d">
+svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 826" role="img" aria-labelledby="t d">
 <title id="t">Pipeline of the thymol project with the status of every step</title>
 <desc id="d">Simulation path from predicted crystal structures through molecular dynamics and the Hessian to a simulated INS spectrum, the TOSCA measurement path through reduction, and planned FTIR, Raman, VESUVIO, QENS and synthetic-data branches, all meeting in an overlay of simulation and measurement.</desc>
 <style>

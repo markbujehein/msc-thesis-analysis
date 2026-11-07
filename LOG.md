@@ -356,3 +356,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 16:54 - Banner curve made spectrum-like (Claude)
 - What: `docs/figures/make_banner.py` now draws seeded random Gaussian lines arranged like a molecular-crystal spectrum (dense low-energy region, many lines whose width grows with energy, a gap, a few high-energy lines). Still generic: no simulated or measured values. 4 tests pass; render checked in Chromium.
 - No reference: figure.
+
+## 2026-11-07 16:55 - Pipeline figure: planned force-field box above GAFF2 MD (Claude)
+- What: `pipeline.svg` has a PLANNED box "Other force fields (MACE)" above GAFF2 MD with a dotted arrow into it; the earlier MACE box beside the Hessian is removed. Rendered in Chromium and read.
+- No reference: figure.
