@@ -364,3 +364,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 16:57 - Banner title and subtitle rewritten (Claude)
 - What: title "Vibrational spectra of molecular crystals", subtitle "Molecular dynamics, harmonic lattice dynamics and inelastic neutron scattering". Both describe methods the repo uses (MD, Hessian-based harmonic model, INS comparison) and claim no thesis or project context. Previous wording ("Molecular dynamics and neutron spectra") was vague, per user.
 - No reference: wording.
+
+## 2026-11-07 16:59 - Pipeline: potentials box between MD and Hessian (Claude)
+- What: the planned box is now "Improved potentials (MACE, DFT)", placed above and between GAFF2 MD and Hessian with a dotted arrow into each, because both steps use the potential. Earlier "MACE potential" title dropped. README row renamed to match.
+- Finding: yes, the repo has harmonic lattice dynamics: `analysis/ins.py` builds Euphonic `ForceConstants`, computes phonon modes on a Monkhorst-Pack q mesh, and feeds abinslib. It is WIP: tested on a fixture, not yet run on the real force constants.
+- Unverified: that DFT belongs under "potentials": it comes from the existing `dft/` folder, which the user calls future work.
+- No reference: figure.

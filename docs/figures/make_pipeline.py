@@ -7,7 +7,7 @@ N = {  # key: (x, row, status, title, detail)
  "E": (660, 0, "done", "Hessian", "cell, supercell"),
  "F": (860, 0, "wip", "INS per detector", "abinslib"),
  "D": (460, 1, "done", "Vibrational DOS", "from velocities"),
- "FF": (460, -1, "planned", "Other force fields", "MACE (ML potential)"),
+ "FF": (560, -1, "planned", "Improved potentials", "MACE, DFT"),
  "R": (60, 2, "done", "TOSCA runs", "two thymol runs"),
  "S": (260, 2, "done", "Reduction", "Mantid"),
  "T": (460, 2, "done", "Reduced spectra", "git-ignored"),
@@ -34,10 +34,14 @@ def top(k): x, r, *_ = N[k]; return (x + W_ / 2, rows[r])
 def bottom(k): x, r, *_ = N[k]; return (x + W_ / 2, rows[r] + H_)
 def edge(p, q, via="", cls=""):
     return f'<path class="e {cls}" d="M{p[0]},{p[1]} {via} L{q[0]},{q[1]}" marker-end="url(#a)"/>'
+def pot(k):  # dotted elbow from the potentials box down into box k (MD and Hessian both use the potential)
+    sx = N["FF"][0] + (40 if N[k][0] < N["FF"][0] + W_ / 2 else W_ - 40)
+    y0, y1 = bottom("FF")[1], top(k)[1]
+    return f'<path class="e dot" d="M{sx},{y0} L{sx},{y0+15} L{top(k)[0]},{y0+15} L{top(k)[0]},{y1}" marker-end="url(#a)"/>'
 def join(k):  # dotted line from box k to the comparison column, ending on the comparison box
     return f'<path class="e dot" d="M{right(k)[0]},{right(k)[1]} L970,{right(k)[1]} L970,{right("T")[1]}"/>'
 E = [edge(right("A"), left("B")), edge(right("B"), left("C")), edge(right("C"), left("E")), edge(right("E"), left("F")),
-     edge(bottom("C"), top("D")), edge(bottom("FF"), top("C"), cls="dot"), edge(right("R"), left("S")), edge(right("S"), left("T")),
+     edge(bottom("C"), top("D")), pot("C"), pot("E"), edge(right("R"), left("S")), edge(right("S"), left("T")),
      edge(top("SYN"), bottom("R"), cls="dot"), edge(bottom("T"), top("Q"), cls="dot"),
      edge(right("VR"), left("VM"), cls="dot"), edge(right("VM"), left("VF"), cls="dot"), edge(right("VF"), left("VH"), cls="dot"),
      edge(bottom("VR"), left("VD"), via=f"L{bottom('VR')[0]},{left('VD')[1]}", cls="dot"),
