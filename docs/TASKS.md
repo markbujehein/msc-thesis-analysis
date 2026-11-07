@@ -46,7 +46,8 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
-- [ ] Name the other higher-accuracy force fields in the pipeline box and README row (user to say which).
+- [x] Force-field box lists researched candidates (checked: web search, Chromium render, 2026-11-07).
+- [ ] Check whether MACE-OFF23, ANI-2x and AIMNet2 cover C, H, O and have vibrational benchmarks; add the papers to `refs.bib` when read.
 - [x] Pipeline: force-field box text and FTIR box position (checked: Chromium render, 2026-11-07).
 
 

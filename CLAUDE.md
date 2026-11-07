@@ -10,3 +10,5 @@
 - Energies in meV (eV when large), never wavenumbers.
 
 - Files the user must see go inside the repo (git-ignored `.local/`) and are named as absolute `file:///home/mark/Work/msc-thesis-analysis/...` links. Never `/tmp`: the user cannot open it from the terminal. Every reply that names a repo file the user could open (md, svg, png, html, pdf) uses the absolute `file://` URL, never a relative path; the Stop hook `.claude/hooks/check_md_links.py` blocks the reply otherwise.
+
+- Never paste the user's wording into a deliverable (diagram box, README, spec, commit message, comment) unless they quote it or say to. Their message states an intent; the deliverable needs its own content. Before writing, ask: what does the user actually want to know, which concrete things belong here, and what can be verified? Search or read to find those things. If a name or fact is missing and cannot be found, ask for it; never fill the gap with the user's phrase. Self-check before saving: no run of four or more words from the user's message appears unchanged.

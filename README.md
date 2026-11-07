@@ -27,7 +27,7 @@ Solid green is DONE, dashed amber is WIP, dotted grey is PLANNED. Dotted arrows 
 | Pixi test, fix and lint tasks | **WIP** | defined in `pixi.toml` |
 | Synthetic stand-in data in `data/` | **PLANNED** | lets a fresh clone run without the unpublished measurements |
 | Bayesian band model | **PLANNED** | own plan, after the comparison |
-| MACE machine-learned force field | **PLANNED** | MACE and other force fields with higher accuracy than GAFF2, replacing it in the MD and Hessian steps, to see how much the spectrum depends on the potential |
+| Machine-learned force fields: MACE-OFF23, ANI-2x, AIMNet2 | **PLANNED** | candidates for higher accuracy than GAFF2, trained on quantum-chemistry data for organic molecules; replace GAFF2 in the MD and Hessian steps. Their accuracy for vibrations is not yet tested here |
 | FTIR and Raman cross-checks | **PLANNED** | band positions in meV against TOSCA and the simulation; low priority |
 | VESUVIO: neutron Compton scattering | **PLANNED** | foil-cycling reduction, fit per atomic mass, hydrogen momentum width and kinetic energy, compared with the simulated hydrogen dynamics |
 | VESUVIO: cross-section and low energy | **PLANNED** | transmission and cross-section of the sample; the region below 25 meV as a complement to TOSCA |

@@ -389,3 +389,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - What: box above GAFF2 MD now reads "Other force fields: MACE and others for higher accuracy" (two detail lines; only MACE is named because no other force field has been named by the user, none invented). FTIR and Raman box moved to the left column, directly under its lane label. README MACE row text updated.
 - Open: which other force fields to list (user to name them).
 - No reference: figure.
+
+## 2026-11-07 17:07 - Pasted user wording replaced by researched content; prevention rule (Claude)
+- What: the force-field box read "MACE and others for higher accuracy", which was the user's own phrase pasted in. Replaced after a literature search: box "Force fields to try: MACE-OFF23, ANI-2x, AIMNet2"; README row and spec section 3 rewritten with sources (arXiv 2312.15211, arXiv 2505.06462). Found: MACE-OFF23 tested on 23 molecular crystals (sublimation enthalpies) and compared with ANI-2x; the 2025 preprint compares ANI-2x, MACE-OFF23, AIMNet2 on organic crystals. Not found: any vibrational or phonon benchmark for these; listed as unverified.
+- Process: same failure as the first VESUVIO text and the "last step" QENS label. New rule in `CLAUDE.md` (self-check: no four-word run from the user message unchanged) and a feedback memory. No hook: a mechanical check would flag legitimate quotes.
+- No reference added to `refs.bib` (planning text, papers not read in full).
