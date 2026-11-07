@@ -80,11 +80,3 @@ pixi run -e md python 02_run.py -- --cell 1x1x1   # or run one as a script
 | `tests/` | `unit/` (no simulation) and `integration/` (runs the engines), one folder per area |
 | `docs/` | design specs, implementation plan, tutorials, task tracker; `figures/` holds the README banner and pipeline (SVG) and the scripts that draw them |
 | `LOG.md`, `refs.bib` | dated research log; bibliography |
-
-## Working rules
-
-- **Test first.** Code is written after a failing test; unit tests never run a simulation.
-- **Log every scientific change** in `LOG.md`, with the time taken from the shell.
-- **Sources are cited** in `refs.bib`.
-- **Unpublished data never enters git.**
-- **Guard rails** (Claude Code hooks in `.claude/`): a log check, a task-tracker check and a guard that blocks silently dropped packages from `pixi.toml`.

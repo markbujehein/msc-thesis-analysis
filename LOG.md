@@ -416,3 +416,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Source: web search; PMC5111595 / Nessler et al. and RSC C6CP02595A (AMOEBA vs fixed-charge, crystals); arXiv 2505.06462. Not read in full; not added to `refs.bib`.
 - Finding: AMOEBA beat fixed-charge fields for sublimation free energies of five organic crystals and hydrate stability, but not for solvation free energies; no lattice-energy or vibrational benchmark against GAFF2 found (unverified for thymol).
 - Next: view render; read papers before adding to `refs.bib`.
+
+## 2026-11-07 17:11 - README: Working rules section removed (Claude)
+- What: removed the "Working rules" section from `README.md` on the user's instruction. The rules remain in `CLAUDE.md`.
+- No reference: wording.

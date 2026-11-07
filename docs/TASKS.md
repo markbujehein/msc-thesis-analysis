@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [x] README has no Working rules section (checked: grep count 0, 2026-11-07).
+
+
 - [x] Shortened force-field box fits (checked: Chromium render viewed, 2026-11-07).
 
 
