@@ -292,3 +292,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Finding: the user re-locked after my manifest edits: `pixi.lock` now contains `sqlglotc-30.29.0-py314hc824af9_0` (conda-forge) and `tqdm-4.70.1`, so the added packages solve. README facts were taken from `LOG.md` and `pixi.toml`; the README says the test and fix tasks were not yet run through pixi.
 - Next: run `pixi run test-unit-all` once and correct the README if it differs.
 - No reference: documentation.
+
+## 2026-11-07 15:33 - pixi: sqlglot from PyPI with the c extra; python no longer pinned (Claude)
+- What: on the user's instruction (sqlglot and sqlglotc may move to PyPI; python needs no pin) `pixi.toml`: conda `sqlglot` and `sqlglotc` replaced by PyPI `sqlglot = { version = ">=30.29.0,<31", extras = ["c"] }` (the extra installs sqlglotc, so the pixi warning "does not have an extra named c" should disappear); the python pins in the md and ins features removed. `.claude/deps.baseline` updated with the user's approval: `conda:python`, `conda:sqlglot`, `conda:sqlglotc` out, `pypi:sqlglot` in (31 entries).
+- Finding: guard hook after the edit and baseline change: none missing. `pixi.toml` parses.
+- Unverified: `pixi.lock` is stale until the user re-locks; without a python pin the md solve may choose a newer Python than the 3.14 the notebooks were run on (Mantid still pins 3.13 in its own environment).
+- No reference: tooling only.

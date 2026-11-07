@@ -41,6 +41,8 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [ ] Re-lock after the sqlglot-from-PyPI and unpinned-python edits (2026-11-07); check the `sqlglot[c]` warning is gone and which Python md/ins get.
+
 - [x] `README.md` written 2026-11-07 (checked against `pixi.toml` and `LOG.md`; not yet checked: that `pixi run test-unit-all` works).
 
 - [x] `sqlglot[c]` warning: conda `sqlglotc` added to `notebook` (2026-11-07). The warning itself will probably stay; needs a re-lock to see. Checked: manifest parses, guard finds nothing missing.

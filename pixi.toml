@@ -32,23 +32,21 @@ dynesty = ">=3.1.0,<4"
 ruff = ">=0.17.4,<0.18"
 
 # marimo's optional dependencies (altair, nbformat, vegafusion, vl-convert-python for charts;
-# duckdb, sqlglot for SQL cells; openai for AI features), installed on purpose
+# duckdb, sqlglot (PyPI, below) for SQL cells; openai for AI features), installed on purpose
 [feature.notebook.dependencies]
 altair = ">=6.3.0,<7"
 nbformat = ">=5.11.1,<6"
 vegafusion = ">=2.0.3,<3"
 vl-convert-python = ">=2.0.0rc7,<3"
 duckdb = ">=2.0.0,<3"
-sqlglot = ">=30.29.0,<31"
-sqlglotc = ">=30.29.0,<31"  # the compiled speed-up that marimo[sql] asks for as sqlglot[c]
 openai = ">=3.47.0,<4"
 
 [feature.notebook.pypi-dependencies]
+sqlglot = { version = ">=30.29.0,<31", extras = ["c"] }  # from PyPI: only there does the "c" extra (sqlglotc) that marimo[sql] asks for exist
 marimo = { version = ">=0.25.2, <0.26", extras = ["mcp", "recommended"] }  # no "lsp": ty is installed globally
 
 # ---- simulation (md) -----------------------------------------------------------------------------
 [feature.md.dependencies]
-python = ">=3.14.10,<3.15"
 libgfortran5 = ">=16.2.0,<17"
 # md was installed with scipy 1.18.1 and mdanse 2.0.1 together (LOG.md, 2026-11-06 14:04); the old note that
 # MDANSE needs scipy <=1.17.1 is no longer checked against mdanse 2.0.1
@@ -68,9 +66,6 @@ packmol = ">=21.2.3, <22"
 QT_QPA_PLATFORM = "xcb"  # for mdanse-gui
 
 # ---- INS simulation (ins) ------------------------------------------------------------------------
-[feature.ins.dependencies]
-python = ">=3.14.10,<3.15"
-
 [feature.ins.pypi-dependencies]
 abinslib = ">=0.3.0, <0.4"
 resins = ">=0.1.0, <0.2"
