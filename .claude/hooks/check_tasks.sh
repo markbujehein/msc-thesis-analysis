@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Stop hook: block ending the turn if a project file is newer than docs/TASKS.md.
 # Reads no file contents: only mtimes, so it costs no tokens when the tracker is current.
-cd "${CLAUDE_PROJECT_DIR:-$(dirname "$0")/../..}" || exit 0
+cd "$(dirname "$(readlink -f "$0")")/../.." || exit 0   # real script path: immune to a stale CLAUDE_PROJECT_DIR
 in=$(cat); echo "$in" | grep -q '"stop_hook_active": *true' && exit 0   # no loops
 T=docs/TASKS.md
 [ -f "$T" ] && git rev-parse --git-dir >/dev/null 2>&1 || exit 0

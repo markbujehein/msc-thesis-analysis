@@ -1,4 +1,4 @@
-# Extended data analysis: IR, Raman, VESUVIO, QENS (rough spec)
+# Extended analysis: IR, Raman, VESUVIO, MACE, quasi-elastic (rough spec)
 
 Date: 2026-11-07. Status: **rough**, to be refined before any plan is written. Work continues in later sessions.
 
@@ -43,33 +43,53 @@ The main line stays: simulated TOSCA INS spectrum of thymol versus the measured 
 
 ### 2. VESUVIO (after TOSCA works)
 
-- **What the user states VESUVIO offers:** energy range from about 10 meV to several eV; the exact atomic composition of the sample; a fairly precise cross-section; extra information below 25 meV, less precise than TOSCA.
-- **Measurements to parse (user's list):** transmission, forward scattering, backscattering, virtual diffraction, gamma scattering. Combined, they allow neutron Compton scattering (NCS), which relies on thorough fitting and sampling.
-- **Method (rough):** reduce each measurement type with Mantid, then combine in a fit; sample the posterior with dynesty (feature `bayes` already exists).
-- **Unverified:** that Mantid provides each of these steps as described. Check the Mantid VESUVIO documentation before planning.
-- **Environment:** `mantid` for reduction; fitting probably `ins` (to be decided, because Mantid and abinslib cannot share an environment; data crosses as files).
-- **Open:** where the VESUVIO runs are, which sample and temperatures, whether calibration and empty-can runs exist.
+**Correction.** The first version of this section repeated a verbal description without checking it. Checked against the ISIS instrument page and the Mantid 7.0.0 source, three points change:
 
-### 3. QENS on TOSCA data (very last)
+- VESUVIO is an inverse-geometry time-of-flight instrument. Its main technique is neutron Compton scattering (NCS, also called deep inelastic neutron scattering). The ISIS page gives a dynamic range of 1 to 100 eV, an analysing energy of 4906 meV (gold) and a Q range of 30 to 200 per angstrom. That is not a meV-range vibrational spectrometer, so the claim of useful sub-25 meV information is **unverified and probably wrong**; TOSCA remains the instrument for the vibrational spectrum.
+- "Gamma scattering" and "virtual diffraction" are not extra measurement types in Mantid's loader. In `VesuvioCorrections` the gamma background and multiple scattering are corrections applied to the fit. Diffraction is a separate capability of the instrument (ISIS page: 130 to 166 degrees, d-spacing 0.5 to 8 angstrom); Mantid's `VesuvioDiffractionReduction` is deprecated (April 2017).
+- Exact atomic composition comes from the other techniques on the instrument (transmission, resonance capture, prompt gamma activation), not from NCS itself. For a known compound it is a sanity check, not a goal.
 
-- **Goal:** quasi-elastic analysis of the TOSCA data, as the supervisor has done on several occasions.
-- **Prerequisite:** everything above works. TOSCA is an indirect-geometry instrument, so what can be extracted from the quasi-elastic region has to be checked against the supervisor's earlier work.
-- **Open:** which runs, which model, which software. Ask the supervisor for the earlier analyses.
+**Real pipeline (verified against the Mantid source unless marked):**
+
+1. Raw runs are measured with a gold foil cycled in and out of the scattered beam. `LoadVesuvio` forms the difference: single difference (foil in minus foil out) for forward scattering; single, double or thick difference for back scattering.
+2. Transmission and sample thickness: `VesuvioTransmission`, `VesuvioThickness`. Instrument resolution: `VesuvioResolution`.
+3. Fit the neutron Compton profile of each atomic mass in the sample (H, C, O): `VesuvioPreFit`, `VesuvioTOFFit`, with `VesuvioCorrections` for gamma background and multiple scattering. Result: the momentum distribution n(p) of each nucleus.
+4. For hydrogen, the width and the mean kinetic energy of n(p) follow. These are quantum quantities.
+
+**Relevance to this project** (my reasoning, not a source claim): thymol is hydrogen-rich, with an O-H group in a hydrogen bond and methyl and isopropyl C-H groups. A classical MD run cannot give the hydrogen kinetic energy, because the classical value is (3/2)kT regardless of the potential. A harmonic model can: with the hydrogen-projected vibrational density of states, the mean kinetic energy is a thermal sum over the modes. That gives a number from the simulation to compare with the fitted hydrogen width, and a way to test GAFF2 against MACE. This needs checking against the literature before any plan.
+
+**Diffraction** on the same instrument can confirm that the sample has the predicted crystal structure.
+
+**Environment:** `mantid` for steps 1 to 3 (Mantid pins Python 3.13); the harmonic comparison runs in `ins` or `md`; data cross as files.
+**Open:** where the VESUVIO runs are, which sample and temperatures, whether empty-can and calibration runs exist, which Mantid VESUVIO fitting workflow the facility recommends (the `scripts/Inelastic/vesuvio` package or the algorithms above).
+**Sources:** ISIS VESUVIO page (https://www.isis.stfc.ac.uk/Pages/vesuvio.aspx); Mantid LoadVesuvio documentation (https://docs.mantidproject.org/nightly/algorithms/LoadVesuvio-v1.html); Mantid 7.0.0 source, `plugins/python/algorithms/Vesuvio*.py`.
+
+### 3. MACE force field (after the GAFF2 comparison)
+
+- **Goal:** a machine-learned interatomic potential (MACE) as a second force field for the same MD and Hessian steps, to see how much the spectrum depends on the potential. GAFF2 is a fixed-form classical field with unfitted charges.
+- **Unverified:** which pretrained MACE model fits an organic molecular crystal, whether it runs through ASE in this repo's environments, and the cost of a 1800-atom Hessian with it. Check before planning.
+
+### 4. Quasi-elastic analysis of the TOSCA data
+
+- **What:** the elastic line broadens when hydrogen moves on a time scale the instrument resolves (for example methyl or isopropyl reorientation). The two thymol runs are at different temperatures, so the broadening can be compared between them.
+- **Why it belongs here:** it uses the already reduced spectra, and MD can give the matching incoherent scattering function for comparison. It needs MD at the higher temperature, which does not exist yet.
+- **Precedent:** the thesis supervisor has done this on TOSCA data several times; the method and its limits (TOSCA is not a dedicated quasi-elastic instrument) come from those analyses.
+- **Open:** which runs, which model, which software.
 
 ## Order and dependencies
 
-TOSCA INS simulation and overlay (main line, in progress) then synthetic data, then IR and Raman, then VESUVIO, then QENS. The Bayesian band model of the parent spec can use any of these as additional data.
+TOSCA INS simulation and comparison (main line, in progress), then synthetic data, then IR and Raman, then MACE, VESUVIO and the quasi-elastic analysis in any order the data allows. The Bayesian band model of the parent spec can use any of these as additional data.
 
 ## Success criteria (rough)
 
 - Synthetic data: a fresh clone passes `pixi run test-unit-all` and the notebooks run on the synthetic files.
 - IR and Raman: a table of band positions in meV next to the INS peaks, with each band assigned to a simulated mode group or marked unassigned.
-- VESUVIO: reduced spectra for each measurement type, a fit result with sampled uncertainties, and the composition and cross-section it implies.
-- QENS: agreed with the supervisor before starting.
+- VESUVIO: fitted hydrogen momentum width and kinetic energy with uncertainties, next to the simulated value.
+- Quasi-elastic: method agreed with the supervisor before starting.
 
 ## Open questions
 
 1. Where is the VESUVIO data, and in what format?
 2. Should synthetic data mimic the real spectra or only the file layout?
 3. Do the IR and Raman files have a documented calibration and background treatment?
-4. Which earlier QENS analyses can be reused?
+4. Which earlier quasi-elastic analyses can be reused?

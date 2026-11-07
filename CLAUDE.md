@@ -8,3 +8,5 @@
 - Before any git command that rewrites history or resets the working tree (`filter-branch`, `filter-repo`, `reset --hard`, `clean`, `checkout -f`, `stash`): copy every file it could change or delete (tracked or not) to a backup outside the repo, afterwards compare `ls` and `git status` with the backup, and restore at once if anything is missing. Local files are never collateral damage.
 - Real data (`data/zeppelin-experimental-data/`, `data/reduced/`, `dft/zeppelin-dft-input/`) is unpublished: git-ignored, never committed. `data/` itself is tracked and holds synthetic stand-in data.
 - Energies in meV (eV when large), never wavenumbers.
+
+- Files the user must see go inside the repo (git-ignored `.local/`) and are named as absolute `file:///home/mark/Work/msc-thesis-analysis/...` links. Never `/tmp`: the user cannot open it from the terminal.

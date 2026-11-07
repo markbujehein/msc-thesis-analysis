@@ -12,7 +12,7 @@ All energies are in **meV**. Status labels used below: **DONE** (works and is te
 
 Solid green is DONE, dashed amber is WIP, dotted grey is PLANNED. Dotted arrows are planned links.
 
-**WIP detail:** the INS code is written and tested on a small fixture. Its run on the real force constants and the overlay come next. The planned branches are specified in [`docs/superpowers/specs/2026-11-07-extended-data-design.md`](docs/superpowers/specs/2026-11-07-extended-data-design.md).
+**WIP detail:** the INS code is written and tested on a small fixture. Its run on the real force constants and the comparison with the measured spectrum come next.
 
 ## Status
 
@@ -26,10 +26,12 @@ Solid green is DONE, dashed amber is WIP, dotted grey is PLANNED. Dotted arrows 
 | INS spectrum on the real force constants, overlay | **WIP** | |
 | Pixi test, fix and lint tasks | **WIP** | defined in `pixi.toml` |
 | Synthetic stand-in data in `data/` | **PLANNED** | lets a fresh clone run without the unpublished measurements |
-| Bayesian band model | **PLANNED** | own plan, after the overlay |
-| FTIR and Raman cross-checks | **PLANNED** | band positions in meV against TOSCA and the simulation; Raman at 290 K and 6 K; low priority |
-| VESUVIO: reduction and neutron Compton scattering fit | **PLANNED** | transmission, forward, back, virtual diffraction, gamma; composition, cross-section, sub-25 meV information |
-| QENS on TOSCA data | **PLANNED** | last step, after everything above works |
+| Bayesian band model | **PLANNED** | own plan, after the comparison |
+| MACE machine-learned force field | **PLANNED** | second potential next to GAFF2 for MD and Hessian, to test how much the result depends on the force field |
+| FTIR and Raman cross-checks | **PLANNED** | band positions in meV against TOSCA and the simulation; low priority |
+| VESUVIO: neutron Compton scattering | **PLANNED** | foil-cycling reduction, fit per atomic mass, hydrogen momentum width and kinetic energy, compared with the simulated hydrogen dynamics |
+| VESUVIO: diffraction | **PLANNED** | check of the crystal structure against the predicted one |
+| Quasi-elastic analysis of the TOSCA data | **PLANNED** | broadening of the elastic line between the two temperatures, compared with the simulation; method follows the supervisor's earlier work |
 | Measured crystal structure (CSD THYMOL) | **PLANNED** | download needs a CCDC login; until then the structure is a prediction |
 
 Model: GAFF2 with AM1-BCC charges, not fitted. Open work is tracked in [`docs/TASKS.md`](docs/TASKS.md).

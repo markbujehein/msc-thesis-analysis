@@ -1,5 +1,5 @@
 W_, H_ = 172, 66
-rows = [64, 160, 256, 352, 448, 544]
+rows = [64, 160, 256, 352, 448, 544, 640]
 N = {  # key: (x, row, status, title, detail)
  "A": (60, 0, "done", "Predicted structures", "Salager 2010, COD"),
  "B": (260, 0, "done", "PDB supercells", "thymol_cif/, pdb/"),
@@ -7,16 +7,19 @@ N = {  # key: (x, row, status, title, detail)
  "E": (660, 0, "done", "Hessian", "cell, supercell"),
  "F": (860, 0, "wip", "INS per detector", "abinslib"),
  "D": (460, 1, "done", "Vibrational DOS", "from velocities"),
+ "M": (660, 1, "planned", "MACE potential", "ML force field"),
  "R": (60, 2, "done", "TOSCA runs", "two thymol runs"),
  "S": (260, 2, "done", "Reduction", "Mantid"),
  "T": (460, 2, "done", "Reduced spectra", "git-ignored"),
  "SYN": (60, 3, "planned", "Synthetic data", "stand-in runs"),
- "Q": (460, 3, "planned", "QENS", "last step"),
+ "Q": (460, 3, "planned", "Quasi-elastic fit", "line broadening"),
  "IR": (460, 4, "planned", "FTIR and Raman", "band positions in meV"),
- "VR": (60, 5, "planned", "VESUVIO runs", "not in repo yet"),
- "VM": (260, 5, "planned", "Mantid reduction", "five run types"),
- "VF": (460, 5, "planned", "Compton fit", "composition"),
- "U": (1000, 2, "wip", "Overlay, scale fit", "simulation vs data"),
+ "VR": (60, 5, "planned", "VESUVIO runs", "foil in / foil out"),
+ "VM": (260, 5, "planned", "Foil difference", "Mantid LoadVesuvio"),
+ "VF": (460, 5, "planned", "Compton profiles", "fit per mass: H, C, O"),
+ "VH": (660, 5, "planned", "H momentum width", "kinetic energy of H"),
+ "VD": (260, 6, "planned", "Diffraction", "back angles, 0.5-8 A"),
+ "U": (1000, 2, "wip", "Comparison", "simulation vs data"),
  "W": (1000, 3, "planned", "Bayesian band model", "dynesty"),
 }
 def box(k):
@@ -31,18 +34,19 @@ def top(k): x, r, *_ = N[k]; return (x + W_ / 2, rows[r])
 def bottom(k): x, r, *_ = N[k]; return (x + W_ / 2, rows[r] + H_)
 def edge(p, q, via="", cls=""):
     return f'<path class="e {cls}" d="M{p[0]},{p[1]} {via} L{q[0]},{q[1]}" marker-end="url(#a)"/>'
+def join(k):  # dotted line from box k to the comparison column, ending on the comparison box
+    return f'<path class="e dot" d="M{right(k)[0]},{right(k)[1]} L970,{right(k)[1]} L970,{right("T")[1]}"/>'
 E = [edge(right("A"), left("B")), edge(right("B"), left("C")), edge(right("C"), left("E")), edge(right("E"), left("F")),
-     edge(bottom("C"), top("D")), edge(right("R"), left("S")), edge(right("S"), left("T")),
+     edge(bottom("C"), top("D")), edge(top("M"), bottom("E"), cls="dot"), edge(right("R"), left("S")), edge(right("S"), left("T")),
      edge(top("SYN"), bottom("R"), cls="dot"), edge(bottom("T"), top("Q"), cls="dot"),
-     edge(right("VR"), left("VM"), cls="dot"), edge(right("VM"), left("VF"), cls="dot"),
+     edge(right("VR"), left("VM"), cls="dot"), edge(right("VM"), left("VF"), cls="dot"), edge(right("VF"), left("VH"), cls="dot"),
+     edge(bottom("VR"), left("VD"), via=f"L{bottom('VR')[0]},{left('VD')[1]}", cls="dot"),
      edge(right("F"), top("U"), via=f"L{top('U')[0]},{right('F')[1]}"),
-     edge(right("T"), left("U")),
-     f'<path class="e dot" d="M{right("IR")[0]},{right("IR")[1]} L970,{right("IR")[1]} L970,{right("T")[1]}"/>',
-     f'<path class="e dot" d="M{right("VF")[0]},{right("VF")[1]} L970,{right("VF")[1]} L970,{right("T")[1]}"/>',
+     edge(right("T"), left("U")), join("IR"), join("VH"),
      edge(bottom("U"), top("W"), cls="dot")]
 labels = [(0, "Simulation"), (2, "Measurement: TOSCA"), (4, "Measurement: FTIR and Raman"), (5, "Measurement: VESUVIO")]
 lab = "".join(f'<text class="lane" x="60" y="{rows[r]-10}">{t}</text>' for r, t in labels)
-svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img" aria-labelledby="t d">
+svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 730" role="img" aria-labelledby="t d">
 <title id="t">Pipeline of the thymol project with the status of every step</title>
 <desc id="d">Simulation path from predicted crystal structures through molecular dynamics and the Hessian to a simulated INS spectrum, the TOSCA measurement path through reduction, and planned FTIR, Raman, VESUVIO, QENS and synthetic-data branches, all meeting in an overlay of simulation and measurement.</desc>
 <style>

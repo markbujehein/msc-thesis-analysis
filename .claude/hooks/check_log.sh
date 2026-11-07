@@ -2,7 +2,7 @@
 # Stop hook: block ending the turn if scientific files changed since the last LOG.md commit
 # but LOG.md did not (or refs.bib / a "No reference:" line for new data files).
 # Baseline = last commit that touched LOG.md, so committing in the same turn cannot hide changes.
-cd "$(dirname "$0")/../.." || exit 0
+cd "$(dirname "$(readlink -f "$0")")/../.." || exit 0   # real script path: immune to a stale CLAUDE_PROJECT_DIR
 in=$(cat); echo "$in" | grep -q '"stop_hook_active": *true' && exit 0   # no loops
 git rev-parse --git-dir >/dev/null 2>&1 || exit 0
 B=$(git log -1 --format=%H -- LOG.md 2>/dev/null)

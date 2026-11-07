@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [ ] Remove the symlink `/home/mark/Work/msc-thesis/.claude` after restarting Claude in `msc-thesis-analysis` (user).
+- [ ] Check the VESUVIO hydrogen kinetic-energy link and the MACE model choice against the literature before writing plans.
+
 - [ ] Replace `data/tosca_detectors_idf2016.csv` (temporary, from the 2016 Mantid definition) when an updated TOSCA definition is available; then rerun the INS comparison.
 
 - [ ] README figures: pipeline.svg is hand-placed; update `docs/figures/make_pipeline.py` whenever a step changes status.
