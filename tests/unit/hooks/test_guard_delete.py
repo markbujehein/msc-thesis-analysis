@@ -1,5 +1,5 @@
 import json, os, subprocess, tempfile, unittest
-HOOK = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.claude/hooks/guard_delete.py')
+HOOK = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')), '.claude/hooks/guard_delete.py')
 
 def decision(cmd, cwd):
     p = subprocess.run(['python3', HOOK], input=json.dumps({'tool_input': {'command': cmd}, 'cwd': cwd}), capture_output=True, text=True)
