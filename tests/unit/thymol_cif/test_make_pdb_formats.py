@@ -1,5 +1,5 @@
 import os, subprocess, sys, tempfile, unittest
-D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+D = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'thymol_cif'))
 RUN = [sys.executable, '-I', f'{D}/scripts/make_pdb.py']
 
 def run(cif, timeout=60):
@@ -9,7 +9,7 @@ def run(cif, timeout=60):
 
 class FormatTests(unittest.TestCase):
     def test_experimental_style_cif_gives_same_pdb_as_cod_cif(self):
-        a, fa = run(f'{D}/4101955.cif'); b, fb = run(f'{D}/tests/fixtures/experimental_style.cif')
+        a, fa = run(f'{D}/4101955.cif'); b, fb = run(f'{os.path.dirname(__file__)}/fixtures/experimental_style.cif')
         self.assertEqual(b.returncode, 0, b.stderr[-300:])
         with open(fa) as x, open(fb) as y: self.assertEqual(x.read(), y.read())
 

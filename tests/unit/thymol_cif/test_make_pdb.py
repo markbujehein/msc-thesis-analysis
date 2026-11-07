@@ -1,6 +1,6 @@
-"""Run: uv run --with numpy python thymol_cif/tests/test_make_pdb.py  (from anywhere)"""
+"""Run: uv run --with numpy python tests/unit/thymol_cif/test_make_pdb.py  (from anywhere)"""
 import subprocess, sys, tempfile, itertools, os, numpy as np
-D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+D = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'thymol_cif'))
 
 def build(cif, nx=1, ny=1, nz=1):
     out = tempfile.mktemp(suffix='.pdb')

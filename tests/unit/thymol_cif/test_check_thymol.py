@@ -1,5 +1,5 @@
 import importlib.util, os, tempfile, unittest
-D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+D = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'thymol_cif'))
 spec = importlib.util.spec_from_file_location('check_thymol', f'{D}/scripts/check_thymol.py')
 ct = importlib.util.module_from_spec(spec); spec.loader.exec_module(ct)
 
