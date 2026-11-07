@@ -46,6 +46,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [ ] Refine the rough spec `docs/superpowers/specs/2026-11-07-extended-data-design.md` (open questions at its end: VESUVIO data location and format, synthetic-data realism, IR/Raman calibration, earlier QENS analyses), then write plans per work stream.
+- [ ] Synthetic stand-in data in `data/` (generator script + test), so a fresh clone runs without the unpublished data.
+
 - [x] README uses status labels DONE / WIP / PLANNED / BLOCKED (2026-11-07); keep them in step with this tracker.
 
 - [ ] Re-lock after the sqlglot-from-PyPI and unpinned-python edits (2026-11-07); check the `sqlglot[c]` warning is gone and which Python md/ins get.
