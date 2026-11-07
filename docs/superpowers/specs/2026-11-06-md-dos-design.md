@@ -57,7 +57,7 @@ Each notebook only calls the modules above and shows results. Logic stays in the
 
 ## Measured data (new)
 
-`data/zeppelin-experimental-data/` holds ten TOSCA files, two of them thymol: TSC25990 (T < 18 K, the comparison for the 10 K MD) and TSC25989 (T < 220 K). The rest are p-cymene and are out of scope here. Each file holds all detectors and has to be reduced with Mantid. Method, code and results so far: `data/REDUCTION.md`, `analysis/reduce_tosca.py`, output `data/reduced/*.csv` (two bank spectra on a meV axis).
+`data/zeppelin-experimental-data/tosca/` holds ten TOSCA files, two of them thymol: TSC25990 (T < 18 K, the comparison for the 10 K MD) and TSC25989 (T < 220 K). The rest are p-cymene and are out of scope here. Each file holds all detectors and has to be reduced with Mantid. Method, code and results so far: `data/REDUCTION.md`, `analysis/reduce_tosca.py`, output `data/reduced/*.csv` (two bank spectra on a meV axis).
 
 Open points that decide how the measured and simulated spectra can be compared (none resolved): background and calibration runs are not in the folder; the Mantid output is an energy-transfer spectrum, not a DOS, and the conversion (and what to do with Q along the TOSCA trajectory, Debye-Waller, multiple scattering) needs a decision; the 30 percent intensity difference between the two banks is unexplained.
 

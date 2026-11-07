@@ -8,7 +8,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).parents[3] / "analysis"))
 from reduce_tosca import reduce_run, write_csv  # noqa: E402
 
-DATA = Path(__file__).parents[3] / "data" / "zeppelin-experimental-data"
+DATA = Path(__file__).parents[3] / "data" / "zeppelin-experimental-data" / "tosca"
 
 
 class TestReduceTosca(unittest.TestCase):
