@@ -463,3 +463,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - Source: [ref: levine2025, wood2025, gharakhanyan2025, luise2025, li2022, cheng2024, bandi2024, han2025, armstrong2026, fan2025, khan2024]
 - Finding: only abstracts, summaries and part of the UMA paper were read; no paper was read in full. Correction: a search summary attributed "Adaptive atomic basis sets" to another group; the arXiv API lists Khan, Ach, von Lilienfeld. 2603.05442 now has a journal reference (J. Phys. Chem. Lett. 2026, 17, 6596-6601) per the arXiv listing. Not added to refs.bib (authors not seen): Petrov et al. 2026 (Digital Discovery), NN-Dx (Research Square preprint), D3-ML, DNN-MBD, DM21. Most entries are preprints; the add-reference rule covers peer-reviewed sources, preprints were added on request and are labelled as such.
 - Next: read OMC25 and UMA in full (levels of theory per task, element coverage, licence); check the phonon and INS benchmarks before trusting them.
+
+## 2026-11-07 18:00 - OMol25 plus D3 added to the list of things to investigate (Claude)
+- What: new PLANNED row in `README.md` status table; new bullet in section 3 of the spec with open points. Nothing run.
+- Finding: unverified whether wB97M-V already includes non-local dispersion (so D3 would double count) and which tool adds D3 to the model.
+- No reference: planning entry, no source used.
