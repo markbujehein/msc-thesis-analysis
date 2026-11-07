@@ -1,5 +1,5 @@
 W_, H_ = 172, 66
-rows = {-1: 64, 0: 160, 1: 256, 2: 352, 3: 448, 4: 544, 5: 640, 6: 736}
+rows = {-1: 40, 0: 160, 1: 256, 2: 352, 3: 448, 4: 544, 5: 640, 6: 736}
 N = {  # key: (x, row, status, title, detail)
  "A": (60, 0, "done", "Predicted structures", "Salager 2010, COD"),
  "B": (260, 0, "done", "PDB supercells", "thymol_cif/, pdb/"),
@@ -7,13 +7,13 @@ N = {  # key: (x, row, status, title, detail)
  "E": (660, 0, "done", "Hessian", "cell, supercell"),
  "F": (860, 0, "wip", "INS per detector", "abinslib"),
  "D": (460, 1, "done", "Vibrational DOS", "from velocities"),
- "FF": (460, -1, "planned", "Other force fields", "MACE (ML potential)"),
+ "FF": (460, -1, "planned", "Other force fields", ("MACE and others", "for higher accuracy")),
  "R": (60, 2, "done", "TOSCA runs", "two thymol runs"),
  "S": (260, 2, "done", "Reduction", "Mantid"),
  "T": (460, 2, "done", "Reduced spectra", "git-ignored"),
  "SYN": (60, 3, "planned", "Synthetic data", "stand-in runs"),
  "Q": (460, 3, "planned", "QENS check", "exploratory"),
- "IR": (460, 4, "planned", "FTIR and Raman", "band positions in meV"),
+ "IR": (60, 4, "planned", "FTIR and Raman", "band positions in meV"),
  "VR": (60, 5, "planned", "VESUVIO runs", "foil in / foil out"),
  "VM": (260, 5, "planned", "Foil difference", "Mantid LoadVesuvio"),
  "VF": (460, 5, "planned", "Compton profiles", "fit per mass: H, C, O"),
@@ -24,14 +24,18 @@ N = {  # key: (x, row, status, title, detail)
 }
 def box(k):
     x, r, s, t, d = N[k]; y = rows[r]
+    d = [d] if isinstance(d, str) else list(d)
+    h = H_ + 16 * (len(d) - 1)
     label = {"done": "DONE", "wip": "WIP", "planned": "PLANNED"}[s]
-    return (f'<g class="n {s}"><rect x="{x}" y="{y}" width="{W_}" height="{H_}" rx="8"/>'
-            f'<text class="t" x="{x+14}" y="{y+23}">{t}</text><text class="d" x="{x+14}" y="{y+41}">{d}</text>'
-            f'<text class="s" x="{x+14}" y="{y+58}">{label}</text></g>')
+    lines = "".join(f'<text class="d" x="{x+14}" y="{y+41+16*i}">{ln}</text>' for i, ln in enumerate(d))
+    return (f'<g class="n {s}"><rect x="{x}" y="{y}" width="{W_}" height="{h}" rx="8"/>'
+            f'<text class="t" x="{x+14}" y="{y+23}">{t}</text>{lines}'
+            f'<text class="s" x="{x+14}" y="{y+58+16*(len(d)-1)}">{label}</text></g>')
 def right(k): x, r, *_ = N[k]; return (x + W_, rows[r] + H_ / 2)
 def left(k): x, r, *_ = N[k]; return (x, rows[r] + H_ / 2)
 def top(k): x, r, *_ = N[k]; return (x + W_ / 2, rows[r])
-def bottom(k): x, r, *_ = N[k]; return (x + W_ / 2, rows[r] + H_)
+def bottom(k):
+    x, r, s, t, d = N[k]; return (x + W_ / 2, rows[r] + H_ + (16 * (len(d) - 1) if not isinstance(d, str) else 0))
 def edge(p, q, via="", cls=""):
     return f'<path class="e {cls}" d="M{p[0]},{p[1]} {via} L{q[0]},{q[1]}" marker-end="url(#a)"/>'
 def join(k):  # dotted line from box k to the comparison column, ending on the comparison box

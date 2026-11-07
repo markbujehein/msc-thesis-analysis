@@ -46,6 +46,10 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 
 ## Later
 
+- [ ] Name the other higher-accuracy force fields in the pipeline box and README row (user to say which).
+- [x] Pipeline: force-field box text and FTIR box position (checked: Chromium render, 2026-11-07).
+
+
 - [x] Hook tests green again after the root fallback fix (checked: 38 tests OK, 2026-11-07).
 
 

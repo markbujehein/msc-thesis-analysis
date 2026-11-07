@@ -384,3 +384,8 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 17:04 - Correction: hook root fallback broke hook tests (Claude)
 - What: my earlier change made `check_tasks.sh` and `check_deps.py` ignore `$CLAUDE_PROJECT_DIR`, which failed 4 of their tests; I committed db185eb without reading the failing test run (the command chain ran on). Now the hooks use `$CLAUDE_PROJECT_DIR` when it holds a repo (.git or pixi.toml) and fall back to their own path only when it is stale. Result: all 38 hook tests pass; old-path runs exit 0.
 - No reference: process.
+
+## 2026-11-07 17:05 - Pipeline: force-field box text, FTIR box position (Claude)
+- What: box above GAFF2 MD now reads "Other force fields: MACE and others for higher accuracy" (two detail lines; only MACE is named because no other force field has been named by the user, none invented). FTIR and Raman box moved to the left column, directly under its lane label. README MACE row text updated.
+- Open: which other force fields to list (user to name them).
+- No reference: figure.
