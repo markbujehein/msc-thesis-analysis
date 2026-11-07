@@ -42,7 +42,7 @@ duckdb = ">=2.0.0,<3"
 openai = ">=3.47.0,<4"
 
 [feature.notebook.pypi-dependencies]
-sqlglot = { version = ">=30.29.0,<31", extras = ["c"] }  # from PyPI: only there does the "c" extra (sqlglotc) that marimo[sql] asks for exist
+sqlglot = { version = ">=30.30.0, <31", extras = ["c"] }  # from PyPI: only there does the "c" extra (sqlglotc) that marimo[sql] asks for exist
 marimo = { version = ">=0.25.2, <0.26", extras = ["mcp", "recommended"] }  # no "lsp": ty is installed globally
 
 # ---- simulation (md) -----------------------------------------------------------------------------
