@@ -53,6 +53,9 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 - [ ] Krzystyniak 2023 read (2026-11-07). Open: verify the recomputed E_kin and omega ratio against the journal page; read arXiv 2506.01860 and 2603.05442 in full; GAFF2 vs MACE Hessian comparison.
 - [ ] ML-method survey recorded (2026-11-07). Open: read OMC25 and UMA in full (levels of theory, elements, licence); read arXiv 2506.01860 and the Armstrong paper; decide whether to add the remaining unlisted references (Petrov 2026, DM21).
 - [ ] Investigate UMA (README force-field row, diagram, spec section 3): confirm C, H, O coverage, dispersion treatment and licence; then compare Hessians and spectrum with GAFF2.
+- [x] Diagram: UMA added and box renamed "Potentials to try" (2026-11-07). Checked: regenerated `docs/figures/pipeline.svg`, grep finds the title and UMA in the SVG, README `?v=` hash updated, first render (three-line box) viewed; the renamed-title render is saved but not viewed.
+- [x] Names aligned: README row and spec section 3 heading now "Potentials to try" (checked by grep, 2026-11-07).
+- [ ] Confirm the eSEN baseline names and licence (fallback to UMA); not yet in the README or diagram.
 
 
 - [ ] Public repo: remove mentions of the user and revision narrative from older documents (TASKS, plan, older spec, LOG); decide how to treat LOG.md history.

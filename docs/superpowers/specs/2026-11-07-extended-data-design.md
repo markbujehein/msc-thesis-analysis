@@ -127,7 +127,7 @@ The main line stays: simulated TOSCA INS spectrum of thymol versus the measured 
 **Open:** where the VESUVIO runs are, which sample and temperatures, whether empty-can and calibration runs exist, which Mantid VESUVIO fitting workflow the facility recommends (the `scripts/Inelastic/vesuvio` package or the algorithms above).
 **Sources:** ISIS VESUVIO page (https://www.isis.stfc.ac.uk/Pages/vesuvio.aspx); Mantid LoadVesuvio documentation (https://docs.mantidproject.org/nightly/algorithms/LoadVesuvio-v1.html); Mantid 7.0.0 source, `plugins/python/algorithms/Vesuvio*.py`.
 
-### 3. Better force fields (after the GAFF2 comparison)
+### 3. Potentials to try (after the GAFF2 comparison)
 
 - **Goal:** replace GAFF2 in the MD and Hessian steps and measure how much the spectrum changes.
 - **Candidates:** MACE, ANI-2x, AIMNet2 and UMA (machine-learned; a 2025 preprint compares all three on organic crystals, [arXiv 2505.06462](https://arxiv.org/pdf/2505.06462)), and AMOEBA (classical, polarizable, available in OpenMM). CHARMM-type fields are fixed-charge like GAFF2, so they are not expected to differ much.

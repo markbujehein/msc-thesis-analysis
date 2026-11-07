@@ -481,3 +481,7 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 18:05 - Diagram box renamed to "Potentials to try" (Claude)
 - What: title in `docs/figures/make_pipeline.py`, regenerated `docs/figures/pipeline.svg`, README image hash 75c9a7d; rendered to `.local/pipeline_potentials.png`. README force-field row and spec section 3 titles unchanged.
 - No reference: wording change.
+
+## 2026-11-07 18:07 - README row and spec heading renamed to "Potentials to try" (Claude)
+- What: `README.md` status row and section 3 heading of the spec; tracker item ticked.
+- No reference: wording change.
