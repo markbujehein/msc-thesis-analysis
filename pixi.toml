@@ -1,0 +1,128 @@
+# One manifest for the repo: the default feature is shared by every environment, features add what
+# one part needs, environments combine them. Run e.g. `pixi run test-unit-all` or `pixi run -e fix fix`.
+#
+# Why three science environments: Mantid 7 pins Python 3.13 and euphonic <2, abinslib needs euphonic >=2.
+
+[workspace]
+name = "msc-thesis"
+authors = ["Mark Sørensen <191927387+markbujehein@users.noreply.github.com>"]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[dependencies]
+numpy = ">=2.1.3,<3"
+scipy = ">=1.16.3,<2"
+pandas = ">=3.1.1,<4"
+matplotlib = ">=3.10.9,<4"
+tqdm = ">=4.70.1,<5"  # progress bars for any long-running step
+
+# ---- shared building blocks ----------------------------------------------------------------------
+# for analysing MD runs in md and ins. mdanalysis: trajectory analysis; ase: structure/trajectory
+# interchange between MD programs, and thermochemistry (md/thermo.py)
+[feature.md-analysis.dependencies]
+ase = ">=3.29.0,<4"
+mdanalysis = ">=2.11.0,<3"
+
+[feature.bayes.dependencies]       # ins and mantid, as in the old analysis manifest (md never had it)
+dynesty = ">=3.1.0,<4"
+
+# ruff as a conda package: marimo[recommended] also asks for it, and an installed conda ruff satisfies that,
+# so the notebook environments get one ruff, not two
+[feature.ruff.dependencies]
+ruff = ">=0.17.4,<0.18"
+
+# marimo's optional dependencies (altair, nbformat, vegafusion, vl-convert-python for charts;
+# duckdb, sqlglot for SQL cells; openai for AI features), installed on purpose
+[feature.notebook.dependencies]
+altair = ">=6.3.0,<7"
+nbformat = ">=5.11.1,<6"
+vegafusion = ">=2.0.3,<3"
+vl-convert-python = ">=2.0.0rc7,<3"
+duckdb = ">=2.0.0,<3"
+sqlglot = ">=30.29.0,<31"
+sqlglotc = ">=30.29.0,<31"  # the compiled speed-up that marimo[sql] asks for as sqlglot[c]
+openai = ">=3.47.0,<4"
+
+[feature.notebook.pypi-dependencies]
+marimo = { version = ">=0.25.2, <0.26", extras = ["mcp", "recommended"] }  # no "lsp": ty is installed globally
+
+# ---- simulation (md) -----------------------------------------------------------------------------
+[feature.md.dependencies]
+python = ">=3.14.10,<3.15"
+libgfortran5 = ">=16.2.0,<17"
+# md was installed with scipy 1.18.1 and mdanse 2.0.1 together (LOG.md, 2026-11-06 14:04); the old note that
+# MDANSE needs scipy <=1.17.1 is no longer checked against mdanse 2.0.1
+scipy = ">=1.18.1,<2"
+rdkit = ">=2026.9.2,<2027"
+openff-toolkit-base = ">=0.19.0,<0.20"
+openmmforcefields = ">=0.16.0,<0.17"
+ambertools = ">=26.0,<27"
+
+[feature.md.pypi-dependencies]
+mdanse = ">=2.0.1, <3"
+mdanse-gui = { version = ">=2.0.2, <3", extras = ["all"] }
+openmm = "*"
+packmol = ">=21.2.3, <22"
+
+[feature.md.activation.env]
+QT_QPA_PLATFORM = "xcb"  # for mdanse-gui
+
+# ---- INS simulation (ins) ------------------------------------------------------------------------
+[feature.ins.dependencies]
+python = ">=3.14.10,<3.15"
+
+[feature.ins.pypi-dependencies]
+abinslib = ">=0.3.0, <0.4"
+resins = ">=0.1.0, <0.2"
+
+# ---- data reduction (mantid) ---------------------------------------------------------------------
+[feature.mantid]
+channels = ["conda-forge", "mantid"]
+
+[feature.mantid.dependencies]
+mantid = ">=7.0.0,<8"
+mantidworkbench = ">=7.0.0,<8"
+
+# ---- testing -------------------------------------------------------------------------------------
+# pytest is the default runner; add other test tools here. pytest.ini turns on doctests (--doctest-modules),
+# so passing a module path to pytest also runs the examples in its docstrings.
+[feature.test.dependencies]
+pytest = ">=9.2.0,<10"
+
+# One task feature per environment, so a task exists only where its tools do.
+# Unit tests (and doctests) never run a simulation; integration tests do (OpenMM, Mantid, AmberTools) and are slow.
+[feature.tests-md.tasks]
+test-unit-md = "pytest tests/unit/md tests/unit/thymol_cif tests/unit/hooks md --ignore-glob='*/0[0-9]_*.py' --ignore=md/output --ignore=md/layouts"
+test-integration-md = "pytest tests/integration/md"
+
+[feature.tests-ins.tasks]
+test-unit-ins = "pytest tests/unit/analysis analysis/compare.py analysis/ins.py analysis/tosca_detectors.py"
+test-integration-ins = "pytest tests/integration/analysis/test_ins.py"
+
+[feature.tests-mantid.tasks]
+test-integration-mantid = "pytest tests/integration/analysis/test_reduce_tosca.py tests/integration/analysis/test_tosca_detectors.py analysis/reduce_tosca.py"
+
+# Supersets: each dependency names the environment it runs in, so `pixi run test-unit-all` works from anywhere.
+[tasks]
+test-unit-all = { depends-on = [{ task = "test-unit-md", environment = "test-md" }, { task = "test-unit-ins", environment = "test-ins" }] }
+test-integration-all = { depends-on = [
+  { task = "test-integration-md", environment = "test-md" },
+  { task = "test-integration-ins", environment = "test-ins" },
+  { task = "test-integration-mantid", environment = "test-mantid" },
+] }
+
+# ---- fixing (lint, format, docstring style); rules are in ruff.toml ----------------------------------
+[feature.fixing.tasks]
+fix = "ruff check --fix . && ruff format ."
+lint = "ruff check . && ruff format --check ."
+
+# ---- environments --------------------------------------------------------------------------------
+# A solve-group makes an environment and its test environment use identical package versions.
+[environments]
+md = { features = ["md", "md-analysis", "notebook", "ruff"], solve-group = "md" }
+ins = { features = ["ins", "md-analysis", "bayes", "notebook", "ruff"], solve-group = "ins" }
+mantid = { features = ["mantid", "bayes"], solve-group = "mantid" }
+test-md = { features = ["md", "md-analysis", "test", "tests-md"], solve-group = "md" }
+test-ins = { features = ["ins", "md-analysis", "bayes", "test", "tests-ins"], solve-group = "ins" }
+test-mantid = { features = ["mantid", "bayes", "test", "tests-mantid"], solve-group = "mantid" }
+fix = ["ruff", "fixing"]

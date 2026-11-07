@@ -1,0 +1,14 @@
+# Light defaults: real errors, import order, modern syntax and docstring *style*; no demand that everything has a docstring.
+line-length = 120
+extend-exclude = ["md/output", "data", ".superpowers", "thymol_cif"]
+
+[lint]
+select = ["E", "F", "W", "I", "UP", "B", "D"]
+ignore = ["D1", "E501", "E701", "E702", "E731", "E741"]   # D1xx: missing docstrings; E501: the formatter owns line length; E70x/E731/E741: the compact one-line style of the hook tests
+
+[lint.pydocstyle]
+convention = "numpy"       # the doctrine in ~/.claude/rules/scientific-python.md asks for numpydoc
+
+[lint.per-file-ignores]
+"tests/**" = ["D"]
+"md/0*.py" = ["B018", "F811", "E402", "D"]   # marimo notebooks: bare expressions and redefined cell variables are normal
