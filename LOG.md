@@ -410,3 +410,9 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 - What: viewed the render of `docs/figures/pipeline.svg` after the previous entry; both box lines fit inside the box.
 - Finding: previous entry said "not yet viewed"; now viewed, fits.
 - Next: confirm AMOEBA with the user.
+
+## 2026-11-07 17:10 - Force-field box: ML candidates restored, no parentheses (Claude)
+- What: box text "MACE, ANI-2x" / "AIMNet2, AMOEBA" (parentheticals removed). README row and spec section 3 updated. I had dropped ANI-2x and AIMNet2 after the user asked for MACE plus one classical field; the user says both are worth investigating.
+- Source: web search; PMC5111595 / Nessler et al. and RSC C6CP02595A (AMOEBA vs fixed-charge, crystals); arXiv 2505.06462. Not read in full; not added to `refs.bib`.
+- Finding: AMOEBA beat fixed-charge fields for sublimation free energies of five organic crystals and hydrate stability, but not for solvation free energies; no lattice-energy or vibrational benchmark against GAFF2 found (unverified for thymol).
+- Next: view render; read papers before adding to `refs.bib`.

@@ -67,8 +67,9 @@ The main line stays: simulated TOSCA INS spectrum of thymol versus the measured 
 ### 3. Better force fields (after the GAFF2 comparison)
 
 - **Goal:** replace GAFF2 in the MD and Hessian steps and measure how much the spectrum changes.
-- **Candidates:** MACE (machine-learned) and one classical force field more accurate than GAFF2. AMOEBA (polarizable, available in OpenMM) is my proposal for the classical one; the user has not confirmed it.
-- **Unverified:** that AMOEBA is more accurate than GAFF2 for this crystal; whether thymol can be parametrized for it; which MACE model fits an organic molecular crystal (MACE-OFF23 was tested on molecular crystals, [arXiv 2312.15211](https://arxiv.org/html/2312.15211v2)); the cost of an 1800-atom Hessian.
+- **Candidates:** MACE, ANI-2x and AIMNet2 (machine-learned; a 2025 preprint compares all three on organic crystals, [arXiv 2505.06462](https://arxiv.org/pdf/2505.06462)), and AMOEBA (classical, polarizable, available in OpenMM). CHARMM-type fields are fixed-charge like GAFF2, so they are not expected to differ much.
+- **Evidence on AMOEBA:** better than fixed-charge fields for sublimation free energies of five organic crystals and for crystal hydrate stability; no better, sometimes worse, than GAFF for solvation free energies. No lattice-energy or vibrational comparison with GAFF2 was found. Unverified for this crystal.
+- **Unverified:** accuracy of any candidate for crystal vibrations; element coverage (C, H, O) of each ML model; whether thymol can be parametrized for AMOEBA; cost of an 1800-atom Hessian.
 
 ### 4. QENS check on the TOSCA data (exploratory, may lead nowhere)
 
