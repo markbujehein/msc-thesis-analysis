@@ -61,6 +61,7 @@ mdanse = ">=2.0.1, <3"
 mdanse-gui = { version = ">=2.0.2, <3", extras = ["all"] }
 openmm = "*"
 packmol = ">=21.2.3, <22"
+ipymolstar = ">=0.1.0, <0.2"
 
 [feature.md.activation.env]
 QT_QPA_PLATFORM = "xcb"  # for mdanse-gui
