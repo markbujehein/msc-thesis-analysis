@@ -32,3 +32,22 @@ def test_constant_velocity_gives_no_peak():
     v = v + 1e-3 * rng.standard_normal(v.shape)
     _e, g = dos(v, 2.0)
     assert g.max() < 5 * g.mean()
+
+
+def test_blocks_give_the_same_spectrum_as_one_pass():
+    rng = np.random.default_rng(1)
+    v = rng.standard_normal((600, 7, 3)).astype(np.float32)
+    e1, g1 = dos(v, 2.0, block=21)  # all columns in one block
+    e2, g2 = dos(v, 2.0, block=4)  # uneven last block
+    assert np.allclose(g1, g2, rtol=1e-10) and np.allclose(e1, e2)
+
+
+def test_peak_memory_is_set_by_the_block_not_the_trajectory():
+    import tracemalloc
+
+    v = np.random.default_rng(2).standard_normal((2000, 100, 3)).astype(np.float32)  # 2.4 MB
+    tracemalloc.start()
+    dos(v, 2.0, block=30)
+    _, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+    assert peak < 2 * v.nbytes  # one pass in float64 would need about 10 times the input

@@ -21,9 +21,10 @@ def thermo_from_dos(energy_mev, g, n_modes, temperatures_K):
     temperatures = np.asarray(temperatures_K, dtype=float)
     x = energy[None, :] / (KB_MEV * temperatures[:, None])
     heat_capacity = KB_MEV * trapezoid(g * x**2 * np.exp(-x) / (-np.expm1(-x)) ** 2, energy, axis=1)
-    return {
-        "U_meV": np.array([1000 * thermo.get_internal_energy(t, verbose=False) for t in temperatures]),
-        "S_meV_per_K": np.array([1000 * thermo.get_entropy(t, verbose=False) for t in temperatures]),
-        "F_meV": np.array([1000 * thermo.get_helmholtz_energy(t, verbose=False) for t in temperatures]),
-        "Cv_meV_per_K": heat_capacity,
-    }
+    with np.errstate(over="ignore"):  # exp(E / kT) overflows to inf for E >> kT; 1 / inf = 0 is the exact limit there
+        return {
+            "U_meV": np.array([1000 * thermo.get_internal_energy(t, verbose=False) for t in temperatures]),
+            "S_meV_per_K": np.array([1000 * thermo.get_entropy(t, verbose=False) for t in temperatures]),
+            "F_meV": np.array([1000 * thermo.get_helmholtz_energy(t, verbose=False) for t in temperatures]),
+            "Cv_meV_per_K": heat_capacity,
+        }

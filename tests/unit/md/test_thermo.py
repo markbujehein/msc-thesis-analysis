@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 import pytest
 
@@ -36,3 +38,11 @@ def test_zero_energy_modes_are_dropped_not_nan():
     for key, value in with_zero.items():
         assert np.isfinite(value).all()
         np.testing.assert_allclose(value, without[key], rtol=1e-9)
+
+
+def test_no_overflow_warning_for_high_energy_bins_at_low_temperature():
+    energy = np.arange(0.0, 1000.5, 0.5)  # E / kT is about 1160 at 1000 meV and 10 K: exp overflows float64
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        result = thermo_from_dos(energy, np.ones_like(energy), n_modes=3, temperatures_K=np.array([10.0]))
+    assert all(np.isfinite(v).all() for v in result.values())

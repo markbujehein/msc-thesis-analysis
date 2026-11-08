@@ -15,7 +15,7 @@ with app.setup:
     from build import read_pdb
     from dos import dos, resolution_mev
 
-    CELLS = {"1x1x1": "unitcell", "2x2x1": "2x2x1"}  # PDB names, as in 02_run.py
+    CELLS = {"1x1x1": "unitcell", "2x2x1": "2x2x1"}
 
 
 @app.cell
@@ -30,6 +30,8 @@ def _():
 @app.cell
 def _(dt_fs, every, out_dir):
     spectra = {}  # cell -> (energy_meV, total g, hydrogen g)
+    summary = []  # one row per cell for the table below
+    h_peaks = {}  # cell -> energies (meV) of the peaks of the hydrogen DOS
     for _cell, _name in CELLS.items():
         _path = out_dir / f"velocities_{_cell}.f32"
         if not _path.exists():
@@ -41,15 +43,41 @@ def _(dt_fs, every, out_dir):
         _, _g_h = dos(_velocities[:, _hydrogen], dt_fs * every)
         spectra[_cell] = (_energy, _g, _g_h)
         _peaks, _ = find_peaks(_g_h, prominence=_g_h.max() * 0.02)
-        print(
-            f"{_cell}: {len(_velocities)} frames, resolution {resolution_mev(len(_velocities), dt_fs * every):.2f} meV; "
-            f"H peaks (meV): {np.round(_energy[_peaks], 1)}"
-        )
-    return (spectra,)
+        h_peaks[_cell] = _energy[_peaks]
+        summary.append({
+            "cell": _cell, "frames": len(_velocities), "frame spacing (fs)": dt_fs * every,
+            "resolution (meV)": round(resolution_mev(len(_velocities), dt_fs * every), 3), "hydrogen peaks": len(_peaks),
+        })
+    return h_peaks, spectra, summary
 
 
 @app.cell
-def _(measured, spectra):
+def _(summary):
+    # derived: trajectory length and energy resolution of each DOS
+    mo.ui.table(pd.DataFrame(summary).astype({"cell": object}), label="Velocity trajectories and DOS resolution", selection=None)
+    return
+
+
+@app.cell
+def _(h_peaks, spectra):
+    # derived: the C-H and O-H stretch bands of the hydrogen DOS, from its peaks
+    stretch_bands = {"C-H stretch": (350, 420), "O-H stretch": (440, 480)}
+    _rows = []
+    for _cell, (_energy, _, _g_h) in spectra.items():
+        for _band, (_lo, _hi) in stretch_bands.items():
+            _in = (_energy >= _lo) & (_energy < _hi)
+            _peak_energy = h_peaks[_cell][(h_peaks[_cell] >= _lo) & (h_peaks[_cell] < _hi)]
+            _rows.append({
+                "cell": _cell, "band": _band, "peaks": len(_peak_energy),
+                "lowest (meV)": round(float(_peak_energy.min()), 1), "highest (meV)": round(float(_peak_energy.max()), 1),
+                "strongest (meV)": round(float(_energy[_in][np.argmax(_g_h[_in])]), 1),
+            })
+    mo.ui.table(pd.DataFrame(_rows).astype({"cell": object, "band": object}), label="Stretch bands of the hydrogen DOS (C-H: 350-420 meV, O-H: 440-480 meV)", selection=None)
+    return (stretch_bands,)
+
+
+@app.cell
+def _(measured, spectra, stretch_bands):
     _cell = "2x2x1" if "2x2x1" in spectra else next(iter(spectra))
     energy_meV, g, g_h = spectra[_cell]
     table = pd.concat(
@@ -59,9 +87,24 @@ def _(measured, spectra):
         ]
         + ([measured.assign(which="measured")] if measured is not None else [])
     )
-    mo.ui.altair_chart(
-        alt.Chart(table[table["energy (meV)"] <= 600]).mark_line().encode(x="energy (meV)", y="g(E)", color="which")
+    dos_fig = (
+        alt.Chart(table[table["energy (meV)"] <= 600])
+        .mark_line()
+        .encode(
+            x=alt.X("energy (meV):Q", title="energy (meV)"),
+            y=alt.Y("g(E):Q", title="g(E) (1/meV, area 1)"),
+            color=alt.Color("which:N", title="curve"),
+        )
+        .properties(title=f"Vibrational DOS from MD velocities, {_cell} cell, up to 600 meV", width=560, height=300)
     )
+    _energy, _, _g_h = spectra[_cell]
+    _marks = []
+    for _band, (_lo, _hi) in stretch_bands.items():
+        _in = (_energy >= _lo) & (_energy < _hi)
+        _i = np.flatnonzero(_in)[np.argmax(_g_h[_in])]
+        _marks.append({"energy (meV)": float(_energy[_i]), "g(E)": float(_g_h[_i]), "label": f"{_energy[_i]:.1f} meV"})
+    _labels = alt.Chart(pd.DataFrame(_marks)).mark_text(dy=-10, fontWeight="bold").encode(x="energy (meV):Q", y="g(E):Q", text="label:N")
+    mo.ui.altair_chart(dos_fig + _labels)
     return
 
 
@@ -74,9 +117,17 @@ def _(spectra):
             for _c, (_e, _g, _) in spectra.items()
         ]
     )
-    mo.ui.altair_chart(
-        alt.Chart(low[low["energy (meV)"] <= 30]).mark_line().encode(x="energy (meV)", y="g(E)", color="cell")
+    low_fig = (
+        alt.Chart(low[low["energy (meV)"] <= 30])
+        .mark_line()
+        .encode(
+            x=alt.X("energy (meV):Q", title="energy (meV)"),
+            y=alt.Y("g(E):Q", title="g(E) (1/meV, area 1)"),
+            color=alt.Color("cell:N", title="cell"),
+        )
+        .properties(title="Lattice region of the DOS by cell size (convergence)", width=560, height=300)
     )
+    mo.ui.altair_chart(low_fig)
     return
 
 

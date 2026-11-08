@@ -10,5 +10,5 @@ class NoBar:
     def __exit__(self, *exc):
         return False
 
-    def update(self, increment=1):
+    def update(self, increment=1, title=None, subtitle=None):
         pass

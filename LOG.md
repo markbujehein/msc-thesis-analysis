@@ -495,3 +495,135 @@ Goal: find a suitable unit cell of solid thymol (C10H14O, 25 atoms/molecule), lo
 ## 2026-11-07 18:15 - Correction: Z-prime statement for thymol removed (Claude)
 - What: the previous entry's spec block claimed one molecule per asymmetric unit for the thymol structure; not checked, so replaced by an explicit "not checked". Task: check Z-prime of Structure 3 (R-3) from the CIF.
 - No reference: wording correction.
+
+## 2026-11-07 22:45 - Harmonic thermodynamics from the 1x1x1 MD DOS (Claude)
+- What: `md/thermo.py::thermo_from_dos` applied in the marimo notebook `analysis/05_ins.py` (environment `ins`) to the DOS of `md/output/velocities_1x1x1.f32` (frames every 2 fs, 450 atoms, `md/dos.py`), n_modes = 3 x 450 - 3 = 1347. The unit tests of `thermo.py` and `compare.py` pass in `test-ins` (9 passed).
+- Finding (per cell, classical DOS, harmonic quantum formulas applied to it, so approximate):
+
+  | T (K) | U (meV) | S (meV/K) | F (meV) | Cv (meV/K) |
+  |---|---|---|---|---|
+  | 10 | 137928.5 | 0.0942 | 137927.6 | 0.2852 |
+  | 50 | 138009.7 | 2.6219 | 137878.6 | 3.8758 |
+  | 100 | 138331.0 | 6.8740 | 137643.6 | 8.8824 |
+  | 300 | 141691.2 | 23.7880 | 134554.8 | 25.0437 |
+
+  All values finite. The ASE `RuntimeWarning: overflow encountered in exp` appears for the high-energy bins at the low temperatures; the Bose terms there go to 0, and no value is NaN or inf. Not checked: the same numbers without the warning (for example with a clipped exponent).
+- Not checked: that `velocities_1x1x1.f32` (written 2026-11-06 23:03) is the run with the switching function; Task 1 of the plan has no log entry yet.
+- No reference: arithmetic on own data.
+- Next: Task 6 (INS on `fc_2x2x1.npz`).
+
+## 2026-11-07 23:21 - ins.py: bank collapsed to one geometry, q-points processed one at a time, progress hook; thermo overflow fixed (Claude)
+- What: (1) `analysis/ins.py::simulate_tosca` simulates a bank once, with the mean 2 theta and mean Efixed of its detectors from the table, because TOSCA data are summed over the detectors of a bank during reduction; before this it looped over all 70 detectors. (2) abinslib builds a dense (q, modes, atoms, 3, 3) displacement array (about 2.8 GB for 4 q-points x 5400 modes x 1800 atoms, plus einsum copies); Euphonic 2.1.1 and abinslib have no lazy arrays (grep of both packages), so the displacements are built per q-point and freed. The Debye-Waller tensor is summed over q-points (matches the all-at-once value to 1.7e-16); second order is q-weighted inside abinslib; first order is renormalised by abinslib to weight 1 per call, so each first-order chunk is scaled by its share of the total weight. (3) `progress(step, total, label)` callback, used by the notebook `analysis/05_ins.py` (progress bar, elapsed time, peak memory; the heavy cell runs only on a button). (4) `md/thermo.py`: overflow of exp(E/kT) at low T inside ASE ignored (exact limit 1/inf = 0).
+- Finding: red/green: new test for the ASE overflow failed with the same RuntimeWarning, then passed; the chunked-versus-whole test failed with the first-order sum exactly 8x too large (8 q-points), then passed after the share factor; `tests/unit` and `tests/integration/analysis/test_ins.py`: 73 passed (dimer fixture, q-mesh 2x2x2). Not run: the real 2x2x1 force constants; memory and time of the real run unknown. The mean-geometry choice (mean of the detector table, not the resins default 134.99 deg) is not compared with the resins value.
+- Earlier crash: the first one-detector run in the notebook kernel was killed at 22:52 by systemd-oomd (RAM 15.49 of 15.51 GB, swap 27.9 of 31.0 GB); a rerun under a 5 GB cap was killed by the kernel OOM killer; the 8 GB marimo unit was killed 87 s after the notebook opened because marimo ran all cells.
+- No reference: code change.
+
+## 2026-11-07 23:27 - ins.py progress follows the md/run.py convention (Claude)
+- What: `simulate_tosca` takes `bar=NoBar` (factory `(total, title)` giving a context manager with `update`), as `md/run.py` does, instead of the `progress` callback of the entry above; `md/progress.py::NoBar.update` accepts `title` and `subtitle` like `mo.status.progress_bar`. The notebook `analysis/05_ins.py` passes `lambda total, title: mo.status.progress_bar(...)` as `02_run.py` does; the hand-written HTML bar is removed. Tests: `tests/unit` and `tests/integration/analysis/test_ins.py`: 72 passed (new `test_bar_has_one_step_per_stage` failed first with the unexpected keyword `bar`).
+- No reference: code change.
+
+## 2026-11-07 23:28 - Second-order INS on the 2x2x1 force constants does not fit in memory (Claude)
+- What: first real run of `simulate_tosca` on `md/output/fc_2x2x1.npz` (back bank, mean geometry, 4 q-points) from the notebook, started with the button under the 8 GB unit cap.
+- Finding: the saved notebook output ends at "step 6/14: q-point 1/4: first order | 16 s | peak memory 1.74 GB"; the unit was then killed by the kernel OOM killer (8 GB peak, 23:25:56). Stages up to and including first order of q-point 1 fit in 1.74 GB. The next stage is second order (`mantid_like_combination_spectra`); abinslib's `calculate_almost_isotropic_incoherent_combinations` documents the result as indices (qpt1, mode1, qpt2, mode2, atom) with cubic scaling in system size: 5400 x 5400 x 1800 float64 is about 420 GB (computed from the documented shape, not measured). Not checked: whether second order can be restricted to a subset of atoms or modes without changing abinslib.
+- No reference: run result.
+- Next: decide between first order only on the supercell, second order on the 450-atom unit cell (1350 x 1350 x 450 x 8 B is about 6.6 GB per q-point, also not measured), or a cluster run.
+
+## 2026-11-07 23:28 - Correction: size of the second-order array (Claude)
+- What: the entries of 22:45 and the one above this state a model of 1800 atoms and 5400 modes and a second-order array of about 420 GB. Reading `md/output/fc_2x2x1.npz` shows 450 atoms and 1350 modes per q-point (the force constants are unfolded to the primitive cell, 4 supercell origins, `fc` shape (4, 1350, 1350)).
+- Finding: one second-order array (qpt1, mode1, qpt2, mode2, atom) is 1350 x 1350 x 450 x 8 B = 6.56 GB per q-point (computed). abinslib forms several arrays of this size at once (`tr_term`, `double_contraction`, products; seen in the source, peak not measured), which exceeds the 8 GB unit cap and is consistent with the 23:25 kill after the first-order stage. The dense displacement array that the per-q-point loop in `ins.py` frees is 4 x 1350 x 450 x 9 x 8 B = 0.8 GB (computed), so that loop does not address the failure. The per-q-point loop, the mean-geometry change and the `bar` argument in `ins.py` are unapproved drafts: no design, spec or plan was approved before they were written.
+- No reference: arithmetic on file shapes.
+
+## 2026-11-07 23:52 - Correction: size of the displacement array; second-order streaming in ins.py (Claude)
+- What: the entry "Correction: size of the second-order array" gives the dense displacement array as 4 x 1350 x 450 x 9 x 8 B = 0.8 GB. The product is 4 x 1350 x 450 x 72 B = 175 MB (one array; three alive at once: 525 MB). `analysis/second_order.py::combination_spectra` evaluates the abinslib two-phonon formula per atom (matrix product of the 1350 x 1350 mode-pair block, binned at once) and `analysis/ins.py::simulate_tosca` uses it per q-point; first order stays with abinslib on all modes. `ins.estimate_peak_bytes` (729 MB for 450 atoms and 4 q-points, computed) and `ins.available_bytes` (MemAvailable and cgroup headroom) let `simulate_tosca` raise MemoryError before any heavy work when 1.5 x the estimate exceeds the limit.
+- Finding: tests: `test_second_order.py` 4 passed (equal to abinslib to rtol 1e-10 for unequal q-weights, Gamma-only with zero modes lifted to the 10 cm^-1 floor, pairs above the last bin; memory bound on a 40-atom fixture: abinslib's peak exceeds it, the new function stays below); red runs: module missing, then a missing global factor 0.5 (1/n!) found by the equivalence test. `tests/unit` plus `tests/integration/analysis`: 80 passed; NOT RUN: `test_reduce_tosca.py` (needs Mantid, environment `test-mantid`, not installed) and the 3 tests of `test_tosca_detectors.py` (look for the instrument file in the active environment prefix, so they need `test-mantid`). The estimate is a sum of array sizes; the measured peak of the old code through first order was 1.74 GB, so the real peak includes more than the estimate counts. Calibration comes from the measured run (next entry).
+- No reference: code change.
+
+## 2026-11-07 23:54 - First INS run on the real force constants, back bank, mean geometry (Claude)
+- What: `simulate_tosca` on `md/output/fc_2x2x1.npz` (450 atoms, 1350 modes, 4 q-points), back bank of `data/tosca_detectors_idf2016.csv` collapsed to its mean 2 theta and mean Efixed, 10 K, bins 0 to 500 meV in 0.5 meV, orders 1 and 2, `AbINS_v1` resolution; run as the script `.local/run_real.py` (same function as the notebook `analysis/05_ins.py`) under `systemd-run --scope -p MemoryMax=5G -p MemorySwapMax=0`. Output `.local/ins_back_2x2x1.csv`.
+- Finding: exit 0, 45 s wall time, peak RSS 1.14 GB (step log: modes 14 s, 0.70 GB; displacements 1.04 GB; first order 1.14 GB; second order 7 to 8 s per q-point with no growth of the peak). Strongest peaks above 20 meV (meV): 20.8, 27.8, 28.8, 31.8, 37.8, 41.2, 59.8, 123.8; not compared with the measurement. The estimate of `ins.estimate_peak_bytes` is 0.729 GB, so measured/estimate is 1.56; `SAFETY_MARGIN` is set to 2.0 (test `test_margin_covers_the_measured_peak_of_the_real_run` failed at 1.5, then passed). `tests/unit` plus `tests/integration/analysis`: 81 passed; NOT RUN: `test_reduce_tosca.py` and 3 tests of `test_tosca_detectors.py` (need `test-mantid`). Not checked: the run from the notebook button; the Mantid-free peak positions against hydrogen mode bands of the DOS.
+- No reference: run result.
+- Next: plan Task 5 (mean geometry versus detector average), Task 7 of the earlier plan (overlay).
+
+## 2026-11-08 00:00 - Mean geometry versus detector average, back bank (Claude)
+- What: script `.local/run_detector_avg.py`: every 10th back-bank detector of `data/tosca_detectors_idf2016.csv` (7 of 70: indices 0, 10, ..., 60), each simulated alone with `simulate_tosca` on `md/output/fc_2x2x1.npz` (10 K, 0 to 500 meV, 0.5 meV bins, orders 1 and 2); their average compared with one run at the mean 2 theta and mean Efixed of the same 7 detectors.
+- Finding: area ratio mean-geometry / detector-average 1.0007; the 8 strongest peaks above 20 meV are at the same energies in both (20.8, 27.8, 28.8, 31.8, 37.8, 41.2, 59.8, 123.8 meV); largest difference 0.29 percent of the maximum of the average, at 4.25 meV. Not checked: all 70 detectors; the forward bank; other q-meshes; comparison with the measurement.
+- No reference: run result.
+
+## 2026-11-08 00:10 - Memory guard counts reclaimable file cache as free (Claude)
+- What: review of the INS change found that `ins.available_bytes` took the cgroup headroom as memory.max - memory.current; memory.current includes file cache. `_cgroup_headroom` now adds inactive_file from memory.stat.
+- Finding: in the terminal's cgroup here, memory.current is 5.15 GB, of which file 4.53 GB and inactive_file 2.56 GB (read from /sys/fs/cgroup); the reviewer measured the same effect in a 600 MB scope (546 MB headroom, 236 MB after writing 300 MB to disk). Tests `test_cgroup_headroom_counts_reclaimable_file_cache_as_free` and `test_cgroup_headroom_is_none_without_a_limit` failed (import error), then passed; `tests/unit` plus `tests/integration/analysis`: 83 passed; NOT RUN: tests needing `test-mantid`. `available_bytes()` reports 6.86 GB here. The guard is a pre-flight check against one fitted estimate; the protection against an OOM kill is the cgroup cap of the unit or scope.
+- No reference: code change.
+
+## 2026-11-08 00:38 - Notebook 05_ins.py runs on open with the standard progress bar (Claude)
+- What: the run button and `mo.stop` are removed from `analysis/05_ins.py`; the cell calls `simulate_tosca` with `bar=lambda total, title: mo.status.progress_bar(total=total, title=title)`, as `md/02_run.py` does. Edited through the live session of the unit `marimo-ins` and run there.
+- Finding: the cell finished in the notebook: `ins_energy` shape (1000,), all intensities finite; the unit reports peak 2.3 GB (cap 8 GB, no swap; includes the earlier Task 8 cell). Not checked: what the progress bar looks like in the browser.
+- No reference: notebook change.
+
+## 2026-11-08 00:51 - Visualisation in every notebook; INS orders as separate runs; euphonic stdout silenced (Claude)
+
+- Change: marimo-native altair charts (`mo.ui.altair_chart`), each with a title, axis titles with units and a legend title. `analysis/05_ins.py`: classical DOS, harmonic thermodynamics (U, S, F, Cv against T), and the simulated TOSCA back-bank spectrum (first order, second order, total) overlaid on the measured run with a fitted scale (dropdowns for run, bank, linear or log axis, energy-window slider). `md/01_system.py`: atom positions (x-y, x-z) by element, atoms per element, partial-charge histogram. `md/02_run.py`: titled T and total-energy charts, table of mean T, std T and energy drift of the second half of the log (10.09 K, 0.14 K, 0.0011 kJ/mol/ps for 2x2x1). `md/03_dos.py`: titles and labels on both charts. `md/04_hessian.py`: mode-energy histogram with band edges, modes-per-band table.
+- Change: `simulate_tosca(..., orders=(1, 2))` accepts (1,), (2,) or (1, 2); the broadened parts add up to the full spectrum (test). Euphonic's per-atom "Found reference data" prints are redirected inside the call (test).
+- Finding: the fitted-scale overlay compares the 2x2x1 GAFF2 spectrum with TSC25989 bank1; the assignment of bank1 to the IDF back bank is still unverified (Task 7).
+- Verified: 87 tests pass in test-ins; test-mantid 7 pass; test-md unit 9 pass; 01_system.py ran as a script. Not run: 03_dos.py (exceeded a 400 s limit, not killed) and 04_hessian.py (recomputes the Hessian); both only compiled. Charts of 02 were not rendered.
+
+## 2026-11-08 00:56 - Molecular sphere view in md/01_system.py; blocked DOS transform (Claude)
+
+- Change: `md/01_system.py` shows the 2x2x1 supercell (1800 atoms, C720H1008O72) as spheres with CPK colours and the unit cell (ASE `plot_atoms`, matplotlib), with sliders for the viewing angle. No dedicated 3D viewer (nglview, py3Dmol, weas) is installed and none was added; ASE's x3d writer gives a bare X3D file that needs a plugin and was not used.
+- Change: `md/dos.py` `dos()` transforms the columns in blocks (`block=300`); the 2x2x1 DOS was OOM-killed at a 6 GB cap before. Tests: block equivalence and a tracemalloc bound (red then green), md unit tests 11 passed. `md/03_dos.py` not yet re-run with it.
+- Rule: notebooks run one at a time.
+
+## 2026-11-08 01:04 - nglview added to the md environment; 3D view in md/01_system.py (Claude)
+
+- Change: `pixi.toml` `[feature.md.dependencies]` gains `nglview >=4.0.1,<5` (most-used candidate after py3Dmol by PyPI downloads last month: py3Dmol 230,427, nglview 67,803; nglview chosen). `pixi install -e md` only; import checked (nglview 4.0.1). Backups: `.local/pixi.toml.bak-nglview`, `.local/pixi.lock.bak-nglview`.
+- Side effect: the lock diff also moves ipywidgets, ipython and related packages from PyPI to conda in `md` (pulled in by nglview's dependencies).
+- Change: `md/01_system.py` gains a cell with `nglview.show_ase(structure)`, space-filling spheres and the unit cell.
+- Unverified: whether marimo's frontend renders this ipywidgets widget. marimo emits a `application/vnd.jupyter.widget-view+json` bundle, and marimo supports anywidget natively, not ipywidgets. Not yet checked in a browser.
+
+## 2026-11-08 01:09 - IPyMolStar replaces nglview in the md environment (Claude)
+
+- Finding: nglview (ipywidgets-based) does not render in marimo; the cell rendered empty in a browser check. Removed with `pixi remove --feature md nglview`.
+- Change: `pixi.toml` `[feature.md.pypi-dependencies]` gains `ipymolstar >=0.1.0, <0.2` (anywidget-based Mol* viewer; PyPI only, not on conda-forge; PyPI downloads last month 2,112; release 0.1.0 of 2025-04-10). `pixi install -e md` only; import checked. Backups in `.local/pixi.*.bak-ipymolstar` and `.local/pixi.*.bak-rm-nglview`.
+- Change: `md/01_system.py` 3D cell: `mo.ui.anywidget(PDBeMolstar(custom_data={"data": PDB text from ASE, "format": "pdb", "binary": False}, visual_style="spacefill"))`. Kernel check: widget constructed, 145,878 characters of PDB, CRYST1 29.323 29.323 22.713 90 90 120; all cells idle, no errors.
+- Unverified: that the Mol* canvas draws in a browser (Mol* JavaScript may load from a CDN).
+
+## 2026-11-08 01:21 - md/01_system.py cleanup: 2D view removed, table dtype (Claude)
+
+- Change: the 2D `plot_atoms` cell and its three rotation sliders are removed from `md/01_system.py`; the structure cell keeps only the ASE `Atoms` construction used by the Mol* view.
+- Finding: the "Atoms per element" `mo.ui.table` showed "Something went wrong" in the browser. The kernel built it without error and its payload (inline rows, field types string/str and integer/int64) was valid; the one unusual part is pandas 3's `str` dtype in the element column. Changed the column to `object`. Cause not confirmed: the browser console was not read.
+- Change: same dtype change in the band table of `md/04_hessian.py` (compiled, not run).
+
+## 2026-11-08 01:28 - Mol* view: mmCIF instead of PDB, dark theme (Claude)
+
+- Change: `md/molview.py` (new, tests `tests/unit/md/test_molview.py`, red then green, 2 passed) writes mmCIF: `_cell` lengths and angles, space group P 1, one HETATM row per atom, one residue per molecule (72). The 3D cell in `md/01_system.py` passes it as `format: "cif"` instead of a PDB block (PDB is a protein format; thymol is a small-molecule crystal).
+- Change: `PDBeMolstar(theme="dark")`: the default light stylesheet and background (#F7F7F7) gave white text on a light background inside the dark marimo page.
+- Checked: widget built in the live kernel (format cif, bg #111111, 107,754 characters, cell 29.323 29.323 22.713 90 90 120), notebook cells idle, no errors. Unverified: that Mol* parses this mmCIF and draws it (browser check).
+
+## 2026-11-08 01:33 - Mol* view inspected in a browser; chain per molecule, grey background, unit cell (Claude)
+
+- Inspection (Chrome DevTools browser, read-only, dark colour scheme): the Mol* widget renders; the default dark background hid the dark control icons, so `bg_color="#808080"` with `theme="dark"`; icons and white labels are visible. `default_preset="unitcell"` draws the cell outline (orange). "Atoms per element" renders: C 720, H 1,008, O 72 (the `object` dtype fix worked). Charge histogram renders with title; its legend was clipped at width 600, now 480 (not re-inspected).
+- Change: `md/molview.py` `chain_id()`: each molecule is its own chain (A, B, ..., Z, AA, ...); tests 15 passed in `tests/unit/md`.
+- Open: carbon and hydrogen are both light grey in the spacefill view, so elements are hard to tell apart; ball-and-stick or a carbon colour is the next thing to try.
+
+## 2026-11-08 01:49 - 3D view rebuilt on the MolViewSpec widget (Claude)
+
+- Finding: `PDBeMolstar` ignored `visual_style`: checked in a browser, a live change to ball-and-stick changed nothing, and a widget created with `visual_style="point"` and preset `unitcell` rendered as spacefill. Cause not found; the package JS has a `change:visual_style` handler.
+- Change: `md/01_system.py` 3D cell now uses `ipymolstar.molviewspec.MolViewSpec` with a MolViewSpec description from `md/molview.py` `mvs_json()`: the mmCIF travels as a data URL, one component per element (C #303030, H #ffffff, O #e01010) shown as ball_and_stick, canvas background #808080, no unit-cell outline, no protein representation. `viewer_options` switch the Mol* side panels, sequence, log and remote states off (the first version showed them and squeezed the canvas). No dropdown. Tests `tests/unit/md/test_molview.py`: 17 passed in `tests/unit/md` (new tests red first).
+- Incident: a code-mode edit left the server unresponsive (HTTP no answer, process idle); `marimo-md` was restarted, the unsaved edit was redone.
+
+## 2026-11-08 01:53 - Unit cell and supercell outlines in the 3D view (Claude)
+
+- Change: `md/molview.py` `cell_edges()` and `mvs_json(cif_text, cells=...)` draw cells as 12 `tube` primitives each (radius 0.1 angstrom). `md/01_system.py` outlines the 450-atom unit cell (orange, read from `pdb/thymol_structure3_R-3_unitcell.pdb`) and the 2x2x1 supercell (cyan, 29.323 x 29.323 x 22.713 angstrom); the supercell vectors are exactly 2, 2, 1 times the unit cell vectors (checked). Tests: 19 passed in `tests/unit/md`, the tube test red first.
+- Incident: the first version used primitive kind `line`, which Mol* rejects ("line" is not a valid value for literal type mesh | lines | tube | arrow | distance_measurement | angle_measurement | label | ellipse | ellipsoid | box); the whole description was refused and the view fell back to a single colour. Reverted within minutes, then fixed with `tube`. Cause found in the browser console; the unit test could not catch it because Mol* validates the description in the browser.
+- Checked in a browser (Chrome DevTools, read-only): no "Invalid MVS tree" error; ball-and-stick, element colours, grey background and both outlines visible.
+- Note: the 450-atom cell is the conventional hexagonal cell of R-3 (18 molecules). The rhombohedral primitive cell (one third, 6 molecules) is not drawn. Atom coordinates in the PDB are not wrapped into the cell (x from -13.9 to 28.6 angstrom), so some molecules extend beyond the outlines.
+
+## 2026-11-08 01:59 - Notebooks 03 and 02 served and viewed; 03 print replaced by tables; chart width (Claude)
+- What: `md/03_dos.py`: the per-cell `print` of frames, resolution and every hydrogen peak is replaced by a summary table (cell, frames, frame spacing, resolution, number of hydrogen peaks) and a stretch-band table (peaks, lowest, highest, strongest peak in meV); the strongest peak of each band is labelled on the hydrogen DOS chart; chart width 700 to 560 (legend was clipped). `md/02_run.py`: chart width 600 to 520 (time axis clipped at the right edge). `docs/TASKS.md` updated. Notebooks served one at a time (`marimo-md`, port 2718), viewed with the Chrome DevTools browser (read-only).
+- Source: none; local runs.
+- Finding: `03_dos.py` ran fully with the block-wise `dos()`: peak 4.5 GB under the 8 GB cap (killed at 6 GB before), no cell errors. Summary table: 1x1x1 and 2x2x1 both 50,000 frames at 2 fs, resolution 0.041 meV, 115 and 94 hydrogen peaks. Stretch bands (viewed in the browser): C-H, 14 peaks 375.6 to 396.6 meV (1x1x1) and 12 peaks 375.9 to 396.6 meV (2x2x1); O-H, 4 peaks 462.3 to 467.9 meV (1x1x1) and 5 peaks 462.3 to 467.9 meV (2x2x1). `02_run.py`: only the cells that read the existing log were run (the system-build and MD cells skipped); temperature settles at 10 K, total energy settles; 1 GB. Unverified: both width changes (02 and 03 legend) were not re-inspected; the chart labels on the 03 DOS chart were not looked at after the last edit.
+- Next: serve `md/04_hessian.py` (recomputes the Hessian: run selected cells only) and `analysis/05_ins.py` one at a time; commit the width changes and these entries.
+
+## 2026-11-08 02:06 - Notebook 02: richer run charts (Claude)
+- What: `md/02_run.py` chart cell: temperature chart with the 10 K target as a red dashed rule and the 5 ps equilibration shaded; total-energy chart with the same shading; production-only total energy minus its mean; production temperature histogram. The statistics cell reuses `log` (no second CSV read). `mo.ui.altair_chart(..., chart_selection=False, legend_selection=False)`. Edited in the live session on `marimo-md` (port 2718), the only server running.
+- Finding: the first version showed "Duplicate signal name: pan_zoom_tuple" (layered charts each get an auto-added selection); fixed by disabling the automatic selections; the reloaded page shows no such error. Viewed in the browser: energy deviation in production within about -0.3 to 0.3 kJ/mol; temperature histogram spans about 9.45 to 10.65 K, centred near 10.1 K. The top temperature chart was not in the final screenshot (unverified after the fix).
+- Next: confirm the temperature chart after the fix; round the digits in the statistics table.
