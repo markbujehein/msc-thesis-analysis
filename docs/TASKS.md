@@ -151,7 +151,7 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 - [ ] `pixi.toml` `test-integration-ins` omits `test_second_order.py` (manifest edit needs approval).
 
 - [x] `md/dos.py`: `dos()` transforms the columns in blocks (`block=300`) because the 2x2x1 DOS was OOM-killed at a 6 GB cap (kernel OOM log, 2026-11-08). Checked: `tests/unit/md` 11 passed, including block equivalence and a tracemalloc bound; red run first (`unexpected keyword argument 'block'`).
-- [ ] `md/03_dos.py`: not yet re-run after the `dos()` change; run it once in marimo under the memory cap and check peak memory and the charts. Same for `md/04_hessian.py` (recomputes the Hessian) and `md/02_run.py` (its first cell re-runs the MD).
+- [x] `md/03_dos.py`: not yet re-run after the `dos()` change; run it once in marimo under the memory cap and check peak memory and the charts. Same for `md/04_hessian.py` (recomputes the Hessian) and `md/02_run.py` (its first cell re-runs the MD). Done: ran in marimo 2026-11-08 under the 8 GB cap; peak 3.5 to 4.5 GB, no cell errors (systemd memory status).
 - [ ] Notebook servers: run one at a time (one at a time). `marimo-md` serves `md/01_system.py` on port 2718; `marimo-ins` (05_ins.py) is stopped. The server on port 2719 is a leftover from `~/Work/msc-thesis/md` (not started in this session): decide whether to stop it.
 - [ ] `md/01_system.py` charts verified by `marimo export html` (9 vega outputs) and by a live run; the other four notebooks' charts are not yet viewed in a browser.
 
@@ -173,7 +173,11 @@ Code and tests exist for all eight (tests passed when last run, 2026-11-06; not 
 - [x] `md/01_system.py` 3D view with unit-cell (orange) and supercell (cyan) outlines (`tube` primitives); checked in a browser, no MVS validation error, 19 md unit tests pass.
 - [ ] Decide whether to draw the rhombohedral primitive cell (6 molecules) and whether to wrap molecules into the cell; the PDB molecules are not wrapped (x -13.9 to 28.6 angstrom).
 - [x] `md/01_system.py`: comment "loaded: atom positions of the relaxed-geometry PDB, by element" removed; checked: the cell ran without errors in the live session and a search of the file finds no copy.
-- [ ] Next: serve `md/03_dos.py` alone (stop `marimo-md` first, one notebook at a time) and check its charts after the block-wise `dos()` change; then 02, 04, 05.
+- [x] Next: serve `md/03_dos.py` alone (stop `marimo-md` first, one notebook at a time) and check its charts after the block-wise `dos()` change; then 02, 04, 05. Done: 03 was served and viewed in a browser (tables, stretch-band labels); the 03 chart labels after the last edit were not re-inspected.
 - [x] `md/02_run.py` served alone and viewed in a browser (cells that read the existing log only; the MD cells were not run): titled temperature and total-energy charts and the statistics table render, no cell errors, 1 GB. Chart width reduced from 600 to 520 (right edge of the time axis was clipped); not re-inspected. Not yet committed.
 - [ ] Next notebooks to serve one at a time: `md/04_hessian.py` (recomputes the Hessian: run only selected cells) and `analysis/05_ins.py`.
 - [x] `md/02_run.py` charts: target and equilibration marks, production energy deviation, temperature histogram; checked in the browser (no chart error). Open: temperature chart not re-seen after the selection fix; statistics table shows too many digits. Not committed.
+
+- [x] Branch `notebook-visualisation` committed in nine commits and merged into `main` (merge commit 9c4aa4d); checked with `git log` and an empty `git status`. Not pushed.
+- [ ] Push `main` to origin (not done; needs approval).
+- [ ] `md/02_run.py`: round the statistics table digits; re-inspect the temperature chart after the selection fix.
