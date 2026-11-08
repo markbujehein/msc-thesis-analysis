@@ -9,6 +9,7 @@ with app.setup:
 
     import altair as alt
     import marimo as mo
+    import numpy as np
     import pandas as pd
 
     from build import make_system
@@ -76,15 +77,29 @@ def _(
 def _(cell, out_dir):
     log = pd.read_csv(out_dir / f"log_{cell}.csv")
     log.columns = ["step", "time (ps)", "potential (kJ/mol)", "kinetic (kJ/mol)", "total (kJ/mol)", "T (K)"]
-    temperature_chart = alt.Chart(log).mark_line().encode(x="time (ps)", y="T (K)")
-    energy_chart = alt.Chart(log).mark_line().encode(x="time (ps)", y=alt.Y("total (kJ/mol)", scale=alt.Scale(zero=False)))
-    mo.ui.altair_chart(temperature_chart & energy_chart)
+    temperature_chart = alt.Chart(log).mark_line().encode(
+        x=alt.X("time (ps):Q", title="time (ps)"), y=alt.Y("T (K):Q", title="temperature (K)")
+    ).properties(title="Temperature during the run", height=200, width=600)
+    energy_chart = alt.Chart(log).mark_line().encode(
+        x=alt.X("time (ps):Q", title="time (ps)"),
+        y=alt.Y("total (kJ/mol):Q", title="total energy (kJ/mol)", scale=alt.Scale(zero=False)),
+    ).properties(title="Total energy during the run", height=200, width=600)
+    run_fig = (temperature_chart & energy_chart).properties(title=f"MD run, {cell} cell")
+    mo.ui.altair_chart(run_fig)
     return
 
 
 @app.cell
 def _(cell, out_dir):
-    pd.read_csv(out_dir / f"log_{cell}.csv")
+    # derived: temperature and energy drift of the production part (second half of the log), as a table
+    _log = pd.read_csv(out_dir / f"log_{cell}.csv")
+    _log.columns = ["step", "time (ps)", "potential (kJ/mol)", "kinetic (kJ/mol)", "total (kJ/mol)", "T (K)"]
+    _half = _log[_log["time (ps)"] >= _log["time (ps)"].max() / 2]
+    _drift = float(np.polyfit(_half["time (ps)"], _half["total (kJ/mol)"], 1)[0])
+    mo.ui.table(pd.DataFrame({
+        "mean T (K)": [_half["T (K)"].mean()], "std T (K)": [_half["T (K)"].std()],
+        "total energy drift (kJ/mol/ps)": [_drift],
+    }), label=f"Second half of the log, {cell} cell")
     return
 
 
