@@ -74,27 +74,39 @@ def _(
 
 
 @app.cell
-def _(cell, out_dir):
+def _(cell, dt_fs, equil_steps, out_dir, temperature_K):
     log = pd.read_csv(out_dir / f"log_{cell}.csv")
     log.columns = ["step", "time (ps)", "potential (kJ/mol)", "kinetic (kJ/mol)", "total (kJ/mol)", "T (K)"]
-    temperature_chart = alt.Chart(log).mark_line().encode(
-        x=alt.X("time (ps):Q", title="time (ps)"), y=alt.Y("T (K):Q", title="temperature (K)")
-    ).properties(title="Temperature during the run", height=200, width=600)
-    energy_chart = alt.Chart(log).mark_line().encode(
-        x=alt.X("time (ps):Q", title="time (ps)"),
-        y=alt.Y("total (kJ/mol):Q", title="total energy (kJ/mol)", scale=alt.Scale(zero=False)),
-    ).properties(title="Total energy during the run", height=200, width=600)
-    run_fig = (temperature_chart & energy_chart).properties(title=f"MD run, {cell} cell")
-    mo.ui.altair_chart(run_fig)
-    return
+    equil_ps = equil_steps * dt_fs / 1000
+    _production = log[log["time (ps)"] > equil_ps].assign(**{"total minus mean (kJ/mol)": lambda d: d["total (kJ/mol)"] - d["total (kJ/mol)"].mean()})
+    _equil_band = alt.Chart(pd.DataFrame({"start": [0.0], "end": [equil_ps], "phase": ["equilibration"]})).mark_rect(opacity=0.2, color="orange").encode(
+        x=alt.X("start:Q", title="time (ps)"), x2="end:Q"
+    )
+    _target = alt.Chart(pd.DataFrame({"T (K)": [temperature_K]})).mark_rule(color="red", strokeDash=[6, 4]).encode(y="T (K):Q")
+    _temperature = (
+        alt.Chart(log).mark_line().encode(x=alt.X("time (ps):Q", title="time (ps)"), y=alt.Y("T (K):Q", title="temperature (K)"))
+        + _target + _equil_band
+    ).properties(title=f"Temperature (red: {temperature_K} K target; orange: equilibration)", height=180, width=520)
+    _energy = (
+        alt.Chart(log).mark_line().encode(
+            x=alt.X("time (ps):Q", title="time (ps)"), y=alt.Y("total (kJ/mol):Q", title="total energy (kJ/mol)", scale=alt.Scale(zero=False))
+        ) + _equil_band
+    ).properties(title="Total energy (orange: equilibration)", height=180, width=520)
+    _energy_zoom = alt.Chart(_production).mark_line().encode(
+        x=alt.X("time (ps):Q", title="time (ps)"), y=alt.Y("total minus mean (kJ/mol):Q", title="total energy minus its mean (kJ/mol)")
+    ).properties(title="Total energy during production, deviation from its mean", height=180, width=520)
+    _histogram = alt.Chart(_production).mark_bar().encode(
+        x=alt.X("T (K):Q", bin=alt.Bin(maxbins=40), title="temperature (K)"), y=alt.Y("count():Q", title="frames")
+    ).properties(title="Temperature distribution during production", height=180, width=520)
+    run_fig = alt.vconcat(_temperature, _energy, _energy_zoom, _histogram).properties(title=f"MD run, {cell} cell")
+    mo.ui.altair_chart(run_fig, chart_selection=False, legend_selection=False)
+    return (log,)
 
 
 @app.cell
-def _(cell, out_dir):
+def _(cell, log):
     # derived: temperature and energy drift of the production part (second half of the log), as a table
-    _log = pd.read_csv(out_dir / f"log_{cell}.csv")
-    _log.columns = ["step", "time (ps)", "potential (kJ/mol)", "kinetic (kJ/mol)", "total (kJ/mol)", "T (K)"]
-    _half = _log[_log["time (ps)"] >= _log["time (ps)"].max() / 2]
+    _half = log[log["time (ps)"] >= log["time (ps)"].max() / 2]
     _drift = float(np.polyfit(_half["time (ps)"], _half["total (kJ/mol)"], 1)[0])
     mo.ui.table(pd.DataFrame({
         "mean T (K)": [_half["T (K)"].mean()], "std T (K)": [_half["T (K)"].std()],
